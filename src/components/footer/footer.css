@@ -29,3 +29,8 @@
     background-image: url(./logo-rsschool.svg);
     background-repeat: no-repeat;
 }
+
+.footer__link:hover {
+    color: white;
+    text-shadow: 0px 0px 3px white;
+}
