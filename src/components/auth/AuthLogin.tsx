@@ -3,7 +3,7 @@ import './auth.css';
 
 const AuthLogin = () => {
   return (
-    <Form className="auth d-flex flex-column auth mt-5 mx-auto">
+    <Form className="auth d-flex flex-column auth mx-auto">
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Email*</Form.Label>
         <Form.Control type="email" placeholder="Enter email address" />

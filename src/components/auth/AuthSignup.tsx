@@ -3,7 +3,7 @@ import './auth.css';
 
 const AuthSignup = () => {
   return (
-    <Form className="auth d-flex flex-column auth mt-5 mx-auto">
+    <Form className="auth d-flex flex-column auth mx-auto">
       <Form.Group className="mb-3" controlId="formBasiclogin">
         <Form.Label>Login*</Form.Label>
         <Form.Control placeholder="Enter login" />

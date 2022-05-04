@@ -36,3 +36,27 @@
     transform: rotate(360deg);
   }
 }
+
+.home {
+  height: 100%;
+  background-image: url(./assets/images/main.webp);
+  background-repeat: no-repeat;
+  background-position: 100% 100%;
+}
+
+.login {
+  padding-top: 5%;
+  height: 100%;
+  background-image: url(./assets/images/login.jpg);
+  background-repeat: no-repeat;
+  background-position: 50% 100%;
+}
+
+.signup {
+  padding-top: 5%;
+  height: 100%;
+  background-image: url(./assets/images/signup.webp);
+  background-repeat: no-repeat;
+  background-position: 50% 90%;
+  background-size: 50%;
+}
