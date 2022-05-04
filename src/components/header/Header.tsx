@@ -22,7 +22,7 @@ function Header() {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <NavLink to="/login" className="nav-link active" aria-current="page">
+              <NavLink to="/login" className="nav-link" aria-current="page">
                 To come in
               </NavLink>
             </li>
