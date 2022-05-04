@@ -1,10 +1,6 @@
-import React from 'react';
+import AuthLogin from '../components/auth/AuthLogin';
 
 function Login() {
-  return (
-    <div>
-      <h1>Hello, Login </h1>
-    </div>
-  );
+  return <AuthLogin />;
 }
 export { Login };
