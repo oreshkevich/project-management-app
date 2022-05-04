@@ -1,10 +1,11 @@
-import React from 'react';
+import AuthSignup from '../components/auth/AuthSignup';
 
 function Signup() {
   return (
-    <div>
-      <h1>Hello, signup </h1>
-    </div>
+    <section className="signup">
+      <AuthSignup />
+    </section>
   );
 }
+
 export { Signup };

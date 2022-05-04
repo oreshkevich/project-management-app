@@ -1,12 +1,11 @@
-import React from 'react';
 import './footer.css';
 
 function Footer() {
   return (
     <footer className="footer">
       <div className="footer__content">
-        <div className="footer__info">
-          © {new Date().getFullYear()} Copyright Text | Developments:
+        <p className="footer__info">
+          © {new Date().getFullYear()} Copyright Text | Developments:&nbsp;
           <a
             className="footer__link"
             target="_blank"
@@ -15,7 +14,7 @@ function Footer() {
           >
             Henadzi
           </a>
-          ,
+          ,&nbsp;
           <a
             className="footer__link"
             target="_blank"
@@ -24,7 +23,7 @@ function Footer() {
           >
             Kirill
           </a>
-          ,
+          ,&nbsp;
           <a
             className="footer__link"
             target="_blank"
@@ -33,11 +32,11 @@ function Footer() {
           >
             Uladzislava
           </a>
-        </div>
+        </p>
         <a href="https://rs.school/" target="_blank" rel="noreferrer" className="footer__logo"></a>
       </div>
     </footer>
   );
 }
 
-export { Footer };
+export default Footer;

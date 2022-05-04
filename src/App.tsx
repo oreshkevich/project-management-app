@@ -1,7 +1,5 @@
-import React from 'react';
-
-import Header from './components/header';
-import Footer from './components/footer';
+import Header from './components/header/Header';
+import Footer from './components/footer/Footer';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Home } from './pages/Home';
 import { NotFound } from './pages/NotFound';

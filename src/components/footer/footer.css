@@ -1,36 +1,41 @@
 .footer {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    height: 50px;
-    background-color: #393939;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 50px;
+  background-color: #393939;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
 }
 
 .footer__content {
-    width: 1280px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  max-width: 1400px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .footer__info {
-    color: white;
-    font-size: 1.1rem;
+  color: white;
+  display: block;
+  font-size: 1.1rem;
+  margin: 0;
 }
 
 .footer__link {
-    color: white;
-    text-decoration: none;
+  color: white;
+  text-decoration: none;
 }
 
 .footer__logo {
-    height: 38px;
-    width: 83px;
-    background-image: url(./logo-rsschool.svg);
-    background-repeat: no-repeat;
+  height: 38px;
+  width: 83px;
+  background-image: url(./logo-rsschool.svg);
+  background-repeat: no-repeat;
 }
 
 .footer__link:hover {
-    color: white;
-    text-shadow: 0px 0px 3px white;
+  color: white;
+  text-shadow: 0px 0px 3px white;
 }
