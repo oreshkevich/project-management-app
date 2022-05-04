@@ -3,7 +3,7 @@ import React from 'react';
 
 function Header() {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark ">
       <div className="container-fluid">
         <NavLink to="/" className="navbar-brand">
           GoodBoard

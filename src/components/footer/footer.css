@@ -1,0 +1,31 @@
+.footer {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 50px;
+    background-color: #393939;
+}
+
+.footer__content {
+    width: 1280px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.footer__info {
+    color: white;
+    font-size: 1.1rem;
+}
+
+.footer__link {
+    color: white;
+    text-decoration: none;
+}
+
+.footer__logo {
+    height: 38px;
+    width: 83px;
+    background-image: url(./logo-rsschool.svg);
+    background-repeat: no-repeat;
+}
