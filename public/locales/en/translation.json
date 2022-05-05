@@ -1,0 +1,17 @@
+{
+  "header": {
+    "log-in": "To come in",
+    "reqistration": "Registration",
+    "language": "Language"
+  },
+  "authentication": {
+    "login": "Login",
+    "email": "Email",
+    "password": "Password",
+    "enter-login": "Enter login",
+    "enter-email": "Enter email adress",
+    "enter-password": "Enter password",
+    "submit-login": "Log In",
+    "submit-registration": "Register"
+  }
+}

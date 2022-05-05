@@ -1,0 +1,17 @@
+{
+  "header": {
+    "log-in": "Войти в аккаунт",
+    "reqistration": "Зарегистрироваться",
+    "language": "Язык"
+  },
+  "authentication": {
+    "login": "Логин",
+    "email": "Электронная почта",
+    "password": "Пароль",
+    "enter-login": "Введите логин",
+    "enter-email": "Введите электронную почту",
+    "enter-password": "Введите пароль",
+    "submit-login": "Войти",
+    "submit-registration": "Зарегистрироваться"
+  }
+}
