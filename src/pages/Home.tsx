@@ -1,7 +1,10 @@
+import { useTranslation } from 'react-i18next';
 import '../App.css';
 import img from '../assets/images/main.webp';
 
 const Home = () => {
+  const { t } = useTranslation();
+
   return (
     <section className="home">
       <div className="row">
@@ -9,11 +12,8 @@ const Home = () => {
           <img src={img} className="img-fluid" alt="main" />
         </div>
         <div className="col-lg-5">
-          <h1 className=" home__title">GoodBoard helps teams to solve work tasks efficiently.</h1>
-          <p className="home__text">
-            Work in a team, manage projects, write notes and assignments, go to the store and not
-            only. Our interactive whiteboard will help you with all this
-          </p>
+          <h1 className=" home__title">{t('homepage.welcome-block__title')}</h1>
+          <p className="home__text">{t('homepage.welcome-block__title-description')}</p>
 
           <a
             href="/signup"
@@ -21,7 +21,7 @@ const Home = () => {
             data-analytics-button="greenSignupHeroButton"
             className="btn btn-wrap btn-primary btn-block px-4"
           >
-            Register&nbsp;— it is free!
+            {t('homepage.welcome-block__button')}
           </a>
         </div>
       </div>

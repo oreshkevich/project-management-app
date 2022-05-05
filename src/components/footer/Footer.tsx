@@ -1,18 +1,21 @@
+import { useTranslation } from 'react-i18next';
 import './footer.css';
 
 const Footer = () => {
+  const { t } = useTranslation();
+
   return (
     <footer className="footer">
       <div className="footer__content">
         <p className="footer__info">
-          © {new Date().getFullYear()} Copyright Text | Developments:&nbsp;
+          © {new Date().getFullYear()} {t('footer.footer-text')}:&nbsp;
           <a
             className="footer__link"
             target="_blank"
             rel="noreferrer"
             href="https://github.com/oreshkevich"
           >
-            Henadzi
+            {t('footer.team-Henadzi')}
           </a>
           ,&nbsp;
           <a
@@ -21,7 +24,7 @@ const Footer = () => {
             rel="noreferrer"
             href="https://github.com/kerllsname"
           >
-            Kirill
+            {t('footer.team-Kirill')}
           </a>
           ,&nbsp;
           <a
@@ -30,7 +33,7 @@ const Footer = () => {
             rel="noreferrer"
             href="https://github.com/kvadratikk"
           >
-            Uladzislava
+            {t('footer.team-Uladzislava')}
           </a>
         </p>
         <a href="https://rs.school/" target="_blank" rel="noreferrer" className="footer__logo"></a>
