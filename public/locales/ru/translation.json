@@ -1,0 +1,28 @@
+{
+  "header": {
+    "log-in": "Войти в аккаунт",
+    "reqistration": "Зарегистрироваться",
+    "language": "Язык"
+  },
+  "authentification": {
+    "login": "Логин",
+    "email": "Электронная почта",
+    "password": "Пароль",
+    "enter-login": "Введите логин",
+    "enter-email": "Введите электронную почту",
+    "enter-password": "Введите пароль",
+    "submit-login": "Войти",
+    "submit-registration": "Зарегистрироваться"
+  },
+  "homepage": {
+    "welcome-block__title": "GoodBoard помогает командам эффективно решать рабочие задачи.",
+    "welcome-block__title-description": "Работайте в команде, управляйте проектами, пишите заметки и задания, ходите в магазин и не только. Наша интерактивная доска поможет вам во всем этом.",
+    "welcome-block__button": "Регистрируйтесь — это бесплатно!"
+  },
+  "footer": {
+    "footer-text": "Авторское право | Команда разработки",
+    "team-Henadzi": "Геннадий",
+    "team-Kirill": "Кирилл",
+    "team-Uladzislava": "Владислава"
+  }
+}
