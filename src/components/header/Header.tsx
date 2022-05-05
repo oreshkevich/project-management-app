@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 
 import './header.css';
 
-function Header() {
+const Header = () => {
   return (
     <header className="header d-flex justify-content-center bg-dark">
       <nav className="nav navbar navbar-expand-lg navbar-dark">
@@ -39,5 +39,5 @@ function Header() {
       </nav>
     </header>
   );
-}
+};
 export default Header;

@@ -1,10 +1,10 @@
 import AuthLogin from '../components/auth/AuthLogin';
 
-function Login() {
+const Login = () => {
   return (
     <section className="login">
       <AuthLogin />
     </section>
   );
-}
+};
 export { Login };
