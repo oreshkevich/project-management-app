@@ -37,19 +37,22 @@
   }
 }
 
-.home {
-  height: 100%;
-  background-image: url(./assets/images/main.webp);
-  background-repeat: no-repeat;
-  background-position: 100% 100%;
+
+.img-fluid {
+max-width: 110%;
+}
+
+.home__title {
+  font-size: 3rem;
+  line-height: 1.25;
 }
 
 .login {
   padding-top: 5%;
   height: 100%;
-  background-image: url(./assets/images/login.jpg);
+  background-image: url(./assets/images/login.png);
   background-repeat: no-repeat;
-  background-position: 50% 100%;
+  background-position: -21% 100%;
 }
 
 .signup {
