@@ -17,7 +17,19 @@
   "homepage": {
     "welcome-block__title": "GoodBoard helps teams to solve work tasks efficiently.",
     "welcome-block__title-description": "Work in a team, manage projects, write notes and assignments, go to the store and not only. Our interactive whiteboard will help you with all this.",
-    "welcome-block__button": "Register — it is free!"
+    "welcome-block__button": "Register — it is free!",
+    "team-block__title": "About the team",
+    "team-block__Henadzi-name": "Henadzi",
+    "team-block__Henadzi-description": "There will be something here",
+    "team-block__Henadzi-role": "Teamlead",
+    "team-block__Kirill-name": "Kirill",
+    "team-block__Kirill-description": "There will be something here",
+    "team-block__Kirill-role": "Member",
+    "team-block__Uladzislava-name": "Uladzislava",
+    "team-block__Uladzislava-description": "There will be something here",
+    "team-block__Uladzislava-role": "Member",
+    "course-block__title": "About the course",
+    "course-block__about": "There will be something here"
   },
   "footer": {
     "footer-text": "Copyright | Development Team",
