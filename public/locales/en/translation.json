@@ -4,7 +4,7 @@
     "reqistration": "Registration",
     "language": "Language"
   },
-  "authentication": {
+  "authentification": {
     "login": "Login",
     "email": "Email",
     "password": "Password",

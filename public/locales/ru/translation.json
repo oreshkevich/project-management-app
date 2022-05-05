@@ -4,7 +4,7 @@
     "reqistration": "Зарегистрироваться",
     "language": "Язык"
   },
-  "authentication": {
+  "authentification": {
     "login": "Логин",
     "email": "Электронная почта",
     "password": "Пароль",
