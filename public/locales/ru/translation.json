@@ -6,10 +6,10 @@
   },
   "authentification": {
     "login": "Логин",
-    "email": "Электронная почта",
+    "name": "Имя",
     "password": "Пароль",
     "enter-login": "Введите логин",
-    "enter-email": "Введите электронную почту",
+    "enter-name": "Введите имя",
     "enter-password": "Введите пароль",
     "submit-login": "Войти",
     "submit-registration": "Зарегистрироваться"
