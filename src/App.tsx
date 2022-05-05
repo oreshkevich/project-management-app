@@ -6,7 +6,7 @@ import { NotFound } from './pages/NotFound';
 import { Signup } from './pages/Signup';
 import { Login } from './pages/Login';
 
-function App() {
+const App = () => {
   return (
     <>
       <BrowserRouter basename="/">
@@ -23,6 +23,6 @@ function App() {
       </BrowserRouter>
     </>
   );
-}
+};
 
 export default App;
