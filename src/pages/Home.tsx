@@ -1,12 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import '../App.css';
-import img from '../assets/images/main.webp';
+import img from '../assets/images/sections/main.webp';
 
 const Home = () => {
   const { t } = useTranslation();
 
   return (
-    <section className="home">
+    <section className="container content home d-flex align-items-center">
       <div className="row">
         <div className="col-lg-5 offset-lg-1 order-2 hero-image">
           <img src={img} className="img-fluid" alt="main" />

@@ -37,9 +37,8 @@
   }
 }
 
-
 .img-fluid {
-max-width: 110%;
+  max-width: 110%;
 }
 
 .home__title {
@@ -47,19 +46,16 @@ max-width: 110%;
   line-height: 1.25;
 }
 
-.login {
-  padding-top: 5%;
+.home,
+.main {
   height: 100%;
-  background-image: url(./assets/images/login.png);
-  background-repeat: no-repeat;
-  background-position: -21% 100%;
 }
 
+.login,
 .signup {
   padding-top: 5%;
   height: 100%;
-  background-image: url(./assets/images/signup.webp);
-  background-repeat: no-repeat;
-  background-position: 50% 90%;
-  background-size: 50%;
+  background: url(./assets/images/sections/auth.webp) 93% 100% no-repeat,
+    url(./assets/images/sections/auth.svg) 6% 100% no-repeat;
+  background-size: 30%, 35%;
 }

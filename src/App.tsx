@@ -11,7 +11,7 @@ const App = () => {
     <>
       <BrowserRouter basename="/">
         <Header />
-        <main className="container content">
+        <main className="main">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
