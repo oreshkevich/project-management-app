@@ -31,7 +31,7 @@
 .footer__logo {
   height: 38px;
   width: 83px;
-  background-image: url(./logo-rsschool.svg);
+  background-image: url(../assets/icons/logo-rsschool.svg);
   background-repeat: no-repeat;
 }
 

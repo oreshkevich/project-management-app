@@ -1,13 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import '../App.css';
-import img from '../assets/images/main.webp';
+import img from '../assets/images/sections/main.webp';
 
 const Home = () => {
   const { t } = useTranslation();
 
   return (
     <>
-      <section className="home">
+      <section className="home container pt-5">
         <div className="row">
           <div className="col-lg-5 offset-lg-1 order-2 hero-image">
             <img src={img} className="img-fluid" alt="main" />
@@ -27,7 +27,7 @@ const Home = () => {
           </div>
         </div>
       </section>
-      <section>
+      <section className="team container pt-5">
         <h2 className="team__title">{t('homepage.team-block__title')}</h2>
         <div className="row">
           <div className="card mb-3 profile-card" style={{ width: '840px' }}>
@@ -82,7 +82,7 @@ const Home = () => {
           </div>
         </div>
       </section>
-      <section>
+      <section className="container pt-5">
         <h2 className="team__title">{t('homepage.course-block__title')}</h2>
         <p>{t('homepage.course-block__about')}</p>
       </section>

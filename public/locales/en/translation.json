@@ -6,10 +6,10 @@
   },
   "authentification": {
     "login": "Login",
-    "email": "Email",
+    "name": "Name",
     "password": "Password",
     "enter-login": "Enter login",
-    "enter-email": "Enter email adress",
+    "enter-name": "Enter name",
     "enter-password": "Enter password",
     "submit-login": "Log In",
     "submit-registration": "Register"
