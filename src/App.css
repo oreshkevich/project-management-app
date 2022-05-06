@@ -46,9 +46,10 @@
   line-height: 1.25;
 }
 
-.home,
 .main {
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1;
 }
 
 .login,
@@ -58,4 +59,8 @@
   background: url(./assets/images/sections/auth.webp) 93% 100% no-repeat,
     url(./assets/images/sections/auth.svg) 6% 100% no-repeat;
   background-size: 30%, 35%;
+}
+
+.card.mb-3:last-child {
+  margin-bottom: 0 !important;
 }
