@@ -2,6 +2,12 @@
   "header": {
     "log-in": "To come in",
     "reqistration": "Registration",
+    "create-board__button": "Create new board",
+    "create-board__modal": "New board",
+    "create-board__modal-title": "Board title",
+    "create-board__modal-description": "Bord description",
+    "create-board__modal-close-button": "Close",
+    "create-board__modal-submit-button": "Submit",
     "language": "Language"
   },
   "authentification": {
