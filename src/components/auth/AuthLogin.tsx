@@ -26,7 +26,7 @@ const AuthLogin = () => {
     try {
       const { data } = await login(formData);
       dispatch(setToken(data.token));
-      navigate('/main');
+      navigate('/');
     } catch (error) {
       console.log(error);
     }

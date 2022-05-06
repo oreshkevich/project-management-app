@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form, Button, Modal, NavDropdown } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
+import jwt_decode from 'jwt-decode';
 
 import { useAppDispatch, useAppSelector } from '../../core/hooks/redux';
 import { userSlice } from '../../core/store/reducers/UserSlice';
@@ -26,10 +27,19 @@ const Header = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const logout = () => {
+  const logout = useCallback(() => {
     dispatch(setToken(null));
-    navigate('/home');
-  };
+    navigate('/');
+  }, [dispatch, navigate, setToken]);
+
+  useEffect(() => {
+    if (token) {
+      const decodedToken: { iat: number } = jwt_decode(token);
+      if (decodedToken.iat * 2000 < new Date().getTime()) logout();
+    }
+
+    setToken(JSON.parse(localStorage.getItem('token') || ''));
+  }, [logout, setToken, token]);
 
   return (
     <header className="header d-flex justify-content-center bg-dark">

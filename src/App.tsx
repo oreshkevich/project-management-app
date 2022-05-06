@@ -16,7 +16,7 @@ const App = () => {
     <>
       <BrowserRouter basename="/">
         <Header />
-        <main className="main">
+        <main>
           <Routes>
             <Route
               path="/"

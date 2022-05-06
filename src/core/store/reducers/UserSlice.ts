@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { UserState } from '../../types/types';
 
 const initialState: UserState = {
-  token: '',
+  token: JSON.parse(localStorage.getItem('token') || ''),
 };
 
 export const userSlice = createSlice({
@@ -10,6 +10,7 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setToken(state, { payload }) {
+      localStorage.setItem('token', JSON.stringify(payload));
       state.token = payload;
     },
   },
