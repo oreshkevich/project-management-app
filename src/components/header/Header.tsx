@@ -9,6 +9,8 @@ const Header = () => {
   const { t, i18n } = useTranslation();
   const [show, setShow] = useState(false);
 
+  const user = localStorage.getItem('user') || '';
+
   const changeLanguage = (language: string) => {
     i18n.changeLanguage(language);
   };
@@ -36,21 +38,26 @@ const Header = () => {
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav">
-              <li className="nav-item">
-                <NavLink to="/login" className="nav-link" aria-current="page">
-                  {t('header.log-in')}
-                </NavLink>
-              </li>
-              <li className="nav-item">
-                <NavLink to="/signup" className="nav-link">
-                  {t('header.reqistration')}
-                </NavLink>
-              </li>
-              <li className="nav-item">
-                <Button variant="success" onClick={handleShow}>
-                  {t('header.create-board__button')}
-                </Button>
-              </li>
+              {user ? (
+                <li className="nav-item">
+                  <Button variant="success" onClick={handleShow}>
+                    {t('header.create-board__button')}
+                  </Button>
+                </li>
+              ) : (
+                <>
+                  <li className="nav-item">
+                    <NavLink to="/login" className="nav-link" aria-current="page">
+                      {t('header.log-in')}
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink to="/signup" className="nav-link">
+                      {t('header.reqistration')}
+                    </NavLink>
+                  </li>
+                </>
+              )}
               <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>
                 <Modal.Header closeButton>
                   <Modal.Title>{t('header.create-board__modal')}</Modal.Title>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { Button, Form } from 'react-bootstrap';
@@ -9,11 +10,19 @@ import { login } from '../../core/api/api';
 
 const AuthLogin = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({} as User);
 
   const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    await login(formData);
+
+    try {
+      const user = await login(formData);
+      localStorage.setItem('user', user.data.token);
+      navigate('/');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleChange = (event: React.SyntheticEvent) => {
