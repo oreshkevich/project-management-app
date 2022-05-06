@@ -5,21 +5,28 @@ import { useTranslation } from 'react-i18next';
 import { Button, Form } from 'react-bootstrap';
 import './auth.css';
 
+import { useAppDispatch } from '../../core/hooks/redux';
+import { userSlice } from '../../core/store/reducers/UserSlice';
+
 import { User } from '../../core/types/types';
 import { login } from '../../core/api/api';
 
 const AuthLogin = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   const [formData, setFormData] = useState({} as User);
+
+  const { setToken } = userSlice.actions;
 
   const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
 
     try {
-      const user = await login(formData);
-      localStorage.setItem('user', user.data.token);
-      navigate('/');
+      const { data } = await login(formData);
+      dispatch(setToken(data.token));
+      navigate('/main');
     } catch (error) {
       console.log(error);
     }

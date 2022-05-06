@@ -1,15 +1,23 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Form, Button, Modal, NavDropdown } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
+
+import { useAppDispatch, useAppSelector } from '../../core/hooks/redux';
+import { userSlice } from '../../core/store/reducers/UserSlice';
 
 import './header.css';
 
 const Header = () => {
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   const [show, setShow] = useState(false);
 
-  const user = localStorage.getItem('user') || '';
+  const { token } = useAppSelector((state) => state.userReducer);
+  const { setToken } = userSlice.actions;
 
   const changeLanguage = (language: string) => {
     i18n.changeLanguage(language);
@@ -17,6 +25,11 @@ const Header = () => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const logout = () => {
+    dispatch(setToken(null));
+    navigate('/home');
+  };
 
   return (
     <header className="header d-flex justify-content-center bg-dark">
@@ -38,12 +51,19 @@ const Header = () => {
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav">
-              {user ? (
-                <li className="nav-item">
-                  <Button variant="success" onClick={handleShow}>
-                    {t('header.create-board__button')}
-                  </Button>
-                </li>
+              {token ? (
+                <>
+                  <li className="nav-item">
+                    <Button variant="success" onClick={handleShow}>
+                      {t('header.create-board__button')}
+                    </Button>
+                  </li>
+                  <li className="nav-item">
+                    <Button variant="link nav-link" onClick={logout}>
+                      {t('header.log-out')}
+                    </Button>
+                  </li>
+                </>
               ) : (
                 <>
                   <li className="nav-item">

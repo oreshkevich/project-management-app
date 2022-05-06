@@ -1,6 +1,7 @@
 {
   "header": {
-    "log-in": "To come in",
+    "log-in": "Log In",
+    "log-out": "Log out",
     "reqistration": "Registration",
     "create-board__button": "Create new board",
     "create-board__modal": "New board",

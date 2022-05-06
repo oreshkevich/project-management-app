@@ -7,8 +7,10 @@ import { Signup } from './pages/Signup';
 import { Login } from './pages/Login';
 import { Main } from './pages/Main';
 
+import { useAppSelector } from './core/hooks/redux';
+
 const App = () => {
-  const user = localStorage.getItem('user') || '';
+  const { token } = useAppSelector((state) => state.userReducer);
 
   return (
     <>
@@ -18,12 +20,12 @@ const App = () => {
           <Routes>
             <Route
               path="/"
-              element={user ? <Navigate replace to="/main" /> : <Navigate replace to="/home" />}
+              element={token ? <Navigate replace to="/main" /> : <Navigate replace to="/home" />}
             />
-            <Route path="/login" element={user ? <Navigate replace to="/main" /> : <Login />} />
-            <Route path="/signup" element={user ? <Navigate replace to="/main" /> : <Signup />} />
-            <Route path="/main" element={user ? <Main /> : <Navigate replace to="/home" />} />
-            <Route path="/home" element={user ? <Navigate replace to="/main" /> : <Home />} />
+            <Route path="/login" element={token ? <Navigate replace to="/main" /> : <Login />} />
+            <Route path="/signup" element={token ? <Navigate replace to="/main" /> : <Signup />} />
+            <Route path="/main" element={token ? <Main /> : <Navigate replace to="/home" />} />
+            <Route path="/home" element={token ? <Navigate replace to="/main" /> : <Home />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
