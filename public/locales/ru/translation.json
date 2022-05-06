@@ -2,6 +2,12 @@
   "header": {
     "log-in": "Войти в аккаунт",
     "reqistration": "Зарегистрироваться",
+    "create-board__button": "Создать новую доску",
+    "create-board__modal": "Новая доска",
+    "create-board__modal-title": "Название доски",
+    "create-board__modal-description": "Описание доски",
+    "create-board__modal-close-button": "Отмена",
+    "create-board__modal-submit-button": "Создать",
     "language": "Язык"
   },
   "authentification": {
