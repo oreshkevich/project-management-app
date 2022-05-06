@@ -17,7 +17,19 @@
   "homepage": {
     "welcome-block__title": "GoodBoard помогает командам эффективно решать рабочие задачи.",
     "welcome-block__title-description": "Работайте в команде, управляйте проектами, пишите заметки и задания, ходите в магазин и не только. Наша интерактивная доска поможет вам во всем этом.",
-    "welcome-block__button": "Регистрируйтесь — это бесплатно!"
+    "welcome-block__button": "Регистрируйтесь — это бесплатно!",
+    "team-block__title": "О команде",
+    "team-block__Henadzi-name": "Геннадий",
+    "team-block__Henadzi-description": "Здесь что-то будет",
+    "team-block__Henadzi-role": "Тимлид",
+    "team-block__Kirill-name": "Кирилл",
+    "team-block__Kirill-description": "Здесь что-то будет",
+    "team-block__Kirill-role": "Участник",
+    "team-block__Uladzislava-name": "Владислава",
+    "team-block__Uladzislava-description": "Здесь что-то будет",
+    "team-block__Uladzislava-role": "Участник",
+    "course-block__title": "О курсе",
+    "course-block__about": "Здесь что-то будет"
   },
   "footer": {
     "footer-text": "Авторское право | Команда разработки",
