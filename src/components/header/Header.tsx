@@ -38,7 +38,7 @@ const Header = () => {
       if (decodedToken.iat * 2000 < new Date().getTime()) logout();
     }
 
-    setToken(JSON.parse(localStorage.getItem('token') || ''));
+    setToken(JSON.parse(localStorage.getItem('token') || String(null)));
   }, [logout, setToken, token]);
 
   return (

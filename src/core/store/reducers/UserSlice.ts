@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { UserState } from '../../types/types';
 
 const initialState: UserState = {
-  token: JSON.parse(localStorage.getItem('token') || ''),
+  token: JSON.parse(localStorage.getItem('token') || String(null)),
 };
 
 export const userSlice = createSlice({
