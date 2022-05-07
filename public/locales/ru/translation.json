@@ -1,6 +1,7 @@
 {
   "header": {
     "log-in": "Войти в аккаунт",
+    "log-out": "Выйти из аккаунта",
     "reqistration": "Зарегистрироваться",
     "create-board__button": "Создать новую доску",
     "create-board__modal": "Новая доска",

@@ -16,6 +16,12 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+main {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1;
+}
+
 #root {
   height: 100%;
   display: flex;
