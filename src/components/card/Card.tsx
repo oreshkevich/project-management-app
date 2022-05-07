@@ -43,8 +43,6 @@ const Card = () => {
   ]);
   const [currentBoard, setCurrentBoard] = useState<ICard | null>(null);
   const [currentItem, setCurrentItem] = useState<IItem | null>(null);
-  console.log(currentBoard);
-  console.log(currentItem);
 
   const dragOverHandler = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
