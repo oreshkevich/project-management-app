@@ -1,18 +1,19 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Form, Button, Modal, NavDropdown } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
-import jwt_decode from 'jwt-decode';
 
 import { useAppDispatch, useAppSelector } from '../../core/hooks/redux';
 import { userSlice } from '../../core/store/reducers/UserSlice';
+import { getUsers } from '../../core/api/api';
 
 import './header.css';
 
 const Header = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useAppDispatch();
 
   const [show, setShow] = useState(false);
@@ -33,13 +34,17 @@ const Header = () => {
   }, [dispatch, navigate, setToken]);
 
   useEffect(() => {
-    if (token) {
-      const decodedToken: { iat: number } = jwt_decode(token);
-      if (decodedToken.iat * 2000 < new Date().getTime()) logout();
-    }
+    const checkToken = async () => {
+      try {
+        await getUsers();
+      } catch (error) {
+        console.log(error);
+        dispatch(setToken(null));
+      }
+    };
 
-    setToken(JSON.parse(localStorage.getItem('token') || String(null)));
-  }, [logout, setToken, token]);
+    if (token) checkToken();
+  }, [setToken, dispatch, location, token]);
 
   return (
     <header className="header d-flex justify-content-center bg-dark">

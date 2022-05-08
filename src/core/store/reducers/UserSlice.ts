@@ -1,8 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { UserState } from '../../types/types';
+import { checkJson } from '../../helpers/helpers';
 
 const initialState: UserState = {
-  token: JSON.parse(localStorage.getItem('token') || String(null)),
+  token: checkJson(),
 };
 
 export const userSlice = createSlice({
