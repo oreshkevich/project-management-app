@@ -1,11 +1,5 @@
-*{
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-}
 
-.appCard {
- 
+.app-card {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -36,4 +30,9 @@
  margin: 5px 0;
  cursor: grab;
  background-color: #fcfcf9;
+}
+
+.icon {
+  margin-left: 10px;
+  cursor: pointer;
 }

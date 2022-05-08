@@ -1,9 +1,15 @@
 import './card.css';
 import React, { useState } from 'react';
+import { AiFillDelete } from 'react-icons/ai';
 
 interface ICard {
   id: number;
   title: string;
+  items: IItem[];
+}
+interface ICardBoard {
+  id?: number;
+  title?: string;
   items: IItem[];
 }
 interface IItem {
@@ -12,7 +18,7 @@ interface IItem {
 }
 
 const Card = () => {
-  const [boards, setBoards] = useState<(ICard | null)[]>([
+  const [boards, setBoards] = useState<(ICard | ICardBoard | null)[]>([
     {
       id: 1,
       title: 'Сделать',
@@ -41,10 +47,11 @@ const Card = () => {
       ],
     },
   ]);
+
   const [currentBoard, setCurrentBoard] = useState<ICard | null>(null);
   const [currentItem, setCurrentItem] = useState<IItem | null>(null);
-  console.log(currentBoard);
-  console.log(currentItem);
+
+  // console.log(currentItem);
 
   const dragOverHandler = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -108,8 +115,32 @@ const Card = () => {
     );
   }
 
+  const handleDeleteBoard = (id: number) => {
+    setBoards(boards.filter((todo) => (todo as ICard).id !== id));
+  };
+
+  const handleDelete = (idItem: number, board: ICard, itemTitle: string) => {
+    const isConfirm = confirm(`Точно вы хотите удалить задачу: ${itemTitle}`);
+    if (!isConfirm) return isConfirm;
+
+    const boardId = board.id - 1;
+
+    setBoards(
+      boards.map((todo) =>
+        (todo as ICard).id === board.id
+          ? {
+              ...todo,
+              items: (boards[boardId] as ICard | ICardBoard).items.filter(
+                (todo: { id: number }) => todo.id !== idItem
+              ),
+            }
+          : todo
+      )
+    );
+  };
+
   return (
-    <div className="appCard">
+    <div className="app-card">
       {boards.map((board) => (
         <div
           key={(board as ICard).id}
@@ -118,6 +149,9 @@ const Card = () => {
           onDrop={(e) => dropCardHandler(e, board as ICard)}
         >
           <div className="board__title">{(board as ICard).title}</div>
+          <span className="icon" onClick={() => handleDeleteBoard((board as ICard).id)}>
+            <AiFillDelete />
+          </span>
           {(board as ICard).items.map((item) => (
             <div
               key={item.id}
@@ -130,6 +164,12 @@ const Card = () => {
               className="item"
             >
               {item.title}
+              <span
+                className="icon"
+                onClick={() => handleDelete(item.id, board as ICard, item.title)}
+              >
+                <AiFillDelete />
+              </span>
             </div>
           ))}
         </div>
