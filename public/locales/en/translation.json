@@ -17,6 +17,7 @@
     "password": "Password",
     "enter-name": "Enter name",
     "error-name": "Please enter name",
+    "error-login-exist": "This user already exist",
     "error-name-length": "The minimum name length is 4 characters",
     "enter-login": "Enter login",
     "error-login": "Please enter login",
@@ -24,6 +25,7 @@
     "enter-password": "Enter password",
     "error-password": "Please enter password",
     "error-password-length": "The minimum password length is 8 characters",
+    "error-auth": "Check the entered data",
     "submit-login": "Log In",
     "submit-registration": "Register"
   },

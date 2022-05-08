@@ -14,6 +14,7 @@ const AuthSignup = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({} as NewUser);
+  const [requestStatus, setStatus] = useState(true);
   const {
     register,
     formState: { errors },
@@ -23,9 +24,10 @@ const AuthSignup = () => {
   const onSubmit = async () => {
     try {
       await signup(formData);
+      setStatus(true);
       navigate('/login');
     } catch (error) {
-      console.log(error);
+      setStatus(false);
     }
   };
 
@@ -70,6 +72,9 @@ const AuthSignup = () => {
           placeholder={t('authentification.enter-login')}
         />
         <div>{errors?.login && <p className="form-error">{errors?.login?.message}</p>}</div>
+        <div>
+          {!requestStatus && <p className="form-error">{t('authentification.error-auth')}</p>}
+        </div>
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicPassword">

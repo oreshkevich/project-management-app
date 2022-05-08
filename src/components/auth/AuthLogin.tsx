@@ -17,6 +17,7 @@ const AuthLogin = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const [requestStatus, setStatus] = useState(true);
 
   const {
     register,
@@ -29,14 +30,13 @@ const AuthLogin = () => {
   const { setToken } = userSlice.actions;
 
   const onSubmit = async () => {
-    console.log(formData);
-
     try {
       const { data } = await login(formData);
       dispatch(setToken(data.token));
+      setStatus(true);
       navigate('/');
     } catch (error) {
-      console.log(error);
+      setStatus(false);
     }
   };
 
@@ -83,6 +83,10 @@ const AuthLogin = () => {
         />
         <div>{errors?.password && <p className="form-error">{errors?.password?.message}</p>}</div>
       </Form.Group>
+
+      <div>
+        {!requestStatus && <p className="form-error">{t('authentification.error-auth')}</p>}
+      </div>
 
       <Button variant="outline-*" className="auth__submit mt-2 text-white" type="submit">
         {t('authentification.submit-login')}
