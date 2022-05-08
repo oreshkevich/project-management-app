@@ -8,19 +8,26 @@ import './auth.css';
 import { NewUser } from '../../core/types/types';
 import { signup } from '../../core/api/api';
 
+import { useForm } from 'react-hook-form';
+
 const AuthSignup = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({} as NewUser);
+  const [requestStatus, setStatus] = useState(true);
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({ mode: 'onBlur' });
 
-  const handleSubmit = async (event: React.SyntheticEvent) => {
-    event.preventDefault();
-
+  const onSubmit = async () => {
     try {
       await signup(formData);
+      setStatus(true);
       navigate('/login');
     } catch (error) {
-      console.log(error);
+      setStatus(false);
     }
   };
 
@@ -34,26 +41,56 @@ const AuthSignup = () => {
   return (
     <Form
       className="auth d-flex flex-column auth mx-auto"
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(onSubmit)}
       onChange={handleChange}
     >
       <Form.Group className="mb-3" controlId="formBasicName">
-        <Form.Label>{t('authentification.name')}*</Form.Label>
-        <Form.Control name="name" placeholder={t('authentification.enter-name')} />
+        <Form.Label>{t('authentification.name')}</Form.Label>
+        <Form.Control
+          {...register('name', {
+            required: `${t('authentification.error-name')}`,
+            minLength: {
+              value: 4,
+              message: `${t('authentification.error-name-length')}`,
+            },
+          })}
+          placeholder={t('authentification.enter-name')}
+        />
+        <div>{errors?.name && <p className="form-error">{errors?.name?.message}</p>}</div>
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasiclogin">
-        <Form.Label>{t('authentification.login')}*</Form.Label>
-        <Form.Control name="login" placeholder={t('authentification.enter-login')} />
+        <Form.Label>{t('authentification.login')}</Form.Label>
+        <Form.Control
+          {...register('login', {
+            required: `${t('authentification.error-login')}`,
+            minLength: {
+              value: 4,
+              message: `${t('authentification.error-login-length')}`,
+            },
+          })}
+          placeholder={t('authentification.enter-login')}
+        />
+        <div>{errors?.login && <p className="form-error">{errors?.login?.message}</p>}</div>
+        <div>
+          {!requestStatus && <p className="form-error">{t('authentification.error-auth')}</p>}
+        </div>
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicPassword">
-        <Form.Label>{t('authentification.password')}*</Form.Label>
+        <Form.Label>{t('authentification.password')}</Form.Label>
         <Form.Control
-          name="password"
+          {...register('password', {
+            required: `${t('authentification.error-password')}`,
+            minLength: {
+              value: 8,
+              message: `${t('authentification.error-password-length')}`,
+            },
+          })}
           type="password"
           placeholder={t('authentification.enter-password')}
         />
+        <div>{errors?.password && <p className="form-error">{errors?.password?.message}</p>}</div>
       </Form.Group>
 
       <Button variant="outline-*" className="auth__submit mt-2 text-white" type="submit">
