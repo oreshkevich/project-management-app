@@ -16,3 +16,7 @@ export type AppDispatch = AppStore['dispatch'];
 export type UserState = {
   token: string | null;
 };
+
+export type CatchedError = {
+  message: string;
+};

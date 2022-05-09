@@ -7,6 +7,7 @@ import { NavLink } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../core/hooks/redux';
 import { userSlice } from '../../core/store/reducers/UserSlice';
 import { checkToken } from '../../core/store/creators/asyncCreators';
+import { CatchedError } from '../../core/types/types';
 
 import './header.css';
 
@@ -34,9 +35,17 @@ const Header = () => {
   }, [dispatch, navigate, setToken]);
 
   useEffect(() => {
-    //delete or move later
-    if (token) dispatch(checkToken());
-  }, [setToken, dispatch, location, token]);
+    //move when all api request will work
+    const check = async () => {
+      try {
+        await dispatch(checkToken()).unwrap();
+      } catch (error) {
+        alert((error as CatchedError).message);
+      }
+    };
+
+    if (token) check();
+  }, [dispatch, location, token]);
 
   return (
     <header className="header d-flex justify-content-center bg-dark">

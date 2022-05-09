@@ -17,9 +17,9 @@ export const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(checkToken.rejected, (state, { payload }) => {
+    builder.addCase(checkToken.rejected, (state) => {
+      localStorage.setItem('token', JSON.stringify(null));
       state.token = null;
-      console.log(payload);
     });
     builder.addCase(submitLogin.fulfilled, (state, { payload }) => {
       localStorage.setItem('token', JSON.stringify(payload));

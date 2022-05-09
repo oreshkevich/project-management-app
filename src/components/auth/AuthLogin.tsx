@@ -26,11 +26,12 @@ const AuthLogin = () => {
 
   const onSubmit = async () => {
     try {
-      await dispatch(submitLogin(formData));
+      await dispatch(submitLogin(formData)).unwrap();
       setStatus(true);
       navigate('/');
     } catch (error) {
       setStatus(false);
+      alert((error as Error).message);
     }
   };
 
