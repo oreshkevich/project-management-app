@@ -31,7 +31,7 @@ const Header = () => {
 
   const logout = useCallback(() => {
     dispatch(setToken(null));
-    navigate('/');
+    navigate('/home');
   }, [dispatch, navigate, setToken]);
 
   useEffect(() => {
@@ -51,7 +51,7 @@ const Header = () => {
     <header className="header d-flex justify-content-center bg-dark">
       <nav className="nav navbar navbar-expand-lg navbar-dark">
         <div className="container-fluid">
-          <NavLink to="/" className="navbar-brand">
+          <NavLink to={token ? '/main' : '/home'} className="navbar-brand">
             GoodBoard
           </NavLink>
           <button
