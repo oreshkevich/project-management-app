@@ -1,17 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useForm } from 'react-hook-form';
 
 import { Button, Form } from 'react-bootstrap';
 import './auth.css';
 
 import { useAppDispatch } from '../../core/hooks/redux';
-import { userSlice } from '../../core/store/reducers/UserSlice';
-
 import { User } from '../../core/types/types';
-import { login } from '../../core/api/api';
-
-import { useForm } from 'react-hook-form';
+import { submitLogin } from '../../core/store/creators/asyncCreators';
 
 const AuthLogin = () => {
   const { t } = useTranslation();
@@ -27,12 +24,9 @@ const AuthLogin = () => {
 
   const [formData, setFormData] = useState({} as User);
 
-  const { setToken } = userSlice.actions;
-
   const onSubmit = async () => {
     try {
-      const { data } = await login(formData);
-      dispatch(setToken(data.token));
+      await dispatch(submitLogin(formData));
       setStatus(true);
       navigate('/');
     } catch (error) {

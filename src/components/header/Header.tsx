@@ -6,7 +6,7 @@ import { NavLink } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../core/hooks/redux';
 import { userSlice } from '../../core/store/reducers/UserSlice';
-import { getUsers } from '../../core/api/api';
+import { checkToken } from '../../core/store/creators/asyncCreators';
 
 import './header.css';
 
@@ -34,16 +34,8 @@ const Header = () => {
   }, [dispatch, navigate, setToken]);
 
   useEffect(() => {
-    const checkToken = async () => {
-      try {
-        await getUsers();
-      } catch (error) {
-        console.log(error);
-        dispatch(setToken(null));
-      }
-    };
-
-    if (token) checkToken();
+    //delete or move later
+    if (token) dispatch(checkToken());
   }, [setToken, dispatch, location, token]);
 
   return (

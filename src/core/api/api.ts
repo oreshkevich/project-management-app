@@ -6,14 +6,14 @@ const API = axios.create({
   baseURL: 'https://goodboard.herokuapp.com/',
 });
 
-API.interceptors.request.use((req) => {
+API.interceptors.request.use((request) => {
   const token = checkJson();
 
-  if (token && req.headers) {
-    req.headers.Authorization = `Bearer ${token}`;
+  if (token && request.headers) {
+    request.headers.Authorization = `Bearer ${token}`;
   }
 
-  return req;
+  return request;
 });
 
 export const signup = (formData: NewUser) => API.post('/signup', formData);

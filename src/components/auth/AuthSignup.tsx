@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { useAppDispatch } from '../../core/hooks/redux';
 
 import { Button, Form } from 'react-bootstrap';
 import './auth.css';
 
 import { NewUser } from '../../core/types/types';
-import { signup } from '../../core/api/api';
-
-import { useForm } from 'react-hook-form';
+import { submitSignup } from '../../core/store/creators/asyncCreators';
 
 const AuthSignup = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [formData, setFormData] = useState({} as NewUser);
   const [requestStatus, setStatus] = useState(true);
   const {
@@ -23,7 +24,7 @@ const AuthSignup = () => {
 
   const onSubmit = async () => {
     try {
-      await signup(formData);
+      await dispatch(submitSignup(formData));
       setStatus(true);
       navigate('/login');
     } catch (error) {
