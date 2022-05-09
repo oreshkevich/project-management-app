@@ -30,6 +30,10 @@
     "submit-login": "Log In",
     "submit-registration": "Register"
   },
+  "profile": {
+    "save": "Save",
+    "delete": "Delete profile"
+  },
   "homepage": {
     "welcome-block__title": "GoodBoard helps teams to solve work tasks efficiently.",
     "welcome-block__title-description": "Work in a team, manage projects, write notes and assignments, go to the store and not only. Our interactive whiteboard will help you with all this.",

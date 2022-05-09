@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { UserState } from '../../types/types';
 import { checkJson } from '../../helpers/helpers';
-import { checkToken, submitLogin } from '../creators/asyncCreators';
+import { checkToken, submitLogin, deleteProfile } from '../creators/UserCreators';
 
 const initialState: UserState = {
   token: checkJson(),
@@ -24,6 +24,10 @@ export const userSlice = createSlice({
     builder.addCase(submitLogin.fulfilled, (state, { payload }) => {
       localStorage.setItem('token', JSON.stringify(payload));
       state.token = payload;
+    });
+    builder.addCase(deleteProfile.fulfilled, (state) => {
+      localStorage.setItem('token', JSON.stringify(null));
+      state.token = null;
     });
   },
 });

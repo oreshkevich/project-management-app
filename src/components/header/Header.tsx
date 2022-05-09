@@ -6,7 +6,7 @@ import { NavLink } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../core/hooks/redux';
 import { userSlice } from '../../core/store/reducers/UserSlice';
-import { checkToken } from '../../core/store/creators/asyncCreators';
+import { checkToken } from '../../core/store/creators/UserCreators';
 import { CatchedError } from '../../core/types/types';
 
 import FormBoard from '../formBoard/FormBoard';
@@ -76,9 +76,9 @@ const Header = () => {
                     </Button>
                   </li>
                   <li className="nav-item">
-                    <Button variant="link nav-link" className="edit" onClick={logout}>
+                    <NavLink to="/profile" className="nav-link">
                       {t('header.edit')}
-                    </Button>
+                    </NavLink>
                   </li>
                   <li className="nav-item">
                     <Button variant="link nav-link" className="logout" onClick={logout}>

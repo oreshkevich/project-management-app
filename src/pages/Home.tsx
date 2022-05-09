@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import '../App.css';
 import img from '../assets/images/sections/main.webp';
 
-const Home = () => {
+export const Home = () => {
   const { t } = useTranslation();
 
   return (
@@ -89,5 +89,3 @@ const Home = () => {
     </>
   );
 };
-
-export { Home };

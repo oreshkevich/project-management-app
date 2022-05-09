@@ -6,6 +6,7 @@ import { NotFound } from './pages/NotFound';
 import { Signup } from './pages/Signup';
 import { Login } from './pages/Login';
 import { Main } from './pages/Main';
+import { Profile } from './pages/Profile';
 
 import { useAppSelector } from './core/hooks/redux';
 
@@ -21,6 +22,7 @@ const App = () => {
             path="/"
             element={token ? <Navigate replace to="/main" /> : <Navigate replace to="/home" />}
           />
+          <Route path="/profile" element={token ? <Profile /> : <Navigate replace to="/home" />} />
           <Route path="/login" element={token ? <Navigate replace to="/main" /> : <Login />} />
           <Route path="/signup" element={token ? <Navigate replace to="/main" /> : <Signup />} />
           <Route path="/main" element={token ? <Main /> : <Navigate replace to="/home" />} />

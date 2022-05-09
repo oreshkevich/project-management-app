@@ -1,6 +1,6 @@
 import AuthLogin from '../components/auth/AuthLogin';
 
-const Login = () => {
+export const Login = () => {
   return (
     <section className="content login">
       <div className="container">
@@ -9,4 +9,3 @@ const Login = () => {
     </section>
   );
 };
-export { Login };
