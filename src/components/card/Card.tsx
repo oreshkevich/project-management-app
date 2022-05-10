@@ -47,10 +47,9 @@ const Card = () => {
       ],
     },
   ];
-  console.log(boardsObj);
+
   const [boards, setBoards] =
     useState<(ICard | ICardBoard | { title: string | undefined } | null)[]>(boardsObj);
-  console.log(boards);
 
   const [currentBoard, setCurrentBoard] = useState<ICard | null>(null);
   const [currentItem, setCurrentItem] = useState<IItem | null>(null);
@@ -144,17 +143,16 @@ const Card = () => {
       )
     );
   };
+  const [idEditBoard, setIdEditBoard] = useState<number>(-1);
   const [edit, setEdit] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  console.log(edit);
 
   useEffect(() => {
     inputRef.current?.focus();
   }, [edit]);
 
   const handleEdit = (id: number) => {
-    console.log(id);
-
+    setIdEditBoard(id);
     if (!edit) {
       setEdit(!edit);
     }
@@ -185,11 +183,13 @@ const Card = () => {
     );
 
     setEdit(false);
+    setIdEditBoard(-1);
   };
   const handleEditForm = (e: React.FormEvent) => {
     e.preventDefault();
 
     setEdit(false);
+    setIdEditBoard(-1);
   };
   return (
     <div className="app-card">
@@ -202,7 +202,7 @@ const Card = () => {
           onDrop={(e) => dropCardHandler(e, board as ICard)}
         >
           <div className="board__title">
-            {edit ? (
+            {edit && (board as ICard).id === idEditBoard ? (
               <div className="board__title-button">
                 <Button variant="info" type="submit">
                   Sub
