@@ -1,50 +1,63 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
-import { useAppDispatch } from '../../core/hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../core/hooks/redux';
+import jwt_decode from 'jwt-decode';
 
 import { Button, Form } from 'react-bootstrap';
-import './auth.css';
 
 import { NewUser, CatchedError } from '../../core/types/types';
-import { submitSignup } from '../../core/store/creators/UserCreators';
+import { editProfile, deleteProfile, getProfile } from '../../core/store/creators/UserCreators';
 
-const AuthSignup = () => {
+const FormProfile = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
-  const [formData, setFormData] = useState({} as NewUser);
+  const { token } = useAppSelector((state) => state.userReducer);
   const [requestStatus, setStatus] = useState(true);
   const {
     register,
     formState: { errors },
     handleSubmit,
+    setValue,
+    getValues,
   } = useForm({ mode: 'onBlur' });
+
+  useEffect(() => {
+    const getFormData = async () => {
+      const { userId: id }: { userId: string } = jwt_decode(String(token));
+      const { login, name } = await dispatch(getProfile(id)).unwrap();
+      setValue('name', name, { shouldDirty: true });
+      setValue('login', login, { shouldDirty: true });
+    };
+
+    getFormData();
+  }, [dispatch, token, setValue]);
 
   const onSubmit = async () => {
     try {
-      await dispatch(submitSignup(formData)).unwrap();
+      const { userId: id }: { userId: string } = jwt_decode(String(token));
+      await dispatch(editProfile({ id, formData: getValues() as NewUser })).unwrap();
       setStatus(true);
-      alert('User was created');
+      alert('Profile was edited');
     } catch (error) {
       alert((error as CatchedError).message);
       setStatus(false);
     }
   };
 
-  const handleChange = (event: React.SyntheticEvent) => {
-    const field = (event.target as HTMLInputElement).name;
-    const value = (event.target as HTMLInputElement).value;
-
-    setFormData({ ...formData, [field]: value });
+  const handleDelete = async () => {
+    try {
+      const { userId: id }: { userId: string } = jwt_decode(String(token));
+      await dispatch(deleteProfile(id)).unwrap();
+      alert('Profile was deleted');
+    } catch (error) {
+      alert((error as CatchedError).message);
+    }
   };
 
   return (
-    <Form
-      className="auth d-flex flex-column auth mx-auto"
-      onSubmit={handleSubmit(onSubmit)}
-      onChange={handleChange}
-    >
+    <Form className="auth d-flex flex-column auth mx-auto" onSubmit={handleSubmit(onSubmit)}>
       <Form.Group className="mb-3" controlId="formBasicName">
         <Form.Label>{t('authentification.name')}</Form.Label>
         <Form.Control
@@ -95,10 +108,13 @@ const AuthSignup = () => {
       </Form.Group>
 
       <Button variant="outline-*" className="auth__submit mt-2 text-white" type="submit">
-        {t('authentification.submit-registration')}
+        {t('profile.save')}
+      </Button>
+      <Button variant="danger" className="mt-2 text-white" onClick={handleDelete}>
+        {t('profile.delete')}
       </Button>
     </Form>
   );
 };
 
-export default AuthSignup;
+export default FormProfile;

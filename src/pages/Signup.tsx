@@ -1,6 +1,6 @@
 import AuthSignup from '../components/auth/AuthSignup';
 
-const Signup = () => {
+export const Signup = () => {
   return (
     <section className="content signup">
       <div className="container">
@@ -9,5 +9,3 @@ const Signup = () => {
     </section>
   );
 };
-
-export { Signup };

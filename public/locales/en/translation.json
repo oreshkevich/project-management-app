@@ -1,7 +1,8 @@
 {
   "header": {
-    "log-in": "Log In",
-    "log-out": "Log Out",
+    "log-in": "Log in",
+    "log-out": "Log out",
+    "edit": "Edit profile",
     "reqistration": "Registration",
     "create-board__button": "Create new board",
     "create-board__modal": "New board",
@@ -28,6 +29,10 @@
     "error-auth": "Check the entered data",
     "submit-login": "Log In",
     "submit-registration": "Register"
+  },
+  "profile": {
+    "save": "Save",
+    "delete": "Delete profile"
   },
   "homepage": {
     "welcome-block__title": "GoodBoard helps teams to solve work tasks efficiently.",

@@ -2,6 +2,7 @@
   "header": {
     "log-in": "Войти в аккаунт",
     "log-out": "Выйти из аккаунта",
+    "edit": "Редактировать профиль",
     "reqistration": "Зарегистрироваться",
     "create-board__button": "Создать новую доску",
     "create-board__modal": "Новая доска",
@@ -28,6 +29,10 @@
     "error-auth": "Проверьте введённые данные",
     "submit-login": "Войти",
     "submit-registration": "Зарегистрироваться"
+  },
+  "profile": {
+    "save": "Сохранить",
+    "delete": "Удалить профиль"
   },
   "homepage": {
     "welcome-block__title": "GoodBoard помогает командам эффективно решать рабочие задачи.",

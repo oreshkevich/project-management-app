@@ -1,12 +1,15 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Form, Button, Modal, NavDropdown } from 'react-bootstrap';
+import { Button, NavDropdown } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../core/hooks/redux';
 import { userSlice } from '../../core/store/reducers/UserSlice';
-import { getUsers } from '../../core/api/api';
+import { checkToken } from '../../core/store/creators/UserCreators';
+import { CatchedError } from '../../core/types/types';
+
+import FormBoard from '../formBoard/FormBoard';
 
 import './header.css';
 
@@ -25,32 +28,31 @@ const Header = () => {
     i18n.changeLanguage(language);
   };
 
-  const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   const logout = useCallback(() => {
     dispatch(setToken(null));
-    navigate('/');
+    navigate('/home');
   }, [dispatch, navigate, setToken]);
 
   useEffect(() => {
-    const checkToken = async () => {
+    //move when all api request will work
+    const check = async () => {
       try {
-        await getUsers();
+        await dispatch(checkToken()).unwrap();
       } catch (error) {
-        console.log(error);
-        dispatch(setToken(null));
+        alert((error as CatchedError).message);
       }
     };
 
-    if (token) checkToken();
-  }, [setToken, dispatch, location, token]);
+    if (token) check();
+  }, [dispatch, location, token]);
 
   return (
     <header className="header d-flex justify-content-center bg-dark">
       <nav className="nav navbar navbar-expand-lg navbar-dark">
         <div className="container-fluid">
-          <NavLink to="/" className="navbar-brand">
+          <NavLink to={token ? '/main' : '/home'} className="navbar-brand">
             GoodBoard
           </NavLink>
           <button
@@ -74,7 +76,12 @@ const Header = () => {
                     </Button>
                   </li>
                   <li className="nav-item">
-                    <Button variant="link nav-link" onClick={logout}>
+                    <NavLink to="/profile" className="nav-link">
+                      {t('header.edit')}
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <Button variant="link nav-link" className="logout" onClick={logout}>
                       {t('header.log-out')}
                     </Button>
                   </li>
@@ -93,33 +100,7 @@ const Header = () => {
                   </li>
                 </>
               )}
-              <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>
-                <Modal.Header closeButton>
-                  <Modal.Title>{t('header.create-board__modal')}</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <Form>
-                    <Form.Group className="mb-3">
-                      <Form.Label>{t('header.create-board__modal-title')}</Form.Label>
-                      <Form.Control
-                        type="text"
-                        placeholder={t('header.create-board__modal-title')}
-                      />
-                    </Form.Group>
-
-                    <Form.Group className="mb-3">
-                      <Form.Label>{t('header.create-board__modal-description')}</Form.Label>
-                      <Form.Control as="textarea" aria-label="With textarea" />
-                    </Form.Group>
-                  </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                  <Button variant="secondary" onClick={handleClose}>
-                    {t('header.create-board__modal-close-button')}
-                  </Button>
-                  <Button variant="success">{t('header.create-board__modal-submit-button')}</Button>
-                </Modal.Footer>
-              </Modal>
+              {show ? <FormBoard setShow={setShow} /> : null}
               <li className="nav-item">
                 <NavDropdown title={t('header.language')} id="basic-nav-dropdown">
                   <NavDropdown.Item onClick={() => changeLanguage('ru')}>Russian</NavDropdown.Item>

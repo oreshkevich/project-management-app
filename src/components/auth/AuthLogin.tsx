@@ -1,17 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useForm } from 'react-hook-form';
 
 import { Button, Form } from 'react-bootstrap';
 import './auth.css';
 
 import { useAppDispatch } from '../../core/hooks/redux';
-import { userSlice } from '../../core/store/reducers/UserSlice';
-
 import { User } from '../../core/types/types';
-import { login } from '../../core/api/api';
-
-import { useForm } from 'react-hook-form';
+import { submitLogin } from '../../core/store/creators/UserCreators';
 
 const AuthLogin = () => {
   const { t } = useTranslation();
@@ -27,16 +24,14 @@ const AuthLogin = () => {
 
   const [formData, setFormData] = useState({} as User);
 
-  const { setToken } = userSlice.actions;
-
   const onSubmit = async () => {
     try {
-      const { data } = await login(formData);
-      dispatch(setToken(data.token));
+      await dispatch(submitLogin(formData)).unwrap();
       setStatus(true);
       navigate('/');
     } catch (error) {
       setStatus(false);
+      alert((error as Error).message);
     }
   };
 
@@ -54,7 +49,7 @@ const AuthLogin = () => {
       onChange={handleChange}
     >
       <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Label>{t('authentification.login')}*</Form.Label>
+        <Form.Label>{t('authentification.login')}</Form.Label>
         <Form.Control
           {...register('login', {
             required: `${t('authentification.error-login')}`,
@@ -69,7 +64,7 @@ const AuthLogin = () => {
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicPassword">
-        <Form.Label>{t('authentification.password')}*</Form.Label>
+        <Form.Label>{t('authentification.password')}</Form.Label>
         <Form.Control
           {...register('password', {
             required: `${t('authentification.error-password')}`,

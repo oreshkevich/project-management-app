@@ -2,3 +2,8 @@
   max-width: 1400px;
   width: 100%;
 }
+
+.logout:focus {
+  box-shadow: none;
+  outline: 0px;
+}
