@@ -18,7 +18,7 @@ interface IItem {
 }
 
 const Card = () => {
-  const [boards, setBoards] = useState<(ICard | ICardBoard | { title: string } | null)[]>([
+  const boardsObj = [
     {
       id: 1,
       title: 'Сделать',
@@ -46,7 +46,10 @@ const Card = () => {
         { id: 9, title: 'Код3' },
       ],
     },
-  ]);
+  ];
+
+  const [boards, setBoards] =
+    useState<(ICard | ICardBoard | { title: string | undefined } | null)[]>(boardsObj);
 
   const [currentBoard, setCurrentBoard] = useState<ICard | null>(null);
   const [currentItem, setCurrentItem] = useState<IItem | null>(null);
@@ -140,6 +143,7 @@ const Card = () => {
       )
     );
   };
+  const [idEditBoard, setIdEditBoard] = useState<number>(-1);
   const [edit, setEdit] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -148,8 +152,7 @@ const Card = () => {
   }, [edit]);
 
   const handleEdit = (id: number) => {
-    console.log(id);
-
+    setIdEditBoard(id);
     if (!edit) {
       setEdit(!edit);
     }
@@ -166,13 +169,27 @@ const Card = () => {
       )
     );
   };
-  const handleEditCancel = () => {
+  const handleEditCancel = (id: number) => {
+    const boardId = id - 1;
+    setBoards(
+      boards.map((todo) =>
+        (todo as ICard).id === id
+          ? {
+              ...todo,
+              title: boardsObj[boardId].title,
+            }
+          : todo
+      )
+    );
+
     setEdit(false);
+    setIdEditBoard(-1);
   };
   const handleEditForm = (e: React.FormEvent) => {
     e.preventDefault();
 
     setEdit(false);
+    setIdEditBoard(-1);
   };
   return (
     <div className="app-card">
@@ -185,12 +202,16 @@ const Card = () => {
           onDrop={(e) => dropCardHandler(e, board as ICard)}
         >
           <div className="board__title">
-            {edit ? (
+            {edit && (board as ICard).id === idEditBoard ? (
               <div className="board__title-button">
                 <Button variant="info" type="submit">
                   Sub
                 </Button>
-                <Button variant="info" type="button" onClick={() => handleEditCancel()}>
+                <Button
+                  variant="info"
+                  type="button"
+                  onClick={() => handleEditCancel((board as ICard).id)}
+                >
                   Can.
                 </Button>
 
