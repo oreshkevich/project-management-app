@@ -23,3 +23,5 @@ export const getUsers = () => API.get('/users');
 export const getUser = (id: string) => API.get(`/users/${id}`);
 export const updateUser = (id: string, formData: NewUser) => API.put(`/users/${id}`, formData);
 export const deleteUser = (id: string) => API.delete(`/users/${id}`);
+
+// export const col = (formData: colName) => API.post(`/boards/${boardId}/colums`, formData);
