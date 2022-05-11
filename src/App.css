@@ -58,3 +58,9 @@
 .card.mb-3:last-child {
   margin-bottom: 0 !important;
 }
+
+.main-route {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
