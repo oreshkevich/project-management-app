@@ -1,34 +1,32 @@
 import { SetStateAction } from 'react';
 import { Form, Button, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { ColData } from '../../core/types/types';
+import { createColumn } from '../../core/api/api';
 import { useForm } from 'react-hook-form';
+import './formColumn.css';
 
-import './formBoard.css';
-import { BoardData } from '../../core/types/types';
-import { createBoard } from '../../core/api/api';
-
-const FormBoard = ({ setShow }: { setShow: (value: SetStateAction<boolean>) => void }) => {
+const FormColumn = ({ setShow }: { setShow: (value: SetStateAction<boolean>) => void }) => {
   const { t } = useTranslation();
 
   const {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm<BoardData>({ mode: 'onBlur' });
+  } = useForm<ColData>({ mode: 'onBlur' });
 
   const handleClose = () => setShow(false);
 
-  const onSubmit = async (data: BoardData) => {
-    await createBoard(data);
+  const onSubmit = async (data: ColData) => {
+    await createColumn(data);
 
     handleClose();
-    window.location.reload();
   };
 
   return (
     <Modal show={true} onHide={handleClose} backdrop="static" keyboard={false}>
       <Modal.Header closeButton>
-        <Modal.Title>{t('header.create-board__modal')}</Modal.Title>
+        <Modal.Title>{t('header.create-col__modal')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit)}>
@@ -42,7 +40,7 @@ const FormBoard = ({ setShow }: { setShow: (value: SetStateAction<boolean>) => v
                   message: `${t('header.create-board__modal-error-title-length')}`,
                 },
               })}
-              placeholder={t('header.create-board__modal-title')}
+              placeholder={t('header.create-col__modal-title')}
             />
             <div>{errors?.title && <p className="form-error">{errors?.title?.message}</p>}</div>
           </Form.Group>
@@ -61,4 +59,4 @@ const FormBoard = ({ setShow }: { setShow: (value: SetStateAction<boolean>) => v
   );
 };
 
-export default FormBoard;
+export default FormColumn;
