@@ -4,7 +4,7 @@ import Card from '../components/main/Card';
 import FormColumn from '../components/formColumn/FormColumn';
 import { useEffect, useState } from 'react';
 import Board from '../components/main/Board';
-import { getBoards } from '../core/api/api';
+import { getBoards, getColumns } from '../core/api/api';
 import { BoardData } from '../core/types/types';
 
 export const Main = () => {
@@ -17,10 +17,17 @@ export const Main = () => {
     const response = await getBoards();
 
     setBoards(response.data);
+    console.log(response.data);
+  }
+  async function getAllColumn() {
+    const response = await getColumns();
+
+    console.log(response.data);
   }
 
   useEffect(() => {
     getAllBoards();
+    getAllColumn();
   }, []);
 
   return (
