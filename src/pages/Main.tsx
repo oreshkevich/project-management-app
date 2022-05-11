@@ -17,7 +17,6 @@ export const Main = () => {
     const response = await getBoards();
 
     setBoards(response.data);
-    console.log(response.data);
   }
 
   useEffect(() => {
