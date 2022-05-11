@@ -20,3 +20,12 @@ export type UserState = {
 export type CatchedError = {
   message: string;
 };
+
+export type BoardData = {
+  title: string;
+  id: string | null;
+};
+
+export type Boards = {
+  data: [BoardData];
+};

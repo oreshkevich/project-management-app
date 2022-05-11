@@ -7,6 +7,8 @@
     "create-board__button": "Создать новую доску",
     "create-board__modal": "Новая доска",
     "create-board__modal-title": "Название доски",
+    "create-board__modal-error-title": "Пожалуйста, введите название доски",
+    "create-board__modal-error-title-length": "Минимальная длина названия составляет 4 символа",
     "create-board__modal-description": "Описание доски",
     "create-board__modal-close-button": "Отмена",
     "create-board__modal-submit-button": "Создать",
@@ -50,6 +52,11 @@
     "team-block__Uladzislava-role": "Участник",
     "course-block__title": "О курсе",
     "course-block__about": "Здесь что-то будет"
+  },
+  "main-rote": {
+    "no-boards": "У вас нет созданных досок",
+    "board-delete-button": "Удалить",
+    "board-open-button": "Открыть"
   },
   "footer": {
     "footer-text": "Авторское право | Команда разработки",
