@@ -8,17 +8,20 @@ import { getBoards, getColumns } from '../core/api/api';
 import { BoardData } from '../core/types/types';
 
 export const Main = () => {
+  const [showCol, setShowCol] = useState(false);
   const { t } = useTranslation();
-  const [show, setShow] = useState(false);
-  const handleShow = () => setShow(true);
+  const handleShow = () => setShowCol(true);
   const [boards, setBoards] = useState<Array<BoardData>>();
 
   async function getAllBoards() {
     const response = await getBoards();
 
     setBoards(response.data);
-    console.log(response.data);
+
+    console.log(response);
+    localStorage.setItem('bardsId', response.data[0].id);
   }
+
   async function getAllColumn() {
     const response = await getColumns();
 
@@ -38,7 +41,7 @@ export const Main = () => {
       <Button variant="success" onClick={handleShow}>
         {t('header.create-col__button')}
       </Button>
-      {show ? <FormColumn setShow={setShow} /> : null}
+      {showCol ? <FormColumn setShowCol={setShowCol} /> : null}
       <Card />
     </section>
   );

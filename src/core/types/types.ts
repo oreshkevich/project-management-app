@@ -28,7 +28,7 @@ export type BoardData = {
 
 export type ColData = {
   title: string;
-  id: string | null;
+  order: number;
 };
 
 export type Boards = {
