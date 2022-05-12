@@ -7,11 +7,18 @@ import Board from '../components/main/Board';
 import { getBoards, getColumns } from '../core/api/api';
 import { BoardData } from '../core/types/types';
 
+interface IColData {
+  title: string;
+  id: string;
+  order: number;
+}
+
 export const Main = () => {
   const [showCol, setShowCol] = useState(false);
   const { t } = useTranslation();
   const handleShow = () => setShowCol(true);
   const [boards, setBoards] = useState<Array<BoardData>>();
+  const [columns, setColumns] = useState<Array<IColData>>();
 
   async function getAllBoards() {
     const response = await getBoards();
@@ -24,7 +31,7 @@ export const Main = () => {
 
   async function getAllColumn() {
     const response = await getColumns();
-
+    setColumns(response.data);
     console.log(response.data);
   }
 
@@ -42,7 +49,12 @@ export const Main = () => {
         {t('header.create-col__button')}
       </Button>
       {showCol ? <FormColumn setShowCol={setShowCol} /> : null}
-      <Card />
+
+      <div className="app-card-data">
+        {columns?.map((item: IColData) => (
+          <Card data={item} key={item.id} />
+        ))}
+      </div>
     </section>
   );
 };

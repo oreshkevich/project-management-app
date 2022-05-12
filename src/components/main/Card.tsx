@@ -2,6 +2,13 @@ import './card.css';
 import React, { useEffect, useRef, useState } from 'react';
 import { AiFillDelete } from 'react-icons/ai';
 import { Button } from 'react-bootstrap';
+
+interface IColData {
+  title: string;
+  id: string;
+  order: number;
+}
+
 interface ICard {
   id: number;
   title: string;
@@ -17,35 +24,31 @@ interface IItem {
   title: string;
 }
 
-const Card = () => {
+const Card = (props: { data: IColData }) => {
   const boardsObj = [
     {
-      id: 1,
-      title: 'Сделать',
-      items: [
-        { id: 1, title: 'Пойти в магазин1' },
-        { id: 2, title: 'Пойти в магазин2' },
-        { id: 3, title: 'Пойти в магазин3' },
-      ],
+      id: props.data.order,
+      title: props.data.title,
+      items: [],
     },
-    {
-      id: 2,
-      title: 'Проверить',
-      items: [
-        { id: 4, title: 'Код ревью1' },
-        { id: 5, title: 'Код ревью2' },
-        { id: 6, title: 'Код ревью3' },
-      ],
-    },
-    {
-      id: 3,
-      title: 'Сделано',
-      items: [
-        { id: 7, title: 'Код1' },
-        { id: 8, title: 'Код2' },
-        { id: 9, title: 'Код3' },
-      ],
-    },
+    // {
+    //   id: 2,
+    //   title: 'Проверить',
+    //   items: [
+    //     { id: 4, title: 'Код ревью1' },
+    //     { id: 5, title: 'Код ревью2' },
+    //     { id: 6, title: 'Код ревью3' },
+    //   ],
+    // },
+    // {
+    //   id: 3,
+    //   title: 'Сделано',
+    //   items: [
+    //     { id: 7, title: 'Код1' },
+    //     { id: 8, title: 'Код2' },
+    //     { id: 9, title: 'Код3' },
+    //   ],
+    // },
   ];
 
   const [boards, setBoards] =
