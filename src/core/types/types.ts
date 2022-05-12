@@ -26,6 +26,11 @@ export type BoardData = {
   id: string | null;
 };
 
+export type ColData = {
+  title: string;
+  id: string | null;
+};
+
 export type Boards = {
   data: [BoardData];
 };
