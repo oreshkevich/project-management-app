@@ -6,6 +6,8 @@ const API = axios.create({
   baseURL: 'https://goodboard.herokuapp.com/',
 });
 
+const BOARDID = localStorage.getItem('boardId');
+
 API.interceptors.request.use((request) => {
   const token = cookies.get('token');
 
@@ -28,9 +30,6 @@ export const getBoards = () => API.get('/boards');
 export const createBoard = (boardData: BoardData) => API.post('/boards', boardData);
 export const deleteBoard = (id: string) => API.delete(`/boards/${id}`);
 
-const saved = localStorage.getItem('bardsId');
-export const getColumns = () => API.get(`/boards/${saved}/columns`);
-
-export const createColumn = (colData: ColData) => API.post(`/boards/${saved}/columns`, colData);
-
-export const deleteColumn = (id: string) => API.delete(`/boards/${saved}/columns/${id}`);
+export const getColumns = () => API.get(`/boards/${BOARDID}/columns`);
+export const createColumn = (colData: ColData) => API.post(`/boards/${BOARDID}/columns`, colData);
+export const deleteColumn = (id: string) => API.delete(`/boards/${BOARDID}/columns/${id}`);

@@ -1,35 +1,45 @@
-import './card.css';
-import { Button, Card } from 'react-bootstrap';
-import { BoardData } from '../../core/types/types';
+import { useState, useEffect } from 'react';
+import { Button } from 'react-bootstrap';
+import { getColumns } from '../../core/api/api';
 import { useTranslation } from 'react-i18next';
-import { deleteBoard } from '../../core/api/api';
+import Card from './Card';
+import FormColumn from '../formColumn/FormColumn';
 
-const Board = (props: { data: BoardData }) => {
+interface IColData {
+  title: string;
+  id: string;
+  order: number;
+}
+
+const Board = () => {
   const { t } = useTranslation();
+  const [showCol, setShowCol] = useState(false);
+  const [columns, setColumns] = useState<Array<IColData>>();
+  const handleShow = () => setShowCol(true);
 
-  async function deleteCurrentBoard() {
-    if (props.data.id) {
-      await deleteBoard(props.data.id);
-    }
+  useEffect(() => {
+    getAllColumn();
+  }, []);
 
-    window.location.reload();
+  async function getAllColumn() {
+    const response = await getColumns();
+
+    setColumns(response.data);
   }
 
   return (
-    <Card style={{ width: '18rem' }}>
-      <Card.Body>
-        <Card.Title>{props.data.title}</Card.Title>
-        <Card.Text>Description</Card.Text>
-        <div className="board-buttons">
-          <Button variant="danger" size="sm" onClick={async () => deleteCurrentBoard()}>
-            {t('main-rote.board-delete-button')}
-          </Button>
-          <Button variant="primary" size="lg">
-            {t('main-rote.board-open-button')}
-          </Button>
-        </div>
-      </Card.Body>
-    </Card>
+    <div>
+      <Button variant="success" onClick={handleShow}>
+        {t('header.create-col__button')}
+      </Button>
+      {showCol ? <FormColumn setShowCol={setShowCol} /> : null}
+
+      <div className="app-card-data">
+        {columns?.map((item: IColData) => (
+          <Card data={item} key={item.id} />
+        ))}
+      </div>
+    </div>
   );
 };
 

@@ -14,11 +14,13 @@ interface ICard {
   title: string;
   items: IItem[];
 }
+
 interface ICardBoard {
   id?: number;
   title?: string;
   items: IItem[];
 }
+
 interface IItem {
   id: number;
   title: string;
