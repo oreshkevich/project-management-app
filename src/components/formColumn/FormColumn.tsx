@@ -1,4 +1,4 @@
-import { SetStateAction } from 'react';
+import { SetStateAction, useState } from 'react';
 import { Form, Button, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { ColData } from '../../core/types/types';
@@ -6,7 +6,11 @@ import { createColumn } from '../../core/api/api';
 import { useForm } from 'react-hook-form';
 import './formColumn.css';
 
-const FormColumn = ({ setShow }: { setShow: (value: SetStateAction<boolean>) => void }) => {
+interface IData {
+  title: string;
+}
+
+const FormColumn = ({ setShowCol }: { setShowCol: (value: SetStateAction<boolean>) => void }) => {
   const { t } = useTranslation();
 
   const {
@@ -15,12 +19,25 @@ const FormColumn = ({ setShow }: { setShow: (value: SetStateAction<boolean>) => 
     handleSubmit,
   } = useForm<ColData>({ mode: 'onBlur' });
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => setShowCol(false);
+  const [count, setCount] = useState(1);
 
-  const onSubmit = async (data: ColData) => {
-    await createColumn(data);
+  const onSubmit = async (data: IData) => {
+    const savedCount = localStorage.getItem('countId');
+    const value = savedCount ? JSON.parse(savedCount) : 1;
+    setCount(value + 1);
+
+    localStorage.setItem('countId', JSON.stringify(count));
+
+    const dataOrder = {
+      title: data.title,
+      order: count,
+    };
+
+    await createColumn(dataOrder);
 
     handleClose();
+    window.location.reload();
   };
 
   return (
