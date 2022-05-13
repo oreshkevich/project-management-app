@@ -32,6 +32,12 @@ export type ColData = {
   order: number;
 };
 
+export type TaskData = {
+  title: string;
+  order: number;
+  description: string;
+};
+
 export type Boards = {
   data: [BoardData];
 };

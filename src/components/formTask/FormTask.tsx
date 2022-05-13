@@ -1,25 +1,27 @@
 import { SetStateAction, useState } from 'react';
 import { Form, Button, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { ColData } from '../../core/types/types';
-import { createColumn } from '../../core/api/api';
+import { TaskData } from '../../core/types/types';
+import { createTask } from '../../core/api/api';
 import { useForm } from 'react-hook-form';
-import './formColumn.css';
+import './formTask.css';
+import { cookies } from '../../core/cookies/cookies';
 
 interface IData {
   title: string;
+  description: string;
 }
 
-const FormColumn = ({ setShowCol }: { setShowCol: (value: SetStateAction<boolean>) => void }) => {
+const FormTask = ({ setShowTask }: { setShowTask: (value: SetStateAction<boolean>) => void }) => {
   const { t } = useTranslation();
 
   const {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm<ColData>({ mode: 'onBlur' });
+  } = useForm<TaskData>({ mode: 'onBlur' });
 
-  const handleClose = () => setShowCol(false);
+  const handleClose = () => setShowTask(false);
   const [count, setCount] = useState(1);
 
   const onSubmit = async (data: IData) => {
@@ -28,13 +30,16 @@ const FormColumn = ({ setShowCol }: { setShowCol: (value: SetStateAction<boolean
     setCount(value + 1);
 
     localStorage.setItem('countId', JSON.stringify(count));
-
+    const idUser = cookies.get('id');
     const dataOrder = {
       title: data.title,
       order: count,
+      description: data.description,
+      userId: idUser,
     };
 
-    await createColumn(dataOrder);
+    console.log(dataOrder);
+    await createTask(dataOrder);
 
     handleClose();
     window.location.reload();
@@ -43,12 +48,12 @@ const FormColumn = ({ setShowCol }: { setShowCol: (value: SetStateAction<boolean
   return (
     <Modal show={true} onHide={handleClose} backdrop="static" keyboard={false}>
       <Modal.Header closeButton>
-        <Modal.Title>{t('header.create-col__modal')}</Modal.Title>
+        <Modal.Title>{t('header.create-task__modal')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <Form.Group className="mb-3">
-            <Form.Label>{t('header.create-col__modal-title')}</Form.Label>
+            <Form.Label>{t('header.create-task__modal-title')}</Form.Label>
             <Form.Control
               {...register('title', {
                 required: `${t('header.create-board__modal-error-title')}`,
@@ -57,7 +62,21 @@ const FormColumn = ({ setShowCol }: { setShowCol: (value: SetStateAction<boolean
                   message: `${t('header.create-board__modal-error-title-length')}`,
                 },
               })}
-              placeholder={t('header.create-col__modal-title')}
+              placeholder={t('header.create-task__modal-title')}
+            />
+            <div>{errors?.title && <p className="form-error">{errors?.title?.message}</p>}</div>
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>{t('header.create-task__modal-description')}</Form.Label>
+            <Form.Control
+              {...register('description', {
+                required: `${t('header.create-board__modal-error-title')}`,
+                minLength: {
+                  value: 4,
+                  message: `${t('header.create-board__modal-error-title-length')}`,
+                },
+              })}
+              placeholder={t('header.create-task__modal-description')}
             />
             <div>{errors?.title && <p className="form-error">{errors?.title?.message}</p>}</div>
           </Form.Group>
@@ -76,4 +95,4 @@ const FormColumn = ({ setShowCol }: { setShowCol: (value: SetStateAction<boolean
   );
 };
 
-export default FormColumn;
+export default FormTask;
