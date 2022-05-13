@@ -12,7 +12,6 @@ import { submitSignup } from '../../core/store/creators/UserCreators';
 const AuthSignup = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-
   const [formData, setFormData] = useState({} as NewUser);
   const [requestStatus, setStatus] = useState(true);
   const {
