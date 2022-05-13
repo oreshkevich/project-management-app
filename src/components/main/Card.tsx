@@ -2,7 +2,9 @@ import './card.css';
 import React, { useEffect, useRef, useState } from 'react';
 import { AiFillDelete } from 'react-icons/ai';
 import { Button } from 'react-bootstrap';
-
+import { deleteColumn, getTasks } from '../../core/api/api';
+import { useTranslation } from 'react-i18next';
+import FormTask from '../formTask/FormTask';
 interface IColData {
   title: string;
   id: string;
@@ -27,9 +29,13 @@ interface IItem {
 }
 
 const Card = (props: { data: IColData }) => {
+  const { t } = useTranslation();
+  localStorage.setItem('columnId', props.data.id);
+  console.log(props.data);
   const boardsObj = [
     {
-      id: props.data.order,
+      id: props.data.id,
+      order: props.data.order,
       title: props.data.title,
       items: [],
     },
@@ -127,6 +133,7 @@ const Card = (props: { data: IColData }) => {
     const isConfirm = confirm(`Точно вы хотите удалить колонку: ${id}`);
     if (!isConfirm) return isConfirm;
     setBoards(boards.filter((todo) => (todo as ICard).id !== id));
+    deleteCurrentBoard();
   };
 
   const handleDelete = (idItem: number, board: ICard, itemTitle: string) => {
@@ -196,6 +203,27 @@ const Card = (props: { data: IColData }) => {
     setEdit(false);
     setIdEditBoard(-1);
   };
+
+  async function deleteCurrentBoard() {
+    if (props.data.id) {
+      await deleteColumn(props.data.id);
+    }
+
+    window.location.reload();
+  }
+  const [showTask, setShowTask] = useState(false);
+  const [task, setTasks] = useState<Array<IColData>>();
+  const handleShow = () => setShowTask(true);
+  useEffect(() => {
+    getAllTask();
+  }, []);
+
+  async function getAllTask() {
+    const response = await getTasks();
+
+    setTasks(response.data);
+  }
+
   return (
     <div className="app-card">
       {boards.map((board) => (
@@ -237,6 +265,10 @@ const Card = (props: { data: IColData }) => {
           <span className="icon" onClick={() => handleDeleteBoard((board as ICard).id)}>
             <AiFillDelete />
           </span>
+          <Button variant="success" onClick={handleShow}>
+            {t('header.create-task__button')}
+          </Button>
+          {showTask ? <FormTask setShowTask={setShowTask} /> : null}
           {(board as ICard).items.map((item) => (
             <div
               key={item.id}

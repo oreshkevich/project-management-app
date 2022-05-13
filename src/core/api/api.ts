@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { NewUser, User, BoardData, ColData } from '../types/types';
+import { NewUser, User, BoardData, ColData, TaskData } from '../types/types';
 import { cookies } from '../cookies/cookies';
 
 const API = axios.create({
@@ -7,6 +7,7 @@ const API = axios.create({
 });
 
 const BOARDID = localStorage.getItem('boardId');
+const COLUMNID = localStorage.getItem('columnId');
 
 API.interceptors.request.use((request) => {
   const token = cookies.get('token');
@@ -33,3 +34,9 @@ export const deleteBoard = (id: string) => API.delete(`/boards/${id}`);
 export const getColumns = () => API.get(`/boards/${BOARDID}/columns`);
 export const createColumn = (colData: ColData) => API.post(`/boards/${BOARDID}/columns`, colData);
 export const deleteColumn = (id: string) => API.delete(`/boards/${BOARDID}/columns/${id}`);
+
+export const getTasks = () => API.get(`/boards/${BOARDID}/columns/${COLUMNID}/tasks`);
+export const createTask = (colData: TaskData) =>
+  API.post(`/boards/${BOARDID}/columns/${COLUMNID}/tasks`, colData);
+export const deleteTask = (id: string) =>
+  API.delete(`/boards/${BOARDID}/columns/${COLUMNID}/tasks/${id}`);
