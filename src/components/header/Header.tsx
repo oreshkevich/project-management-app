@@ -1,8 +1,9 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, NavDropdown } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
+import { cookies } from '../../core/cookies/cookies';
 
 import { useAppDispatch, useAppSelector } from '../../core/hooks/redux';
 import { userSlice } from '../../core/store/reducers/UserSlice';
@@ -17,9 +18,9 @@ const Header = () => {
   const dispatch = useAppDispatch();
 
   const [show, setShow] = useState(false);
-
   const { token } = useAppSelector((state) => state.userReducer);
   const { setToken } = userSlice.actions;
+  const cookieToken = cookies.get('token');
 
   const changeLanguage = (language: string) => {
     i18n.changeLanguage(language);
@@ -31,6 +32,13 @@ const Header = () => {
     dispatch(setToken(null));
     navigate('/home');
   }, [dispatch, navigate, setToken]);
+
+  useEffect(() => {
+    if (!cookieToken && token) {
+      alert('Сookie expired, please login again');
+      logout();
+    }
+  }, [cookieToken, token, logout]);
 
   return (
     <header className="header d-flex justify-content-center bg-dark">
