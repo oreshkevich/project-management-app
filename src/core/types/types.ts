@@ -18,6 +18,7 @@ export type UserState = {
 };
 
 export type CatchedError = {
+  statusCode: number;
   message: string;
 };
 

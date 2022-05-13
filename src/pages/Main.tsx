@@ -13,22 +13,22 @@ export const Main = () => {
   const handleShow = () => setShow(true);
   const [boards, setBoards] = useState<Array<BoardData>>();
 
-  async function getAllBoards() {
-    const response = await getBoards();
+  // async function getAllBoards() {
+  //   const response = await getBoards();
 
-    setBoards(response.data);
-    console.log(response.data);
-  }
-  async function getAllColumn() {
-    const response = await getColumns();
+  //   setBoards(response.data);
+  //   console.log(response.data);
+  // }
+  // async function getAllColumn() {
+  //   const response = await getColumns();
 
-    console.log(response.data);
-  }
+  //   console.log(response.data);
+  // }
 
-  useEffect(() => {
-    getAllBoards();
-    getAllColumn();
-  }, []);
+  // useEffect(() => {
+  //   getAllBoards();
+  //   getAllColumn();
+  // }, []);
 
   return (
     <section className="main container pt-5">

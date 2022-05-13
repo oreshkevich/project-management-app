@@ -1,13 +1,13 @@
 import axios from 'axios';
 import { NewUser, User, BoardData, ColData } from '../types/types';
-import { checkJson } from '../helpers/helpers';
+import { cookies } from '../cookies/cookies';
 
 const API = axios.create({
   baseURL: 'https://goodboard.herokuapp.com/',
 });
 
 API.interceptors.request.use((request) => {
-  const token = checkJson();
+  const token = cookies.get('token');
 
   if (token && request.headers) {
     request.headers.Authorization = `Bearer ${token}`;

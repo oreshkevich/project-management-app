@@ -18,15 +18,12 @@ const App = () => {
       <Header />
       <main>
         <Routes>
-          <Route
-            path="/"
-            element={token ? <Navigate replace to="/main" /> : <Navigate replace to="/home" />}
-          />
+          <Route path="/" element={<Navigate replace to="/home" />} />
           <Route path="/profile" element={token ? <Profile /> : <Navigate replace to="/home" />} />
-          <Route path="/login" element={token ? <Navigate replace to="/main" /> : <Login />} />
-          <Route path="/signup" element={token ? <Navigate replace to="/main" /> : <Signup />} />
+          <Route path="/login" element={token ? <Navigate replace to="/home" /> : <Login />} />
+          <Route path="/signup" element={token ? <Navigate replace to="/home" /> : <Signup />} />
           <Route path="/main" element={token ? <Main /> : <Navigate replace to="/home" />} />
-          <Route path="/home" element={token ? <Navigate replace to="/main" /> : <Home />} />
+          <Route path="/home" element={<Home />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
