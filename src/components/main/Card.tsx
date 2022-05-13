@@ -31,6 +31,7 @@ interface IItem {
 const Card = (props: { data: IColData }) => {
   const { t } = useTranslation();
   localStorage.setItem('columnId', props.data.id);
+  console.log(props.data);
   const boardsObj = [
     {
       id: props.data.id,
