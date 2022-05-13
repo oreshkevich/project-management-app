@@ -18,6 +18,7 @@ export type UserState = {
 };
 
 export type CatchedError = {
+  statusCode: number;
   message: string;
 };
 
@@ -28,7 +29,7 @@ export type BoardData = {
 
 export type ColData = {
   title: string;
-  id: string | null;
+  order: number;
 };
 
 export type Boards = {

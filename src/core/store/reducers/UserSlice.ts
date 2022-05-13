@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { UserState } from '../../types/types';
-import { checkJson } from '../../helpers/helpers';
-import { checkToken, submitLogin, deleteProfile } from '../creators/UserCreators';
+import { submitLogin, deleteProfile, getProfile, editProfile } from '../creators/UserCreators';
+import { cookies } from '../../cookies/cookies';
 
 const initialState: UserState = {
-  token: checkJson(),
+  token: cookies.get('token'),
 };
 
 export const userSlice = createSlice({
@@ -12,22 +12,30 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setToken(state, { payload }) {
-      localStorage.setItem('token', JSON.stringify(payload));
       state.token = payload;
+      cookies.set('token', payload, { path: '/', maxAge: 0 });
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(checkToken.rejected, (state) => {
-      localStorage.setItem('token', JSON.stringify(null));
-      state.token = null;
-    });
     builder.addCase(submitLogin.fulfilled, (state, { payload }) => {
-      localStorage.setItem('token', JSON.stringify(payload));
       state.token = payload;
+      cookies.set('token', payload, { path: '/', maxAge: 3600 });
     });
     builder.addCase(deleteProfile.fulfilled, (state) => {
-      localStorage.setItem('token', JSON.stringify(null));
       state.token = null;
+      cookies.set('token', state.token, { path: '/', maxAge: 0 });
+    });
+    builder.addCase(deleteProfile.rejected, (state) => {
+      state.token = null;
+      cookies.set('token', state.token, { path: '/', maxAge: 0 });
+    });
+    builder.addCase(getProfile.rejected, (state) => {
+      state.token = null;
+      cookies.set('token', state.token, { path: '/', maxAge: 0 });
+    });
+    builder.addCase(editProfile.rejected, (state) => {
+      state.token = null;
+      cookies.set('token', state.token, { path: '/', maxAge: 0 });
     });
   },
 });

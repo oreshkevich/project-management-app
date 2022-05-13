@@ -1,9 +1,10 @@
 {
   "header": {
-    "log-in": "Log in",
+    "log-in": "Sign In",
     "log-out": "Log out",
     "edit": "Edit profile",
-    "reqistration": "Registration",
+    "reqistration": "Sign Up",
+    "go-to-main": "Go to Main Page",
     "create-board__button": "Create new board",
     "create-col__button": "Create new colum",
     "create-board__modal": "New board",

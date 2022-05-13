@@ -28,7 +28,7 @@ const AuthLogin = () => {
     try {
       await dispatch(submitLogin(formData)).unwrap();
       setStatus(true);
-      navigate('/');
+      navigate('/home');
     } catch (error) {
       setStatus(false);
       alert((error as Error).message);

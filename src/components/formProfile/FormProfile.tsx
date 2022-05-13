@@ -14,6 +14,8 @@ const FormProfile = () => {
   const dispatch = useAppDispatch();
 
   const { token } = useAppSelector((state) => state.userReducer);
+  const { userId: id }: { userId: string } = jwt_decode(String(token));
+
   const [requestStatus, setStatus] = useState(true);
   const {
     register,
@@ -25,18 +27,20 @@ const FormProfile = () => {
 
   useEffect(() => {
     const getFormData = async () => {
-      const { userId: id }: { userId: string } = jwt_decode(String(token));
-      const { login, name } = await dispatch(getProfile(id)).unwrap();
-      setValue('name', name, { shouldDirty: true });
-      setValue('login', login, { shouldDirty: true });
+      try {
+        const { login, name } = await dispatch(getProfile(id)).unwrap();
+        setValue('name', name, { shouldDirty: true });
+        setValue('login', login, { shouldDirty: true });
+      } catch (error) {
+        alert((error as CatchedError).message);
+      }
     };
 
     getFormData();
-  }, [dispatch, token, setValue]);
+  }, [dispatch, setValue, id]);
 
   const onSubmit = async () => {
     try {
-      const { userId: id }: { userId: string } = jwt_decode(String(token));
       await dispatch(editProfile({ id, formData: getValues() as NewUser })).unwrap();
       setStatus(true);
       alert('Profile was edited');
@@ -48,7 +52,6 @@ const FormProfile = () => {
 
   const handleDelete = async () => {
     try {
-      const { userId: id }: { userId: string } = jwt_decode(String(token));
       await dispatch(deleteProfile(id)).unwrap();
       alert('Profile was deleted');
     } catch (error) {

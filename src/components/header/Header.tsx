@@ -1,13 +1,11 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button, NavDropdown } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../core/hooks/redux';
 import { userSlice } from '../../core/store/reducers/UserSlice';
-import { checkToken } from '../../core/store/creators/UserCreators';
-import { CatchedError } from '../../core/types/types';
 
 import FormBoard from '../formBoard/FormBoard';
 
@@ -16,7 +14,6 @@ import './header.css';
 const Header = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const location = useLocation();
   const dispatch = useAppDispatch();
 
   const [show, setShow] = useState(false);
@@ -35,24 +32,11 @@ const Header = () => {
     navigate('/home');
   }, [dispatch, navigate, setToken]);
 
-  useEffect(() => {
-    //move when all api request will work
-    const check = async () => {
-      try {
-        await dispatch(checkToken()).unwrap();
-      } catch (error) {
-        alert((error as CatchedError).message);
-      }
-    };
-
-    if (token) check();
-  }, [dispatch, location, token]);
-
   return (
     <header className="header d-flex justify-content-center bg-dark">
       <nav className="nav navbar navbar-expand-lg navbar-dark">
         <div className="container-fluid">
-          <NavLink to={token ? '/main' : '/home'} className="navbar-brand">
+          <NavLink to={'/home'} className="navbar-brand">
             GoodBoard
           </NavLink>
           <button
@@ -76,6 +60,11 @@ const Header = () => {
                     </Button>
                   </li>
                   <li className="nav-item">
+                    <NavLink to="/main" className="nav-link">
+                      {t('header.go-to-main')}
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
                     <NavLink to="/profile" className="nav-link">
                       {t('header.edit')}
                     </NavLink>
@@ -89,7 +78,7 @@ const Header = () => {
               ) : (
                 <>
                   <li className="nav-item">
-                    <NavLink to="/login" className="nav-link" aria-current="page">
+                    <NavLink to="/login" className="nav-link">
                       {t('header.log-in')}
                     </NavLink>
                   </li>

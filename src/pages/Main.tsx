@@ -7,21 +7,31 @@ import Board from '../components/main/Board';
 import { getBoards, getColumns } from '../core/api/api';
 import { BoardData } from '../core/types/types';
 
+interface IColData {
+  title: string;
+  id: string;
+  order: number;
+}
+
 export const Main = () => {
+  const [showCol, setShowCol] = useState(false);
   const { t } = useTranslation();
-  const [show, setShow] = useState(false);
-  const handleShow = () => setShow(true);
+  const handleShow = () => setShowCol(true);
   const [boards, setBoards] = useState<Array<BoardData>>();
+  const [columns, setColumns] = useState<Array<IColData>>();
 
   async function getAllBoards() {
     const response = await getBoards();
 
     setBoards(response.data);
-    console.log(response.data);
+
+    console.log(response);
+    localStorage.setItem('bardsId', response.data[0].id);
   }
+
   async function getAllColumn() {
     const response = await getColumns();
-
+    setColumns(response.data);
     console.log(response.data);
   }
 
@@ -38,8 +48,13 @@ export const Main = () => {
       <Button variant="success" onClick={handleShow}>
         {t('header.create-col__button')}
       </Button>
-      {show ? <FormColumn setShow={setShow} /> : null}
-      <Card />
+      {showCol ? <FormColumn setShowCol={setShowCol} /> : null}
+
+      <div className="app-card-data">
+        {columns?.map((item: IColData) => (
+          <Card data={item} key={item.id} />
+        ))}
+      </div>
     </section>
   );
 };

@@ -1,13 +1,13 @@
 import axios from 'axios';
 import { NewUser, User, BoardData, ColData } from '../types/types';
-import { checkJson } from '../helpers/helpers';
+import { cookies } from '../cookies/cookies';
 
 const API = axios.create({
   baseURL: 'https://goodboard.herokuapp.com/',
 });
 
 API.interceptors.request.use((request) => {
-  const token = checkJson();
+  const token = cookies.get('token');
 
   if (token && request.headers) {
     request.headers.Authorization = `Bearer ${token}`;
@@ -28,10 +28,9 @@ export const getBoards = () => API.get('/boards');
 export const createBoard = (boardData: BoardData) => API.post('/boards', boardData);
 export const deleteBoard = (id: string) => API.delete(`/boards/${id}`);
 
-export const getColumns = () => API.get(`/boards/0e3def8f-eef5-434f-86d8-1792dc860904/columns`);
+const saved = localStorage.getItem('bardsId');
+export const getColumns = () => API.get(`/boards/${saved}/columns`);
 
-export const createColumn = (colData: ColData) =>
-  API.post(`/boards/0e3def8f-eef5-434f-86d8-1792dc860904/columns`, colData);
+export const createColumn = (colData: ColData) => API.post(`/boards/${saved}/columns`, colData);
 
-export const deleteColumn = (id: string) =>
-  API.delete(`/boards/0e3def8f-eef5-434f-86d8-1792dc860904/columns/${id}`);
+export const deleteColumn = (id: string) => API.delete(`/boards/${saved}/columns/${id}`);
