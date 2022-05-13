@@ -7,4 +7,5 @@ export const removeCookies = () => {
   cookies.set('name', '', { path: '/', maxAge: 0 });
   cookies.set('login', '', { path: '/', maxAge: 0 });
   cookies.set('password', '', { path: '/', maxAge: 0 });
+  cookies.set('id', '', { path: '/', maxAge: 0 });
 };
