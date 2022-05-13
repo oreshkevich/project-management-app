@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { UserState } from '../../types/types';
 import { submitLogin, deleteProfile, getProfile, editProfile } from '../creators/UserCreators';
-import { cookies } from '../../cookies/cookies';
+import { cookies, removeCookies } from '../../cookies/cookies';
 
 const initialState: UserState = {
   token: cookies.get('token'),
@@ -13,29 +13,35 @@ export const userSlice = createSlice({
   reducers: {
     setToken(state, { payload }) {
       state.token = payload;
-      cookies.set('token', payload, { path: '/', maxAge: 0 });
+      removeCookies();
     },
   },
   extraReducers: (builder) => {
     builder.addCase(submitLogin.fulfilled, (state, { payload }) => {
-      state.token = payload;
-      cookies.set('token', payload, { path: '/', maxAge: 3600 });
+      state.token = payload.token;
+      cookies.set('token', payload.token, { path: '/', maxAge: 3600 });
+      cookies.set('password', payload.password, { path: '/', maxAge: 3600 });
+      cookies.set('id', payload.id, { path: '/', maxAge: 3600 });
+    });
+    builder.addCase(getProfile.fulfilled, (_, { payload }) => {
+      cookies.set('name', payload.name, { path: '/', maxAge: 3600 });
+      cookies.set('login', payload.login, { path: '/', maxAge: 3600 });
     });
     builder.addCase(deleteProfile.fulfilled, (state) => {
       state.token = null;
-      cookies.set('token', state.token, { path: '/', maxAge: 0 });
+      removeCookies();
     });
     builder.addCase(deleteProfile.rejected, (state) => {
       state.token = null;
-      cookies.set('token', state.token, { path: '/', maxAge: 0 });
+      removeCookies();
     });
     builder.addCase(getProfile.rejected, (state) => {
       state.token = null;
-      cookies.set('token', state.token, { path: '/', maxAge: 0 });
+      removeCookies();
     });
     builder.addCase(editProfile.rejected, (state) => {
       state.token = null;
-      cookies.set('token', state.token, { path: '/', maxAge: 0 });
+      removeCookies();
     });
   },
 });

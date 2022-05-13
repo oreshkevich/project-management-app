@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 
@@ -8,11 +7,10 @@ import './auth.css';
 
 import { useAppDispatch } from '../../core/hooks/redux';
 import { User } from '../../core/types/types';
-import { submitLogin } from '../../core/store/creators/UserCreators';
+import { submitLogin, getProfile } from '../../core/store/creators/UserCreators';
 
 const AuthLogin = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [requestStatus, setStatus] = useState(true);
 
@@ -26,9 +24,9 @@ const AuthLogin = () => {
 
   const onSubmit = async () => {
     try {
-      await dispatch(submitLogin(formData)).unwrap();
+      const { id } = await dispatch(submitLogin(formData)).unwrap();
+      await dispatch(getProfile(id)).unwrap();
       setStatus(true);
-      navigate('/home');
     } catch (error) {
       setStatus(false);
       alert((error as Error).message);
