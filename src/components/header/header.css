@@ -7,3 +7,17 @@
   box-shadow: none;
   outline: 0px;
 }
+
+.navbar-collapse {
+  flex-grow: 0;
+  width: 100%;
+  justify-content: flex-end;
+}
+
+.navbar-nav {
+  justify-content: end;
+}
+
+.createBoard {
+  margin-right: auto;
+}

@@ -1,21 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
-import { useAppDispatch, useAppSelector } from '../../core/hooks/redux';
-import jwt_decode from 'jwt-decode';
+import { useAppDispatch } from '../../core/hooks/redux';
 
 import { Button, Form } from 'react-bootstrap';
 
 import { NewUser, CatchedError } from '../../core/types/types';
-import { editProfile, deleteProfile, getProfile } from '../../core/store/creators/UserCreators';
+import { editProfile, deleteProfile } from '../../core/store/creators/UserCreators';
+
+import { cookies } from '../../core/cookies/cookies';
 
 const FormProfile = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-
-  const { token } = useAppSelector((state) => state.userReducer);
-  const { userId: id }: { userId: string } = jwt_decode(String(token));
-
   const [requestStatus, setStatus] = useState(true);
   const {
     register,
@@ -25,19 +22,21 @@ const FormProfile = () => {
     getValues,
   } = useForm({ mode: 'onBlur' });
 
+  const id = cookies.get('id');
+
   useEffect(() => {
     const getFormData = async () => {
       try {
-        const { login, name } = await dispatch(getProfile(id)).unwrap();
-        setValue('name', name, { shouldDirty: true });
-        setValue('login', login, { shouldDirty: true });
+        setValue('name', cookies.get('name'), { shouldDirty: true });
+        setValue('login', cookies.get('login'), { shouldDirty: true });
+        setValue('password', cookies.get('password'), { shouldDirty: true });
       } catch (error) {
         alert((error as CatchedError).message);
       }
     };
 
     getFormData();
-  }, [dispatch, setValue, id]);
+  }, [dispatch, setValue]);
 
   const onSubmit = async () => {
     try {

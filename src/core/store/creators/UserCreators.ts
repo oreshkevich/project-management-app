@@ -2,11 +2,20 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 import { login, signup, updateUser, deleteUser, getUser } from '../../api/api';
 import { User, NewUser } from '../../types/types';
+import jwt_decode from 'jwt-decode';
 
-export const submitLogin = createAsyncThunk<string, User>('/signin', async (formData, thunkAPI) => {
+export const submitLogin = createAsyncThunk<
+  { token: string; password: string; login: string; id: string },
+  User
+>('/signin', async (formData, thunkAPI) => {
   try {
     const { data } = await login(formData);
-    return data.token;
+    return {
+      token: data.token,
+      login: formData.login,
+      password: formData.password,
+      id: (jwt_decode(String(data.token)) as { userId: string }).userId,
+    };
   } catch (error) {
     return thunkAPI.rejectWithValue((error as AxiosError).response?.data);
   }

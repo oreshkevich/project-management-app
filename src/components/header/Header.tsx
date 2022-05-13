@@ -51,14 +51,14 @@ const Header = () => {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">
+            {token && (
+              <Button className="createBoard" variant="success" onClick={handleShow}>
+                {t('header.create-board__button')}
+              </Button>
+            )}
             <ul className="navbar-nav">
               {token ? (
                 <>
-                  <li className="nav-item">
-                    <Button variant="success" onClick={handleShow}>
-                      {t('header.create-board__button')}
-                    </Button>
-                  </li>
                   <li className="nav-item">
                     <NavLink to="/main" className="nav-link">
                       {t('header.go-to-main')}
