@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 
@@ -11,6 +12,7 @@ import { submitLogin, getProfile } from '../../core/store/creators/UserCreators'
 
 const AuthLogin = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [requestStatus, setStatus] = useState(true);
 
@@ -26,6 +28,7 @@ const AuthLogin = () => {
     try {
       const { id } = await dispatch(submitLogin(formData)).unwrap();
       await dispatch(getProfile(id)).unwrap();
+      navigate('/main');
       setStatus(true);
     } catch (error) {
       setStatus(false);

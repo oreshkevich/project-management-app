@@ -7,10 +7,6 @@
   --body-background: rgb(240 244 253);
 }
 
-html {
-  height: 100vh;
-}
-
 body {
   margin: 0;
   height: 100%;
@@ -19,6 +15,12 @@ body {
     'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body,
+#root {
+  min-height: 100vh;
 }
 
 code {
