@@ -8,7 +8,7 @@ const Footer = () => {
   const [scroll, setScroll] = useState(false);
 
   const handleScroll = () => {
-    window.scrollY > 56 ? setScroll(true) : setScroll(false);
+    window.scrollY > 0 ? setScroll(true) : setScroll(false);
   };
 
   window.addEventListener('scroll', handleScroll);
