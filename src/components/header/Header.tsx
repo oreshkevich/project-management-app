@@ -18,6 +18,7 @@ const Header = () => {
   const dispatch = useAppDispatch();
 
   const [show, setShow] = useState(false);
+  const [scroll, setScroll] = useState(false);
   const { token } = useAppSelector((state) => state.userReducer);
   const { setToken } = userSlice.actions;
   const cookieToken = cookies.get('token');
@@ -40,9 +41,27 @@ const Header = () => {
     }
   }, [cookieToken, token, logout]);
 
+  const handleScroll = () => {
+    window.scrollY > 56 ? setScroll(true) : setScroll(false);
+  };
+
+  window.addEventListener('scroll', handleScroll);
+
   return (
-    <header className="header d-flex justify-content-center bg-dark">
-      <nav className="nav navbar navbar-expand-lg navbar-dark">
+    <header
+      className={
+        scroll
+          ? 'header d-flex justify-content-center scroll'
+          : 'header d-flex justify-content-center'
+      }
+    >
+      <nav
+        className={
+          scroll
+            ? 'nav navbar navbar-expand-lg navbar-light'
+            : 'nav navbar navbar-expand-lg navbar-dark'
+        }
+      >
         <div className="container-fluid">
           <NavLink to={'/home'} className="navbar-brand">
             GoodBoard

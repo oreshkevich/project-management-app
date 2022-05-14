@@ -82,7 +82,7 @@ export const Home = () => {
           </div>
         </div>
       </section>
-      <section className="container pt-5">
+      <section className="container pt-5 pb-5">
         <h2 className="team__title">{t('homepage.course-block__title')}</h2>
         <p>{t('homepage.course-block__about')}</p>
       </section>

@@ -59,6 +59,10 @@
   margin-bottom: 0 !important;
 }
 
+.main {
+  padding-left: 1%;
+}
+
 .main-route {
   display: flex;
   justify-content: space-evenly;
@@ -66,7 +70,7 @@
 }
 
 .app-card-data {
-   display: flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
