@@ -29,15 +29,39 @@ interface IItem {
 }
 
 const Card = (props: { data: IColData }) => {
+  const [showTask, setShowTask] = useState(false);
+  const [task, setTasks] = useState<Array<IColData>>();
+  const handleShow = () => setShowTask(true);
+  useEffect(() => {
+    getAllTask();
+  }, []);
+
+  async function getAllTask() {
+    const response = await getTasks();
+
+    setTasks(response.data);
+  }
+  async function getAll() {
+    const response = await getTasks();
+
+    setTasks(response.data);
+  }
+  // goodboard.herokuapp.com/boards/6a9b8c4c-2604-454d-9a76-287748c46f4d/columns/966f1705-2131-41f1-860a-40143199cc64
+
   const { t } = useTranslation();
   localStorage.setItem('columnId', props.data.id);
-  console.log(props.data);
+
+  // console.log(props.data.id);
   const boardsObj = [
     {
       id: props.data.id,
       order: props.data.order,
       title: props.data.title,
-      items: [],
+      items: [
+        { id: 4, title: 'Код ревью1' },
+        { id: 5, title: 'Код ревью2' },
+        { id: 6, title: 'Код ревью3' },
+      ],
     },
     // {
     //   id: 2,
@@ -210,18 +234,6 @@ const Card = (props: { data: IColData }) => {
     }
 
     window.location.reload();
-  }
-  const [showTask, setShowTask] = useState(false);
-  const [task, setTasks] = useState<Array<IColData>>();
-  const handleShow = () => setShowTask(true);
-  useEffect(() => {
-    getAllTask();
-  }, []);
-
-  async function getAllTask() {
-    const response = await getTasks();
-
-    setTasks(response.data);
   }
 
   return (

@@ -40,3 +40,5 @@ export const createTask = (colData: TaskData) =>
   API.post(`/boards/${BOARDID}/columns/${COLUMNID}/tasks`, colData);
 export const deleteTask = (id: string) =>
   API.delete(`/boards/${BOARDID}/columns/${COLUMNID}/tasks/${id}`);
+
+export const getAll = () => API.get(`/boards/${BOARDID}/columns/${COLUMNID}`);
