@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import { getColumns } from '../../core/api/api';
 import { useTranslation } from 'react-i18next';
@@ -16,16 +17,17 @@ const Board = () => {
   const [showCol, setShowCol] = useState(false);
   const [columns, setColumns] = useState<Array<IColData>>();
   const handleShow = () => setShowCol(true);
+  const { id } = useParams();
 
   useEffect(() => {
+    const getAllColumn = async () => {
+      const response = await getColumns(String(id));
+
+      setColumns(response.data);
+    };
+
     getAllColumn();
-  }, []);
-
-  async function getAllColumn() {
-    const response = await getColumns();
-
-    setColumns(response.data);
-  }
+  }, [id]);
 
   return (
     <div>

@@ -31,7 +31,7 @@ export const getBoards = () => API.get('/boards');
 export const createBoard = (boardData: BoardData) => API.post('/boards', boardData);
 export const deleteBoard = (id: string) => API.delete(`/boards/${id}`);
 
-export const getColumns = () => API.get(`/boards/${BOARDID}/columns`);
+export const getColumns = (boardId: string) => API.get(`/boards/${boardId}/columns`);
 export const createColumn = (colData: ColData) => API.post(`/boards/${BOARDID}/columns`, colData);
 export const deleteColumn = (id: string) => API.delete(`/boards/${BOARDID}/columns/${id}`);
 
