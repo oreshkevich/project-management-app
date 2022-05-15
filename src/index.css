@@ -1,15 +1,26 @@
-html {
-  height: 100vh;
+:root {
+  --green: #5aac44;
+  --light-green: #61bd4f;
+  --blue: #007fe2;
+  --light-blue: #7189fb;
+  --focus: #4c9aff;
+  --body-background: rgb(240 244 253);
 }
 
 body {
   margin: 0;
   height: 100%;
-  background-color: rgb(240 244 253);
+  background-color: var(--body-background);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
     'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body,
+#root {
+  min-height: 100vh;
 }
 
 code {
@@ -26,14 +37,6 @@ main {
   height: 100%;
   display: flex;
   flex-direction: column;
-}
-
-:root {
-  --green: #5aac44;
-  --light-green: #61bd4f;
-  --blue: #007fe2;
-  --light-blue: #7189fb;
-  --focus: #4c9aff;
 }
 
 .content {

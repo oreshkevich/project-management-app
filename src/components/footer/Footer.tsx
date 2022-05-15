@@ -1,11 +1,20 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import './footer.css';
 
 const Footer = () => {
   const { t } = useTranslation();
 
+  const [scroll, setScroll] = useState(false);
+
+  const handleScroll = () => {
+    window.scrollY > 0 ? setScroll(true) : setScroll(false);
+  };
+
+  window.addEventListener('scroll', handleScroll);
+
   return (
-    <footer className="footer">
+    <footer className={scroll ? 'footer scroll' : 'footer'}>
       <div className="footer__content">
         <p className="footer__info">
           © {new Date().getFullYear()} {t('footer.footer-text')}:&nbsp;

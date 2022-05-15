@@ -1,8 +1,9 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, NavDropdown } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
+import { cookies } from '../../core/cookies/cookies';
 
 import { useAppDispatch, useAppSelector } from '../../core/hooks/redux';
 import { userSlice } from '../../core/store/reducers/UserSlice';
@@ -17,9 +18,10 @@ const Header = () => {
   const dispatch = useAppDispatch();
 
   const [show, setShow] = useState(false);
-
+  const [scroll, setScroll] = useState(false);
   const { token } = useAppSelector((state) => state.userReducer);
   const { setToken } = userSlice.actions;
+  const cookieToken = cookies.get('token');
 
   const changeLanguage = (language: string) => {
     i18n.changeLanguage(language);
@@ -32,9 +34,34 @@ const Header = () => {
     navigate('/home');
   }, [dispatch, navigate, setToken]);
 
+  useEffect(() => {
+    if (!cookieToken && token) {
+      alert('Сookie expired, please login again');
+      logout();
+    }
+  }, [cookieToken, token, logout]);
+
+  const handleScroll = () => {
+    window.scrollY > 0 ? setScroll(true) : setScroll(false);
+  };
+
+  window.addEventListener('scroll', handleScroll);
+
   return (
-    <header className="header d-flex justify-content-center bg-dark">
-      <nav className="nav navbar navbar-expand-lg navbar-dark">
+    <header
+      className={
+        scroll
+          ? 'header d-flex justify-content-center scroll'
+          : 'header d-flex justify-content-center'
+      }
+    >
+      <nav
+        className={
+          scroll
+            ? 'nav navbar navbar-expand-lg navbar-light'
+            : 'nav navbar navbar-expand-lg navbar-dark'
+        }
+      >
         <div className="container-fluid">
           <NavLink to={'/home'} className="navbar-brand">
             GoodBoard
