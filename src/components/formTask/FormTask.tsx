@@ -12,7 +12,15 @@ interface IData {
   description: string;
 }
 
-const FormTask = ({ setShowTask }: { setShowTask: (value: SetStateAction<boolean>) => void }) => {
+const FormTask = ({
+  setShowTask,
+  boardId,
+  columnId,
+}: {
+  setShowTask: (value: SetStateAction<boolean>) => void;
+  boardId: string;
+  columnId: string;
+}) => {
   const { t } = useTranslation();
 
   const {
@@ -38,11 +46,8 @@ const FormTask = ({ setShowTask }: { setShowTask: (value: SetStateAction<boolean
       userId: idUser,
     };
 
-    console.log(dataOrder);
-    await createTask(dataOrder);
-
+    await createTask(boardId, columnId, dataOrder);
     handleClose();
-    window.location.reload();
   };
 
   return (

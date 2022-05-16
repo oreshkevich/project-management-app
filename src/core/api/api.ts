@@ -6,9 +6,6 @@ const API = axios.create({
   baseURL: 'https://goodboard.herokuapp.com/',
 });
 
-const BOARDID = localStorage.getItem('boardId');
-const COLUMNID = localStorage.getItem('columnId');
-
 API.interceptors.request.use((request) => {
   const token = cookies.get('token');
 
@@ -32,13 +29,16 @@ export const createBoard = (boardData: BoardData) => API.post('/boards', boardDa
 export const deleteBoard = (id: string) => API.delete(`/boards/${id}`);
 
 export const getColumns = (boardId: string) => API.get(`/boards/${boardId}/columns`);
-export const createColumn = (colData: ColData) => API.post(`/boards/${BOARDID}/columns`, colData);
-export const deleteColumn = (id: string) => API.delete(`/boards/${BOARDID}/columns/${id}`);
+export const createColumn = (boardId: string, colData: ColData) =>
+  API.post(`/boards/${boardId}/columns`, colData);
+export const deleteColumn = (boardId: string, columnId: string) =>
+  API.delete(`/boards/${boardId}/columns/${columnId}`);
+export const editColumn = (boardId: string, columnId: string, colData: ColData) =>
+  API.put(`/boards/${boardId}/columns/${columnId}`, colData);
 
-export const getTasks = () => API.get(`/boards/${BOARDID}/columns/${COLUMNID}/tasks`);
-export const createTask = (colData: TaskData) =>
-  API.post(`/boards/${BOARDID}/columns/${COLUMNID}/tasks`, colData);
-export const deleteTask = (id: string) =>
-  API.delete(`/boards/${BOARDID}/columns/${COLUMNID}/tasks/${id}`);
-
-export const getAll = () => API.get(`/boards/${BOARDID}/columns/${COLUMNID}`);
+export const getTasks = (boardId: string, columnId: string) =>
+  API.get(`/boards/${boardId}/columns/${columnId}/tasks`);
+export const createTask = (boardId: string, columnId: string, colData: TaskData) =>
+  API.post(`/boards/${boardId}/columns/${columnId}/tasks`, colData);
+export const deleteTask = (boardId: string, columnId: string, taskId: string) =>
+  API.delete(`/boards/${boardId}/columns/${columnId}/tasks/${taskId}`);

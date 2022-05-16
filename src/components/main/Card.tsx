@@ -1,10 +1,12 @@
-import './card.css';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { AiFillDelete } from 'react-icons/ai';
 import { Button } from 'react-bootstrap';
-import { deleteColumn, getAll, getTasks } from '../../core/api/api';
+import { deleteColumn, editColumn, getColumns, getTasks } from '../../core/api/api';
 import { useTranslation } from 'react-i18next';
 import FormTask from '../formTask/FormTask';
+import './card.css';
+
 interface IColData {
   title: string;
   id: string;
@@ -12,8 +14,7 @@ interface IColData {
 }
 
 interface ICard {
-  id: string;
-  order: number;
+  id: number;
   title: string;
   items: IItem[];
 }
@@ -29,41 +30,23 @@ interface IItem {
   title: string;
 }
 
-const Card = (props: { data: IColData }) => {
-  const [showTask, setShowTask] = useState(false);
-  const [task, setTasks] = useState<Array<IColData>>();
-  const handleShow = () => setShowTask(true);
-  useEffect(() => {
-    getAllTask();
-  }, []);
-
-  async function getAllTask() {
-    const response = await getTasks();
-
-    setTasks(response.data);
-  }
-  // async function getAllTask() {
-  //   const response = await getAll();
-
-  //   setTasks(response.data);
-  //   console.log(response.data);
-  // }
-  console.log(task);
-  // goodboard.herokuapp.com/boards/6a9b8c4c-2604-454d-9a76-287748c46f4d/columns/966f1705-2131-41f1-860a-40143199cc64
-
+const Card = ({
+  data,
+  setCount,
+}: {
+  data: IColData;
+  setCount: Dispatch<SetStateAction<number>>;
+}) => {
   const { t } = useTranslation();
-  localStorage.setItem('columnId', props.data.id);
-  console.log(props.data.id);
+  const { id } = useParams();
+
+  localStorage.setItem('columnId', data.id);
   const boardsObj = [
     {
-      id: props.data.id,
-      order: props.data.order,
-      title: props.data.title,
-      items: [
-        { id: 1, order: 4, title: 'Код ревью1' },
-        { id: 2, order: 5, title: 'Код ревью2' },
-        { id: 3, order: 6, title: 'Код ревью3' },
-      ],
+      id: data.id,
+      order: data.order,
+      title: data.title,
+      items: [],
     },
     // {
     //   id: 2,
@@ -127,10 +110,10 @@ const Card = (props: { data: IColData }) => {
     board.items.splice(dropIndex + 1, 0, currentItem as IItem);
     setBoards(
       boards.map((b) => {
-        if ((b as ICard).order === board.order) {
+        if ((b as ICard).id === board.id) {
           return board;
         }
-        if ((b as ICard).order === (currentBoard as ICard).order) {
+        if ((b as ICard).id === (currentBoard as ICard).id) {
           return currentBoard;
         }
         return b;
@@ -144,10 +127,10 @@ const Card = (props: { data: IColData }) => {
     (currentBoard as ICard).items.splice(currentIndex, 1);
     setBoards(
       boards.map((b) => {
-        if ((b as ICard).order === board.order) {
+        if ((b as ICard).id === board.id) {
           return board;
         }
-        if ((b as ICard).order === (currentBoard as ICard).order) {
+        if ((b as ICard).id === (currentBoard as ICard).id) {
           return currentBoard;
         }
         return b;
@@ -155,22 +138,22 @@ const Card = (props: { data: IColData }) => {
     );
   }
 
-  const handleDeleteBoard = (id: string) => {
+  const handleDeleteBoard = (id: number) => {
     const isConfirm = confirm(`Точно вы хотите удалить колонку: ${id}`);
     if (!isConfirm) return isConfirm;
-    deleteCol(id);
-    // setBoards(boards.filter((todo) => (todo as ICard).id !== id));
+    setBoards(boards.filter((todo) => (todo as ICard).id !== id));
+    deleteCurrentBoard();
   };
 
   const handleDelete = (idItem: number, board: ICard, itemTitle: string) => {
     const isConfirm = confirm(`Точно вы хотите удалить задачу: ${itemTitle}`);
     if (!isConfirm) return isConfirm;
 
-    const boardId = board.order - 1;
+    const boardId = board.id - 1;
 
     setBoards(
       boards.map((todo) =>
-        (todo as ICard).order === board.order
+        (todo as ICard).id === board.id
           ? {
               ...todo,
               items: (boards[boardId] as ICard | ICardBoard).items.filter(
@@ -198,7 +181,7 @@ const Card = (props: { data: IColData }) => {
   const handleEditTodo = (item: string, id: number) => {
     setBoards(
       boards.map((todo) =>
-        (todo as ICard).order === id
+        (todo as ICard).id === id
           ? {
               ...todo,
               title: item,
@@ -211,7 +194,7 @@ const Card = (props: { data: IColData }) => {
     const boardId = id - 1;
     setBoards(
       boards.map((todo) =>
-        (todo as ICard).order === id
+        (todo as ICard).id === id
           ? {
               ...todo,
               title: boardsObj[boardId].title,
@@ -230,15 +213,30 @@ const Card = (props: { data: IColData }) => {
     setIdEditBoard(-1);
   };
 
-  async function deleteCol(id: string) {
-    const isConfirm = confirm(`Точно вы хотите удалить колонку: ${id}`);
-    if (!isConfirm) return isConfirm;
-    if (id) {
-      await deleteColumn(id);
+  async function deleteCurrentBoard() {
+    if (data.id) {
+      await deleteColumn(String(id), data.id);
+      setCount((count) => count - 1);
+
+      const columns = await getColumns(String(id));
+
+      columns.data.map((column: IColData, idx: number) =>
+        editColumn(String(id), String(column.id), { title: column.title, order: idx + 1 })
+      );
+    }
+  }
+  const [showTask, setShowTask] = useState(false);
+  const [tasks, setTasks] = useState<Array<IColData>>();
+  const handleShow = () => setShowTask(true);
+
+  useEffect(() => {
+    async function getAllTask() {
+      const response = await getTasks(String(id), data.id);
+      setTasks(response.data);
     }
 
-    window.location.reload();
-  }
+    getAllTask();
+  }, [id, data.id]);
 
   return (
     <div className="app-card">
@@ -251,7 +249,7 @@ const Card = (props: { data: IColData }) => {
           onDrop={(e) => dropCardHandler(e, board as ICard)}
         >
           <div className="board__title">
-            {edit && (board as ICard).order === idEditBoard ? (
+            {edit && (board as ICard).id === idEditBoard ? (
               <div className="board__title-button">
                 <Button variant="info" type="submit">
                   Sub
@@ -259,35 +257,34 @@ const Card = (props: { data: IColData }) => {
                 <Button
                   variant="info"
                   type="button"
-                  onClick={() => handleEditCancel((board as ICard).order)}
+                  onClick={() => handleEditCancel((board as ICard).id)}
                 >
                   Can.
                 </Button>
 
                 <input
                   value={(board as ICard).title}
-                  onChange={(e) => handleEditTodo(e.target.value, (board as ICard).order)}
+                  onChange={(e) => handleEditTodo(e.target.value, (board as ICard).id)}
                   className="todo__single--input"
                   ref={inputRef}
                 />
               </div>
             ) : (
-              <div
-                className="todo__single--text"
-                onClick={() => handleEdit((board as ICard).order)}
-              >
+              <div className="todo__single--text" onClick={() => handleEdit((board as ICard).id)}>
                 {(board as ICard).title}
               </div>
             )}
           </div>
 
-          <span className="icon" onClick={() => deleteCol((board as ICard).id)}>
+          <span className="icon" onClick={() => handleDeleteBoard((board as ICard).id)}>
             <AiFillDelete />
           </span>
           <Button variant="success" onClick={handleShow}>
             {t('header.create-task__button')}
           </Button>
-          {showTask ? <FormTask setShowTask={setShowTask} /> : null}
+          {showTask ? (
+            <FormTask setShowTask={setShowTask} boardId={String(id)} columnId={data.id} />
+          ) : null}
           {(board as ICard).items.map((item) => (
             <div
               key={item.id}
