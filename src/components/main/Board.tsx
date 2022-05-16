@@ -25,7 +25,6 @@ const Board = () => {
     const { data } = await getColumns(String(id));
     setColumns(data);
     setCount(data.length + 1);
-    //console.log(data);
   }, [id]);
 
   useEffect(() => {
