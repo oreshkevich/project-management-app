@@ -1,10 +1,12 @@
-import './card.css';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { AiFillDelete } from 'react-icons/ai';
 import { Button } from 'react-bootstrap';
-import { deleteColumn, getTasks } from '../../core/api/api';
+import { deleteColumn, editColumn, getColumns, getTasks } from '../../core/api/api';
 import { useTranslation } from 'react-i18next';
 import FormTask from '../formTask/FormTask';
+import './card.css';
+
 interface IColData {
   title: string;
   id: string;
@@ -28,15 +30,22 @@ interface IItem {
   title: string;
 }
 
-const Card = (props: { data: IColData }) => {
+const Card = ({
+  data,
+  setCount,
+}: {
+  data: IColData;
+  setCount: Dispatch<SetStateAction<number>>;
+}) => {
   const { t } = useTranslation();
-  localStorage.setItem('columnId', props.data.id);
-  console.log(props.data);
+  const { id } = useParams();
+
+  localStorage.setItem('columnId', data.id);
   const boardsObj = [
     {
-      id: props.data.id,
-      order: props.data.order,
-      title: props.data.title,
+      id: data.id,
+      order: data.order,
+      title: data.title,
       items: [],
     },
     // {
@@ -205,24 +214,29 @@ const Card = (props: { data: IColData }) => {
   };
 
   async function deleteCurrentBoard() {
-    if (props.data.id) {
-      await deleteColumn(props.data.id);
-    }
+    if (data.id) {
+      await deleteColumn(String(id), data.id);
+      setCount((count) => count - 1);
 
-    window.location.reload();
+      const columns = await getColumns(String(id));
+
+      columns.data.map((column: IColData, idx: number) =>
+        editColumn(String(id), String(column.id), { title: column.title, order: idx + 1 })
+      );
+    }
   }
   const [showTask, setShowTask] = useState(false);
-  const [task, setTasks] = useState<Array<IColData>>();
+  const [tasks, setTasks] = useState<Array<IColData>>();
   const handleShow = () => setShowTask(true);
+
   useEffect(() => {
+    async function getAllTask() {
+      const response = await getTasks(String(id), data.id);
+      setTasks(response.data);
+    }
+
     getAllTask();
-  }, []);
-
-  async function getAllTask() {
-    const response = await getTasks();
-
-    setTasks(response.data);
-  }
+  }, [id, data.id]);
 
   return (
     <div className="app-card">
@@ -268,7 +282,9 @@ const Card = (props: { data: IColData }) => {
           <Button variant="success" onClick={handleShow}>
             {t('header.create-task__button')}
           </Button>
-          {showTask ? <FormTask setShowTask={setShowTask} /> : null}
+          {showTask ? (
+            <FormTask setShowTask={setShowTask} boardId={String(id)} columnId={data.id} />
+          ) : null}
           {(board as ICard).items.map((item) => (
             <div
               key={item.id}

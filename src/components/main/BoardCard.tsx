@@ -19,8 +19,7 @@ const BoardCard = (props: { data: BoardData }) => {
 
   async function openBoard() {
     if (props.data.id) {
-      localStorage.setItem('boardId', props.data.id);
-      navigate('/board');
+      navigate(`/board/${props.data.id}`);
     }
   }
 
