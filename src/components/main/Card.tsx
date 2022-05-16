@@ -46,7 +46,11 @@ const Card = ({
       id: data.id,
       order: data.order,
       title: data.title,
-      items: [],
+      items: [
+        { id: 4, title: 'Код ревью1' },
+        { id: 5, title: 'Код ревью2' },
+        { id: 6, title: 'Код ревью3' },
+      ],
     },
     // {
     //   id: 2,
@@ -189,7 +193,9 @@ const Card = ({
           : todo
       )
     );
+    editColumn(String(id), String(data.id), { title: item, order: data.order });
   };
+
   const handleEditCancel = (id: number) => {
     const boardId = id - 1;
     setBoards(
@@ -226,13 +232,16 @@ const Card = ({
     }
   }
   const [showTask, setShowTask] = useState(false);
+  const [countTask, setCountTask] = useState(1);
   const [tasks, setTasks] = useState<Array<IColData>>();
+  console.log(tasks);
   const handleShow = () => setShowTask(true);
 
   useEffect(() => {
     async function getAllTask() {
       const response = await getTasks(String(id), data.id);
       setTasks(response.data);
+      setCountTask(response.data.length + 1);
     }
 
     getAllTask();
@@ -283,7 +292,13 @@ const Card = ({
             {t('header.create-task__button')}
           </Button>
           {showTask ? (
-            <FormTask setShowTask={setShowTask} boardId={String(id)} columnId={data.id} />
+            <FormTask
+              setShowTask={setShowTask}
+              boardId={String(id)}
+              columnId={data.id}
+              countTask={countTask}
+              setCountTask={setCount}
+            />
           ) : null}
           {(board as ICard).items.map((item) => (
             <div
