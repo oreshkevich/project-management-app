@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from 're
 import { useParams } from 'react-router-dom';
 import { AiFillDelete } from 'react-icons/ai';
 import { Button } from 'react-bootstrap';
-import { deleteColumn, editColumn, getColumns, getTasks } from '../../core/api/api';
+import { deleteColumn, deleteTask, editColumn, getColumns, getTasks } from '../../core/api/api';
 import { useTranslation } from 'react-i18next';
 import FormTask from '../formTask/FormTask';
 import './card.css';
@@ -72,15 +72,6 @@ const Card = ({
     //     { id: 4, title: 'Код ревью1' },
     //     { id: 5, title: 'Код ревью2' },
     //     { id: 6, title: 'Код ревью3' },
-    //   ],
-    // },
-    // {
-    //   id: 3,
-    //   title: 'Сделано',
-    //   items: [
-    //     { id: 7, title: 'Код1' },
-    //     { id: 8, title: 'Код2' },
-    //     { id: 9, title: 'Код3' },
     //   ],
     // },
   ];
@@ -162,25 +153,25 @@ const Card = ({
     deleteCurrentBoard();
   };
 
-  const handleDelete = (idItem: number, board: ICard, itemTitle: string) => {
-    const isConfirm = confirm(`Точно вы хотите удалить задачу: ${itemTitle}`);
-    if (!isConfirm) return isConfirm;
+  // const handleDelete = (idItem: number, board: ICard, itemTitle: string) => {
+  //   const isConfirm = confirm(`Точно вы хотите удалить задачу: ${itemTitle}`);
+  //   if (!isConfirm) return isConfirm;
 
-    const boardId = board.id - 1;
+  //   const boardId = board.id - 1;
 
-    setBoards(
-      boards.map((todo) =>
-        (todo as ICard).id === board.id
-          ? {
-              ...todo,
-              items: (boards[boardId] as ICard | ICardBoard).items.filter(
-                (todo: { id: number }) => todo.id !== idItem
-              ),
-            }
-          : todo
-      )
-    );
-  };
+  //   setBoards(
+  //     boards.map((todo) =>
+  //       (todo as ICard).id === board.id
+  //         ? {
+  //             ...todo,
+  //             items: (boards[boardId] as ICard | ICardBoard).items.filter(
+  //               (todo: { id: number }) => todo.id !== idItem
+  //             ),
+  //           }
+  //         : todo
+  //     )
+  //   );
+  // };
   const [idEditBoard, setIdEditBoard] = useState<number>(-1);
   const [edit, setEdit] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -258,6 +249,19 @@ const Card = ({
     getAllTask();
   }, [id, data.id]);
 
+  async function deleteCurrentTask(
+    boardId: string,
+    columnId: string,
+    taskId: string,
+    itemTitle: string
+  ) {
+    const isConfirm = confirm(`Точно вы хотите удалить задачу: ${itemTitle}`);
+    if (!isConfirm) return isConfirm;
+    await deleteTask(boardId, columnId, taskId);
+
+    window.location.reload();
+  }
+
   return (
     <div className="app-card">
       {boards.map((board) => (
@@ -325,7 +329,7 @@ const Card = ({
               {item.title}
               <span
                 className="icon"
-                onClick={() => handleDelete(item.order, board as ICard, item.title)}
+                onClick={() => deleteCurrentTask(item.boardId, item.columnId, item.id, item.title)}
               >
                 <AiFillDelete />
               </span>
