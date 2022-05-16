@@ -12,6 +12,16 @@ interface IColData {
   id: string;
   order: number;
 }
+interface ITaskData {
+  title: string;
+  id: string;
+  order: number;
+  boardId: string;
+  columnId: string;
+  description: string;
+  files: [];
+  userId: string;
+}
 
 interface ICard {
   id: number;
@@ -39,14 +49,21 @@ const Card = ({
 }) => {
   const { t } = useTranslation();
   const { id } = useParams();
-
+  const [showTask, setShowTask] = useState(false);
+  const [countTask, setCountTask] = useState(1);
+  const [tasks, setTasks] = useState<Array<ITaskData>>();
   localStorage.setItem('columnId', data.id);
   const boardsObj = [
     {
       id: data.id,
       order: data.order,
       title: data.title,
-      items: [],
+
+      items: [
+        // { id: 5, title: 'Код ревью1' },
+        // { id: 5, title: 'Код ревью2' },
+        // { id: 6, title: 'Код ревью3' },
+      ],
     },
     // {
     //   id: 2,
@@ -189,7 +206,9 @@ const Card = ({
           : todo
       )
     );
+    editColumn(String(id), String(data.id), { title: item, order: data.order });
   };
+
   const handleEditCancel = (id: number) => {
     const boardId = id - 1;
     setBoards(
@@ -225,14 +244,15 @@ const Card = ({
       );
     }
   }
-  const [showTask, setShowTask] = useState(false);
-  const [tasks, setTasks] = useState<Array<IColData>>();
+
+  console.log(tasks);
   const handleShow = () => setShowTask(true);
 
   useEffect(() => {
     async function getAllTask() {
       const response = await getTasks(String(id), data.id);
       setTasks(response.data);
+      setCountTask(response.data.length + 1);
     }
 
     getAllTask();
@@ -283,23 +303,29 @@ const Card = ({
             {t('header.create-task__button')}
           </Button>
           {showTask ? (
-            <FormTask setShowTask={setShowTask} boardId={String(id)} columnId={data.id} />
+            <FormTask
+              setShowTask={setShowTask}
+              boardId={String(id)}
+              columnId={data.id}
+              countTask={countTask}
+              setCountTask={setCount}
+            />
           ) : null}
-          {(board as ICard).items.map((item) => (
+          {((tasks as ITaskData[]) ? (tasks as ITaskData[]) : []).map((item) => (
             <div
-              key={item.id}
+              key={item.order}
               onDragOver={(e) => dragOverHandler(e)}
               onDragLeave={(e) => dragLeaveHandler(e)}
-              onDragStart={(e) => dragStartHandler(e, board as ICard, item)}
+              // onDragStart={(e) => dragStartHandler(e, board as ICard)}
               onDragEnd={(e) => dragEndHandler(e)}
-              onDrop={(e) => dropHandler(e, board as ICard, item)}
+              // onDrop={(e) => dropHandler(e, board as ICard)}
               draggable={true}
               className="item"
             >
               {item.title}
               <span
                 className="icon"
-                onClick={() => handleDelete(item.id, board as ICard, item.title)}
+                onClick={() => handleDelete(item.order, board as ICard, item.title)}
               >
                 <AiFillDelete />
               </span>

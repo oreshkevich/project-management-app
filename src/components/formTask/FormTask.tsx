@@ -1,4 +1,4 @@
-import { SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { Form, Button, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { TaskData } from '../../core/types/types';
@@ -15,11 +15,15 @@ interface IData {
 const FormTask = ({
   setShowTask,
   boardId,
+  countTask,
+  setCountTask,
   columnId,
 }: {
   setShowTask: (value: SetStateAction<boolean>) => void;
+  countTask: number;
   boardId: string;
   columnId: string;
+  setCountTask: Dispatch<SetStateAction<number>>;
 }) => {
   const { t } = useTranslation();
 
@@ -30,24 +34,20 @@ const FormTask = ({
   } = useForm<TaskData>({ mode: 'onBlur' });
 
   const handleClose = () => setShowTask(false);
-  const [count, setCount] = useState(1);
 
   const onSubmit = async (data: IData) => {
-    const savedCount = localStorage.getItem('countId');
-    const value = savedCount ? JSON.parse(savedCount) : 1;
-    setCount(value + 1);
-
-    localStorage.setItem('countId', JSON.stringify(count));
     const idUser = cookies.get('id');
     const dataOrder = {
       title: data.title,
-      order: count,
+      order: countTask,
       description: data.description,
       userId: idUser,
     };
 
+    setCountTask((countTask) => countTask + 1);
     await createTask(boardId, columnId, dataOrder);
     handleClose();
+    window.location.reload();
   };
 
   return (
