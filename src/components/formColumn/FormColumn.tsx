@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react';
+import { SetStateAction } from 'react';
 import { useParams } from 'react-router-dom';
 import { Form, Button, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -14,13 +14,11 @@ interface IData {
 const FormColumn = ({
   setShowCol,
   getAllColumn,
-  count,
-  setCount,
+  order,
 }: {
   setShowCol: (value: SetStateAction<boolean>) => void;
   getAllColumn: () => void;
-  count: number;
-  setCount: Dispatch<SetStateAction<number>>;
+  order: number;
 }) => {
   const { t } = useTranslation();
   const { id } = useParams();
@@ -36,14 +34,11 @@ const FormColumn = ({
   const onSubmit = async (data: IData) => {
     const dataOrder = {
       title: data.title,
-      order: count,
+      order: order + 1,
     };
-
-    setCount((count) => count + 1);
 
     await createColumn(String(id), dataOrder);
     getAllColumn();
-
     handleClose();
   };
 

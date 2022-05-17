@@ -13,8 +13,6 @@ const BoardCard = (props: { data: BoardData }) => {
     if (props.data.id) {
       await deleteBoard(props.data.id);
     }
-
-    // window.location.reload();
   }
 
   async function openBoard() {
