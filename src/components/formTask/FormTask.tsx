@@ -1,4 +1,5 @@
-import { Dispatch, SetStateAction } from 'react';
+import { SetStateAction } from 'react';
+import { useParams } from 'react-router-dom';
 import { Form, Button, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { TaskData } from '../../core/types/types';
@@ -14,18 +15,17 @@ interface IData {
 
 const FormTask = ({
   setShowTask,
-  boardId,
-  countTask,
-  setCountTask,
+  getAllTask,
   columnId,
+  order,
 }: {
   setShowTask: (value: SetStateAction<boolean>) => void;
-  countTask: number;
-  boardId: string;
+  getAllTask: () => void;
   columnId: string;
-  setCountTask: Dispatch<SetStateAction<number>>;
+  order: number;
 }) => {
   const { t } = useTranslation();
+  const { id } = useParams();
 
   const {
     register,
@@ -39,15 +39,14 @@ const FormTask = ({
     const idUser = cookies.get('id');
     const dataOrder = {
       title: data.title,
-      order: countTask,
+      order: order + 1,
       description: data.description,
-      userId: idUser,
+      userId: String(idUser),
     };
 
-    setCountTask((countTask) => countTask + 1);
-    await createTask(boardId, columnId, dataOrder);
+    await createTask(String(id), columnId, dataOrder);
+    getAllTask();
     handleClose();
-    window.location.reload();
   };
 
   return (

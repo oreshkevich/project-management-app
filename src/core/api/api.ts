@@ -40,7 +40,15 @@ export const editColumn = (boardId: string, columnId: string, colData: ColData) 
 
 export const getTasks = (boardId: string, columnId: string) =>
   API.get(`/boards/${boardId}/columns/${columnId}/tasks`);
-export const createTask = (boardId: string, columnId: string, colData: TaskData) =>
-  API.post(`/boards/${boardId}/columns/${columnId}/tasks`, colData);
+export const createTask = (
+  boardId: string,
+  columnId: string,
+  colData: {
+    title: string;
+    description: string;
+    order: number;
+    userId: string;
+  }
+) => API.post(`/boards/${boardId}/columns/${columnId}/tasks`, colData);
 export const deleteTask = (boardId: string, columnId: string, taskId: string) =>
   API.delete(`/boards/${boardId}/columns/${columnId}/tasks/${taskId}`);
