@@ -12,6 +12,24 @@ interface IColData {
   id: string;
   order: number;
 }
+
+interface ICard {
+  id: number;
+  order: number;
+  title: string;
+  items: ITaskData[];
+}
+
+interface ICardBoard {
+  id?: number;
+  title?: string;
+  items: ITaskData[];
+}
+
+// interface ITaskData {
+//   id: number;
+//   title: string;
+// }
 interface ITaskData {
   title: string;
   id: string;
@@ -22,24 +40,6 @@ interface ITaskData {
   files: [];
   userId: string;
 }
-
-interface ICard {
-  id: number;
-  title: string;
-  items: IItem[];
-}
-
-interface ICardBoard {
-  id?: number;
-  title?: string;
-  items: IItem[];
-}
-
-interface IItem {
-  id: number;
-  title: string;
-}
-
 const Card = ({
   data,
   setCount,
@@ -80,7 +80,7 @@ const Card = ({
     useState<(ICard | ICardBoard | { title: string | undefined } | null)[]>(boardsObj);
 
   const [currentBoard, setCurrentBoard] = useState<ICard | null>(null);
-  const [currentItem, setCurrentItem] = useState<IItem | null>(null);
+  const [currentItem, setCurrentItem] = useState<ITaskData | null>(null);
 
   const dragOverHandler = (
     e: React.DragEvent<HTMLDivElement> | React.DragEvent<HTMLFormElement>
@@ -99,29 +99,29 @@ const Card = ({
   function dragStartHandler(
     _e: React.DragEvent<HTMLDivElement>,
     board: React.SetStateAction<ICard>,
-    item: React.SetStateAction<IItem>
+    item: React.SetStateAction<ITaskData>
   ) {
     setCurrentBoard(board as ICard);
-    setCurrentItem(item as IItem);
+    setCurrentItem(item as ITaskData);
   }
   function dragEndHandler(e: React.DragEvent<HTMLDivElement>) {
     (e.target as HTMLDivElement).style.boxShadow = 'none';
   }
 
-  function dropHandler(e: React.DragEvent<HTMLDivElement>, board: ICard, item: IItem) {
+  function dropHandler(e: React.DragEvent<HTMLDivElement>, board: ICard, item: ITaskData) {
     e.preventDefault();
 
-    const currentIndex = (currentBoard as ICard).items.indexOf(currentItem as IItem);
+    const currentIndex = (currentBoard as ICard).items.indexOf(currentItem as ITaskData);
 
     (currentBoard as ICard).items.splice(currentIndex, 1);
     const dropIndex = board.items.indexOf(item);
-    board.items.splice(dropIndex + 1, 0, currentItem as IItem);
+    board.items.splice(dropIndex + 1, 0, currentItem as ITaskData);
     setBoards(
       boards.map((b) => {
-        if ((b as ICard).id === board.id) {
+        if ((b as ICard).order === board.order) {
           return board;
         }
-        if ((b as ICard).id === (currentBoard as ICard).id) {
+        if ((b as ICard).order === (currentBoard as ICard).order) {
           return currentBoard;
         }
         return b;
@@ -130,15 +130,15 @@ const Card = ({
   }
 
   function dropCardHandler(_e: React.DragEvent<HTMLFormElement>, board: ICard) {
-    board.items.push(currentItem as IItem);
-    const currentIndex = (currentBoard as ICard).items.indexOf(currentItem as IItem);
+    board.items.push(currentItem as ITaskData);
+    const currentIndex = (currentBoard as ICard).items.indexOf(currentItem as ITaskData);
     (currentBoard as ICard).items.splice(currentIndex, 1);
     setBoards(
       boards.map((b) => {
-        if ((b as ICard).id === board.id) {
+        if ((b as ICard).order === board.order) {
           return board;
         }
-        if ((b as ICard).id === (currentBoard as ICard).id) {
+        if ((b as ICard).order === (currentBoard as ICard).order) {
           return currentBoard;
         }
         return b;
@@ -320,9 +320,11 @@ const Card = ({
               key={item.order}
               onDragOver={(e) => dragOverHandler(e)}
               onDragLeave={(e) => dragLeaveHandler(e)}
-              // onDragStart={(e) => dragStartHandler(e, board as ICard)}
+              onDragStart={(e: React.DragEvent<HTMLDivElement>) =>
+                dragStartHandler(e, board as ICard, item)
+              }
               onDragEnd={(e) => dragEndHandler(e)}
-              // onDrop={(e) => dropHandler(e, board as ICard)}
+              onDrop={(e: React.DragEvent<HTMLDivElement>) => dropHandler(e, board as ICard, item)}
               draggable={true}
               className="item"
             >
