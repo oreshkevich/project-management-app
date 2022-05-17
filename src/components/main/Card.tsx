@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import { deleteColumn, editColumn, getColumns, getTasks } from '../../core/api/api';
@@ -29,7 +29,6 @@ const Card = ({ data, getAllColumn }: { data: IColData; getAllColumn: () => void
   const { t } = useTranslation();
   const { id } = useParams();
   const [showTask, setShowTask] = useState(false);
-  const [countTask, setCountTask] = useState(1);
   const [tasks, setTasks] = useState<Array<ITaskData>>();
   const [title, setTitle] = useState(data.title);
   const [edit, setEdit] = useState<boolean>(false);
@@ -38,7 +37,6 @@ const Card = ({ data, getAllColumn }: { data: IColData; getAllColumn: () => void
     async function getAllTask() {
       const response = await getTasks(String(id), data.id);
       setTasks(response.data);
-      setCountTask(response.data.length + 1);
     }
 
     getAllTask();
@@ -73,51 +71,45 @@ const Card = ({ data, getAllColumn }: { data: IColData; getAllColumn: () => void
   const handleEditCancel = () => setEdit(false);
   const handleEditTodo = (title: string) => setTitle(title);
 
-  const handleEditForm = (e: React.FormEvent) => {
+  const handleEditForm = async (e: React.FormEvent) => {
     e.preventDefault();
     setEdit(false);
-    editColumn(String(id), String(data.id), { title, order: data.order });
+    await editColumn(String(id), String(data.id), { title, order: data.order });
+    getAllColumn();
   };
 
   return (
-    <div className="app-card" draggable>
-      <form
-        onSubmit={handleEditForm}
-        key={data.id}
-        className="board"
-        // onDragOver={dragOverHandler}
-        // onDrop={dropCardHandler}
-      >
-        <div className="board__title">
-          {edit ? (
-            <div className="board__title-button">
-              <Button variant="info" type="submit">
-                Sub
-              </Button>
-              <Button variant="info" type="button" onClick={handleEditCancel}>
-                Can.
-              </Button>
+    <form onSubmit={handleEditForm} key={data.id} className="board">
+      <div className="board__title">
+        {edit ? (
+          <div className="board__title-button">
+            <Button variant="info" type="submit">
+              Sub
+            </Button>
+            <Button variant="info" type="button" onClick={handleEditCancel}>
+              Can.
+            </Button>
 
-              <input
-                defaultValue={title}
-                onChange={(e) => handleEditTodo(e.target.value)}
-                className="todo__single--input"
-              />
-            </div>
-          ) : (
-            <div className="todo__single--text" onClick={handleEdit}>
-              {title}
-            </div>
-          )}
-        </div>
+            <input
+              defaultValue={title}
+              onChange={(e) => handleEditTodo(e.target.value)}
+              className="todo__single--input"
+            />
+          </div>
+        ) : (
+          <div className="todo__single--text" onClick={handleEdit}>
+            {title}
+          </div>
+        )}
+      </div>
 
-        <span className="icon" onClick={handleDeleteBoard}>
-          <AiFillDelete />
-        </span>
-        <Button variant="success" onClick={handleShow}>
-          {t('header.create-task__button')}
-        </Button>
-        {/* {showTask ? (
+      <span className="icon" onClick={handleDeleteBoard}>
+        <AiFillDelete />
+      </span>
+      <Button variant="success" onClick={handleShow}>
+        {t('header.create-task__button')}
+      </Button>
+      {/* {showTask ? (
           <FormTask
             setShowTask={setShowTask}
             boardId={String(id)}
@@ -126,11 +118,10 @@ const Card = ({ data, getAllColumn }: { data: IColData; getAllColumn: () => void
             setCountTask={setCount}
           />
         ) : null} */}
-        {tasks?.map((item) => (
-          <Task task={item} key={item.order} />
-        ))}
-      </form>
-    </div>
+      {tasks?.map((item) => (
+        <Task task={item} key={item.order} />
+      ))}
+    </form>
   );
 };
 
