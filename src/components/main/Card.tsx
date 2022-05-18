@@ -42,7 +42,7 @@ const Card = ({
   setCurrentTasks,
 }: {
   data: IColData;
-  getAllColumn: () => void;
+  getAllColumn: () => Promise<void>;
   currentColumn: IColData | undefined;
   setCurrentColumn: Dispatch<SetStateAction<IColData | undefined>>;
   setCurrentTasks: Dispatch<SetStateAction<ITaskData[] | undefined>>;
@@ -58,7 +58,11 @@ const Card = ({
 
   const getAllTask = useCallback(async () => {
     const response = await getTasks(String(id), data.id);
-    setTasks(response.data);
+    setTasks(
+      [...response.data].sort((a, b) => {
+        return a.order > b.order ? 1 : a.order < b.order ? -1 : 0;
+      })
+    );
   }, [id, data.id]);
 
   useEffect(() => {
@@ -66,27 +70,29 @@ const Card = ({
   }, [getAllTask]);
 
   const deleteCurrentBoard = async () => {
-    if (data.id) {
-      await deleteColumn(String(id), data.id);
-      const columns = await getColumns(String(id));
+    await deleteColumn(String(id), data.id);
 
-      await Promise.all(
-        columns.data.map(async (column: IColData, idx: number) => {
-          if (column.order !== idx + 1)
-            await editColumn(String(id), String(column.id), {
-              title: column.title,
-              order: idx + 1,
-            });
-        })
-      );
-    }
+    const columns = await getColumns(String(id));
+    const sortColumns = columns.data.sort((a: IColData, b: IColData) => {
+      return a.order > b.order ? 1 : a.order < b.order ? -1 : 0;
+    });
+
+    await Promise.all(
+      sortColumns.map(async (column: IColData, idx: number) => {
+        if (column.order !== idx + 1)
+          await editColumn(String(id), String(column.id), {
+            title: column.title,
+            order: idx + 1,
+          });
+      })
+    );
   };
 
   const handleDeleteBoard = async () => {
     const isConfirm = confirm(`Точно вы хотите удалить колонку: ${data.order}`);
     if (!isConfirm) return isConfirm;
     await deleteCurrentBoard();
-    getAllColumn();
+    await getAllColumn();
   };
 
   const handleShow = () => setShowTask(true);
@@ -98,11 +104,11 @@ const Card = ({
     e.preventDefault();
     setEdit(false);
     await editColumn(String(id), String(data.id), { title, order: data.order });
-    getAllColumn();
+    await getAllColumn();
   };
 
-  const dragStartHandler = () => {
-    setCurrentColumn(data);
+  const dragStartHandler = (e: React.DragEvent) => {
+    e.target === e.currentTarget ? setCurrentColumn(data) : setCurrentColumn(undefined);
     setCurrentTasks(tasks);
   };
 
@@ -111,10 +117,10 @@ const Card = ({
   const dropHandler = async (e: React.DragEvent, card: IColData = data) => {
     e.preventDefault();
 
-    if (columns) {
+    if (currentColumn) {
       await Promise.all(
         columns.map(async (column: IColData) => {
-          if (Number(currentColumn?.order) === card.order) return;
+          if (Number(currentColumn.order) === card.order) return;
 
           if (column.id === card.id) {
             const copyTasks = tasks ? [...tasks] : null;
@@ -122,7 +128,7 @@ const Card = ({
             await deleteColumn(String(id), column.id);
             const response = await createColumn(String(id), {
               title: column.title,
-              order: Number(currentColumn?.order),
+              order: Number(currentColumn.order),
             });
 
             if (copyTasks) {
@@ -139,7 +145,7 @@ const Card = ({
             }
           }
 
-          if (column.id === currentColumn?.id) {
+          if (column.id === currentColumn.id) {
             await deleteColumn(String(id), column.id);
             const response = await createColumn(String(id), {
               title: column.title,
@@ -162,7 +168,7 @@ const Card = ({
         })
       );
 
-      getAllColumn();
+      await getAllColumn();
     }
   };
 
@@ -213,7 +219,7 @@ const Card = ({
           />
         )}
         {tasks?.map((item) => (
-          <Task task={item} key={item.order} />
+          <Task task={item} key={item.id} getAllTask={getAllTask} columnId={data.id} />
         ))}
       </form>
     </div>

@@ -1,4 +1,6 @@
+import { useParams } from 'react-router-dom';
 import { AiFillDelete } from 'react-icons/ai';
+import { editTask, getTasks, deleteTask } from '../../core/api/api';
 
 interface ITaskData {
   title: string;
@@ -10,67 +12,51 @@ interface ITaskData {
   files: { filename: string; fileSize: number }[];
 }
 
-const Task = ({ task }: { task: ITaskData }) => {
-  // const dragOverHandler = (
-  //   e: React.DragEvent<HTMLDivElement> | React.DragEvent<HTMLFormElement>
-  // ) => {
-  //   e.preventDefault();
+const Task = ({
+  task,
+  getAllTask,
+  columnId,
+}: {
+  task: ITaskData;
+  getAllTask: () => Promise<void>;
+  columnId: string;
+}) => {
+  const { id } = useParams();
 
-  //   if ((e.target as HTMLFormElement).className === 'item') {
-  //     (e.target as HTMLFormElement).style.boxShadow = '0 4px 3px gray';
-  //   }
-  // };
+  const deleteCurrentTask = async () => {
+    await deleteTask(String(id), columnId, task.id);
 
-  // function dragLeaveHandler(e: React.DragEvent<HTMLDivElement>) {
-  //   (e.target as HTMLDivElement).style.boxShadow = 'none';
-  // }
+    const tasks = await getTasks(String(id), columnId);
+    const sortTasks = tasks.data.sort((a: ITaskData, b: ITaskData) => {
+      return a.order > b.order ? 1 : a.order < b.order ? -1 : 0;
+    });
 
-  // function dragStartHandler(
-  //   _e: React.DragEvent<HTMLDivElement>,
-  //   board: React.SetStateAction<ICard>,
-  //   item: React.SetStateAction<IItem>
-  // ) {
-  //   setCurrentBoard(board as ICard);
-  //   setCurrentItem(item as IItem);
-  // }
-  // function dragEndHandler(e: React.DragEvent<HTMLDivElement>) {
-  //   (e.target as HTMLDivElement).style.boxShadow = 'none';
-  // }
+    await Promise.all(
+      sortTasks.map(async (sortTask: ITaskData, idx: number) => {
+        if (sortTask.order !== idx + 1)
+          await editTask(String(id), columnId, sortTask.id, {
+            title: sortTask.title,
+            order: idx + 1,
+            description: sortTask.description,
+            userId: sortTask.userId,
+            boardId: String(id),
+            columnId: columnId,
+          });
+      })
+    );
+  };
 
-  // function dropHandler(e: React.DragEvent<HTMLDivElement>, board: ICard, item: IItem) {
-  //   e.preventDefault();
-
-  //   const currentIndex = (currentBoard as ICard).items.indexOf(currentItem as IItem);
-
-  //   (currentBoard as ICard).items.splice(currentIndex, 1);
-  //   const dropIndex = board.items.indexOf(item);
-  //   board.items.splice(dropIndex + 1, 0, currentItem as IItem);
-  // }
-
-  // function dropCardHandler() {
-  //   console.log(data);
-  // }
-
-  // const handleDelete = (idItem: number, board: ICard, itemTitle: string) => {
-  //   const isConfirm = confirm(`Точно вы хотите удалить задачу: ${itemTitle}`);
-  //   if (!isConfirm) return isConfirm;
-  // };
+  const handleDeleteTask = async () => {
+    const isConfirm = confirm(`Точно вы хотите удалить задание: ${task.order}`);
+    if (!isConfirm) return isConfirm;
+    await deleteCurrentTask();
+    await getAllTask();
+  };
 
   return (
-    <div
-      // onDragOver={dragOverHandler}
-      // onDragLeave={dragLeaveHandler}
-      // onDragStart={(e) => dragStartHandler(e, board as ICard)}
-      // onDragEnd={dragEndHandler}
-      // onDrop={(e) => dropHandler(e, board as ICard)}
-      draggable={true}
-      className="item"
-    >
+    <div draggable className="item">
       {task.title}
-      <span
-        className="icon"
-        //onClick={() => handleDelete(item.order, board as ICard, item.title)}
-      >
+      <span className="icon" onClick={handleDeleteTask}>
         <AiFillDelete />
       </span>
     </div>

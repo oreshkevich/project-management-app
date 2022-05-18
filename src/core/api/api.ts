@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { NewUser, User, BoardData, ColData, TaskData } from '../types/types';
+import { NewUser, User, BoardData, ColData } from '../types/types';
 import { cookies } from '../cookies/cookies';
 
 const API = axios.create({
@@ -52,3 +52,16 @@ export const createTask = (
 ) => API.post(`/boards/${boardId}/columns/${columnId}/tasks`, colData);
 export const deleteTask = (boardId: string, columnId: string, taskId: string) =>
   API.delete(`/boards/${boardId}/columns/${columnId}/tasks/${taskId}`);
+export const editTask = (
+  boardId: string,
+  columnId: string,
+  taskId: string,
+  taskData: {
+    title: string;
+    order: number;
+    description: string;
+    userId: string;
+    boardId: string;
+    columnId: string;
+  }
+) => API.put(`/boards/${boardId}/columns/${columnId}/tasks/${taskId}`, taskData);
