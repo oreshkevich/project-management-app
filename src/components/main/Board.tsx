@@ -12,42 +12,64 @@ interface IColData {
   order: number;
 }
 
+interface ITaskData {
+  title: string;
+  id: string;
+  order: number;
+  done: boolean;
+  description: string;
+  userId: string;
+  files: { filename: string; fileSize: number }[];
+}
+
 const Board = () => {
   const { t } = useTranslation();
   const [showCol, setShowCol] = useState(false);
   const [columns, setColumns] = useState<Array<IColData>>();
-  const [count, setCount] = useState(1);
+  const [currentColumn, setCurrentColumn] = useState<IColData>();
+  const [currentTasks, setCurrentTasks] = useState<ITaskData[]>();
   const { id } = useParams();
 
   const handleShow = () => setShowCol(true);
 
   const getAllColumn = useCallback(async () => {
     const { data } = await getColumns(String(id));
-    setColumns(data);
-    setCount(data.length + 1);
+    setColumns(
+      [...data].sort((a, b) => {
+        return a.order > b.order ? 1 : a.order < b.order ? -1 : 0;
+      })
+    );
   }, [id]);
 
   useEffect(() => {
     getAllColumn();
-  }, [id, getAllColumn]);
+  }, [getAllColumn]);
 
   return (
     <div>
       <Button variant="success" onClick={handleShow}>
         {t('header.create-col__button')}
       </Button>
-      {showCol ? (
+      {showCol && (
         <FormColumn
           setShowCol={setShowCol}
           getAllColumn={getAllColumn}
-          count={count}
-          setCount={setCount}
+          order={columns?.length || 0}
         />
-      ) : null}
+      )}
 
       <div className="app-card-data">
         {columns?.map((item: IColData) => (
-          <Card data={item} key={item.id} setCount={setCount} />
+          <Card
+            data={item}
+            key={item.id}
+            getAllColumn={getAllColumn}
+            columns={columns}
+            setCurrentColumn={setCurrentColumn}
+            currentColumn={currentColumn}
+            setCurrentTasks={setCurrentTasks}
+            currentTasks={currentTasks}
+          />
         ))}
       </div>
     </div>

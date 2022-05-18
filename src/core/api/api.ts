@@ -29,6 +29,8 @@ export const createBoard = (boardData: BoardData) => API.post('/boards', boardDa
 export const deleteBoard = (id: string) => API.delete(`/boards/${id}`);
 
 export const getColumns = (boardId: string) => API.get(`/boards/${boardId}/columns`);
+export const getColumn = (boardId: string, columnId: string) =>
+  API.get(`/boards/${boardId}/columns/${columnId}`);
 export const createColumn = (boardId: string, colData: ColData) =>
   API.post(`/boards/${boardId}/columns`, colData);
 export const deleteColumn = (boardId: string, columnId: string) =>
@@ -38,7 +40,15 @@ export const editColumn = (boardId: string, columnId: string, colData: ColData) 
 
 export const getTasks = (boardId: string, columnId: string) =>
   API.get(`/boards/${boardId}/columns/${columnId}/tasks`);
-export const createTask = (boardId: string, columnId: string, colData: TaskData) =>
-  API.post(`/boards/${boardId}/columns/${columnId}/tasks`, colData);
+export const createTask = (
+  boardId: string,
+  columnId: string,
+  colData: {
+    title: string;
+    description: string;
+    order: number;
+    userId: string;
+  }
+) => API.post(`/boards/${boardId}/columns/${columnId}/tasks`, colData);
 export const deleteTask = (boardId: string, columnId: string, taskId: string) =>
   API.delete(`/boards/${boardId}/columns/${columnId}/tasks/${taskId}`);
