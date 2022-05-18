@@ -1,4 +1,4 @@
-import { AiFillDelete } from 'react-icons/ai';
+import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
 
 interface ITaskData {
   title: string;
@@ -72,6 +72,9 @@ const Task = ({ task }: { task: ITaskData }) => {
         //onClick={() => handleDelete(item.order, board as ICard, item.title)}
       >
         <AiFillDelete />
+      </span>
+      <span className="icon">
+        <AiFillEdit />
       </span>
     </div>
   );

@@ -174,7 +174,7 @@ const Card = ({
       onDragOver={dragOverHandler}
       onDrop={dropHandler}
     >
-      <form onSubmit={handleEditForm} key={data.id} className="board">
+      <form onSubmit={handleEditForm} key={data.id} className="board scroll-task">
         <div className="board__title">
           {edit ? (
             <div className="board__title-button">
