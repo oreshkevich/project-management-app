@@ -82,9 +82,16 @@ export const Home = () => {
           </div>
         </div>
       </section>
-      <section className="container pt-5 pb-5">
+      <section className="container pt-3 pb-3">
         <h2 className="team__title">{t('homepage.course-block__title')}</h2>
         <p>{t('homepage.course-block__about')}</p>
+        <p>{t('homepage.course-block__about-two')}</p>
+        <p>{t('homepage.course-block__about-three')}</p>
+        <p>{t('homepage.course-block__about-four')}</p>
+      </section>
+      <section className="container pt-3 pb-3">
+        <h2 className="team__title">{t('homepage.course-block__title-project')}</h2>
+        <p>{t('homepage.course-block__about-project')}</p>
       </section>
     </>
   );
