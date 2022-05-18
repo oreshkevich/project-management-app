@@ -5,6 +5,7 @@ import { Button } from 'react-bootstrap';
 import { deleteColumn, getTasks } from '../../core/api/api';
 import { useTranslation } from 'react-i18next';
 import FormTask from '../formTask/FormTask';
+import ConfirmationModal from '../modal/ConfirmationModal';
 interface IColData {
   title: string;
   id: string;
@@ -130,9 +131,9 @@ const Card = (props: { data: IColData }) => {
   }
 
   const handleDeleteBoard = (id: number) => {
-    const isConfirm = confirm(`Точно вы хотите удалить колонку: ${id}`);
-    if (!isConfirm) return isConfirm;
-    setBoards(boards.filter((todo) => (todo as ICard).id !== id));
+    // const isConfirm = confirm(`Точно вы хотите удалить колонку: ${id}`);
+    // if (!isConfirm) return isConfirm;
+    // setBoards(boards.filter((todo) => (todo as ICard).id !== id));
     deleteCurrentBoard();
   };
 
@@ -158,7 +159,7 @@ const Card = (props: { data: IColData }) => {
   const [idEditBoard, setIdEditBoard] = useState<number>(-1);
   const [edit, setEdit] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
-
+  const [show, setShow] = useState(false);
   useEffect(() => {
     inputRef.current?.focus();
   }, [edit]);
@@ -205,11 +206,12 @@ const Card = (props: { data: IColData }) => {
   };
 
   async function deleteCurrentBoard() {
-    if (props.data.id) {
-      await deleteColumn(props.data.id);
-    }
+    setShow(true);
+    // if (props.data.id) {
+    //   await deleteColumn(props.data.id);
+    // }
 
-    window.location.reload();
+    // window.location.reload();
   }
   const [showTask, setShowTask] = useState(false);
   const [task, setTasks] = useState<Array<IColData>>();
@@ -225,73 +227,76 @@ const Card = (props: { data: IColData }) => {
   }
 
   return (
-    <div className="app-card">
-      {boards.map((board) => (
-        <form
-          onSubmit={(e) => handleEditForm(e)}
-          key={(board as ICard).id}
-          className="board"
-          onDragOver={(e) => dragOverHandler(e)}
-          onDrop={(e) => dropCardHandler(e, board as ICard)}
-        >
-          <div className="board__title">
-            {edit && (board as ICard).id === idEditBoard ? (
-              <div className="board__title-button">
-                <Button variant="info" type="submit">
-                  Sub
-                </Button>
-                <Button
-                  variant="info"
-                  type="button"
-                  onClick={() => handleEditCancel((board as ICard).id)}
-                >
-                  Can.
-                </Button>
+    <>
+      <div className="app-card">
+        {boards.map((board) => (
+          <form
+            onSubmit={(e) => handleEditForm(e)}
+            key={(board as ICard).id}
+            className="board"
+            onDragOver={(e) => dragOverHandler(e)}
+            onDrop={(e) => dropCardHandler(e, board as ICard)}
+          >
+            <div className="board__title">
+              {edit && (board as ICard).id === idEditBoard ? (
+                <div className="board__title-button">
+                  <Button variant="info" type="submit">
+                    Sub
+                  </Button>
+                  <Button
+                    variant="info"
+                    type="button"
+                    onClick={() => handleEditCancel((board as ICard).id)}
+                  >
+                    Can.
+                  </Button>
 
-                <input
-                  value={(board as ICard).title}
-                  onChange={(e) => handleEditTodo(e.target.value, (board as ICard).id)}
-                  className="todo__single--input"
-                  ref={inputRef}
-                />
-              </div>
-            ) : (
-              <div className="todo__single--text" onClick={() => handleEdit((board as ICard).id)}>
-                {(board as ICard).title}
-              </div>
-            )}
-          </div>
-
-          <span className="icon" onClick={() => handleDeleteBoard((board as ICard).id)}>
-            <AiFillDelete />
-          </span>
-          <Button variant="success" onClick={handleShow}>
-            {t('header.create-task__button')}
-          </Button>
-          {showTask ? <FormTask setShowTask={setShowTask} /> : null}
-          {(board as ICard).items.map((item) => (
-            <div
-              key={item.id}
-              onDragOver={(e) => dragOverHandler(e)}
-              onDragLeave={(e) => dragLeaveHandler(e)}
-              onDragStart={(e) => dragStartHandler(e, board as ICard, item)}
-              onDragEnd={(e) => dragEndHandler(e)}
-              onDrop={(e) => dropHandler(e, board as ICard, item)}
-              draggable={true}
-              className="item"
-            >
-              {item.title}
-              <span
-                className="icon"
-                onClick={() => handleDelete(item.id, board as ICard, item.title)}
-              >
-                <AiFillDelete />
-              </span>
+                  <input
+                    value={(board as ICard).title}
+                    onChange={(e) => handleEditTodo(e.target.value, (board as ICard).id)}
+                    className="todo__single--input"
+                    ref={inputRef}
+                  />
+                </div>
+              ) : (
+                <div className="todo__single--text" onClick={() => handleEdit((board as ICard).id)}>
+                  {(board as ICard).title}
+                </div>
+              )}
             </div>
-          ))}
-        </form>
-      ))}
-    </div>
+
+            <span className="icon" onClick={() => handleDeleteBoard((board as ICard).id)}>
+              <AiFillDelete />
+            </span>
+            <Button variant="success" onClick={handleShow}>
+              {t('header.create-task__button')}
+            </Button>
+            {showTask ? <FormTask setShowTask={setShowTask} /> : null}
+            {(board as ICard).items.map((item) => (
+              <div
+                key={item.id}
+                onDragOver={(e) => dragOverHandler(e)}
+                onDragLeave={(e) => dragLeaveHandler(e)}
+                onDragStart={(e) => dragStartHandler(e, board as ICard, item)}
+                onDragEnd={(e) => dragEndHandler(e)}
+                onDrop={(e) => dropHandler(e, board as ICard, item)}
+                draggable={true}
+                className="item"
+              >
+                {item.title}
+                <span
+                  className="icon"
+                  onClick={() => handleDelete(item.id, board as ICard, item.title)}
+                >
+                  <AiFillDelete />
+                </span>
+              </div>
+            ))}
+          </form>
+        ))}
+      </div>
+      <ConfirmationModal data={show} />
+    </>
   );
 };
 

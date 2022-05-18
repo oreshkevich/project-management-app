@@ -4,17 +4,21 @@ import { BoardData } from '../../core/types/types';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { deleteBoard } from '../../core/api/api';
+import ConfirmationModal from '../modal/ConfirmationModal';
+import { useEffect, useState } from 'react';
 
 const BoardCard = (props: { data: BoardData }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [show, setShow] = useState(false);
 
   async function deleteCurrentBoard() {
-    if (props.data.id) {
-      await deleteBoard(props.data.id);
-    }
+    setShow(true);
+    // if (props.data.id) {
+    //   await deleteBoard(props.data.id);
+    // }
 
-    window.location.reload();
+    // window.location.reload();
   }
 
   async function openBoard() {
@@ -25,20 +29,23 @@ const BoardCard = (props: { data: BoardData }) => {
   }
 
   return (
-    <Card style={{ width: '18rem' }}>
-      <Card.Body>
-        <Card.Title>{props.data.title}</Card.Title>
-        <Card.Text>Description</Card.Text>
-        <div className="board-buttons">
-          <Button variant="danger" size="sm" onClick={async () => deleteCurrentBoard()}>
-            {t('main-rote.board-delete-button')}
-          </Button>
-          <Button variant="primary" size="lg" onClick={async () => openBoard()}>
-            {t('main-rote.board-open-button')}
-          </Button>
-        </div>
-      </Card.Body>
-    </Card>
+    <>
+      <Card style={{ width: '18rem' }}>
+        <Card.Body>
+          <Card.Title onClick={() => setShow(false)}>{props.data.title}</Card.Title>
+          <Card.Text>Description</Card.Text>
+          <div className="board-buttons">
+            <Button variant="danger" size="sm" onClick={async () => deleteCurrentBoard()}>
+              {t('main-rote.board-delete-button')}
+            </Button>
+            <Button variant="primary" size="lg" onClick={async () => openBoard()}>
+              {t('main-rote.board-open-button')}
+            </Button>
+          </div>
+        </Card.Body>
+      </Card>
+      <ConfirmationModal data={show} />
+    </>
   );
 };
 
