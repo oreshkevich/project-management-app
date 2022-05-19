@@ -20,7 +20,7 @@ const FormTask = ({
   order,
 }: {
   setShowTask: (value: SetStateAction<boolean>) => void;
-  getAllTask: () => void;
+  getAllTask: () => Promise<void>;
   columnId: string;
   order: number;
 }) => {
@@ -45,7 +45,7 @@ const FormTask = ({
     };
 
     await createTask(String(id), columnId, dataOrder);
-    getAllTask();
+    await getAllTask();
     handleClose();
   };
 

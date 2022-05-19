@@ -5,22 +5,7 @@ import { getColumns } from '../../core/api/api';
 import { useTranslation } from 'react-i18next';
 import Card from './Card';
 import FormColumn from '../formColumn/FormColumn';
-
-interface IColData {
-  title: string;
-  id: string;
-  order: number;
-}
-
-interface ITaskData {
-  title: string;
-  id: string;
-  order: number;
-  done: boolean;
-  description: string;
-  userId: string;
-  files: { filename: string; fileSize: number }[];
-}
+import { IColData, ITaskData } from '../../core/interfaces/interfaces';
 
 const Board = () => {
   const { t } = useTranslation();
@@ -28,17 +13,14 @@ const Board = () => {
   const [columns, setColumns] = useState<Array<IColData>>();
   const [currentColumn, setCurrentColumn] = useState<IColData>();
   const [currentTasks, setCurrentTasks] = useState<ITaskData[]>();
+  const [currentTask, setCurrentTask] = useState<ITaskData>();
   const { id } = useParams();
 
   const handleShow = () => setShowCol(true);
 
   const getAllColumn = useCallback(async () => {
     const { data } = await getColumns(String(id));
-    setColumns(
-      [...data].sort((a, b) => {
-        return a.order > b.order ? 1 : a.order < b.order ? -1 : 0;
-      })
-    );
+    setColumns([...data].sort((a, b) => (a.order > b.order ? 1 : a.order < b.order ? -1 : 0)));
   }, [id]);
 
   useEffect(() => {
@@ -69,6 +51,8 @@ const Board = () => {
             currentColumn={currentColumn}
             setCurrentTasks={setCurrentTasks}
             currentTasks={currentTasks}
+            setCurrentTask={setCurrentTask}
+            currentTask={currentTask}
           />
         ))}
       </div>
