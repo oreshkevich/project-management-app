@@ -23,6 +23,7 @@ interface IColData {
 }
 
 interface ITaskData {
+  columnId?: string;
   title: string;
   id: string;
   order: number;

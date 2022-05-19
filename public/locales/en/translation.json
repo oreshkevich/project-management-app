@@ -11,6 +11,7 @@
     "create-board__modal": "New board",
     "create-col__modal": "New column",
     "create-task__modal": "New task",
+    "create-task__modal-editing": "Editing a task",
     "create-board__modal-title": "Board title",
     "create-col__modal-title": "Column name",
     "create-task__modal-title": "Task name",
@@ -20,6 +21,7 @@
     "create-board__modal-description": "Board description",
     "create-board__modal-close-button": "Close",
     "create-board__modal-submit-button": "Submit",
+    "create-board__modal-submit-button-editing": "Save",
     "language": "Language"
   },
   "authentification": {

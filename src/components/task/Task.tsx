@@ -1,6 +1,10 @@
+import React, { useState } from 'react';
 import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
+import FormTaskEditing from '../formTaskEditing/FormTaskEditing';
 
-interface ITaskData {
+interface ITaskEditing {
+  columnId?: string;
+  boardId?: string;
   title: string;
   id: string;
   order: number;
@@ -10,7 +14,8 @@ interface ITaskData {
   files: { filename: string; fileSize: number }[];
 }
 
-const Task = ({ task }: { task: ITaskData }) => {
+const Task = ({ task }: { task: ITaskEditing }) => {
+  console.log(task);
   // const dragOverHandler = (
   //   e: React.DragEvent<HTMLDivElement> | React.DragEvent<HTMLFormElement>
   // ) => {
@@ -56,6 +61,8 @@ const Task = ({ task }: { task: ITaskData }) => {
   //   if (!isConfirm) return isConfirm;
   // };
 
+  const [showTask, setShowTask] = useState(false);
+  const handleShow = () => setShowTask(true);
   return (
     <div
       // onDragOver={dragOverHandler}
@@ -73,9 +80,20 @@ const Task = ({ task }: { task: ITaskData }) => {
       >
         <AiFillDelete />
       </span>
-      <span className="icon">
+      <span className="icon" onClick={handleShow}>
         <AiFillEdit />
       </span>
+      {showTask && (
+        <FormTaskEditing
+          setShowTask={setShowTask}
+          columnId={task.columnId as string}
+          boardId={task.boardId as string}
+          id={task.id as string}
+          order={task.order}
+          valueTitle={task.title}
+          valueDescription={task.description}
+        />
+      )}
     </div>
   );
 };
