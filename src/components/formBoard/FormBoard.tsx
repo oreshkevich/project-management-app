@@ -19,7 +19,6 @@ const FormBoard = ({ setShow }: { setShow: (value: SetStateAction<boolean>) => v
   const handleClose = () => setShow(false);
 
   const onSubmit = async (data: BoardData) => {
-    console.log(data);
     await createBoard(data);
 
     handleClose();

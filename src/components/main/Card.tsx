@@ -16,8 +16,8 @@ import Task from '../task/Task';
 import { AiFillDelete } from 'react-icons/ai';
 import './card.css';
 import ConfirmationModal from '../modal/ConfirmationModal';
-import { useAppDispatch } from '../../core/hooks/redux';
-import { updateState } from '../../core/store/reducers/modalReducer';
+// import { useAppDispatch } from '../../core/hooks/redux';
+// import { updateState } from '../../core/store/reducers/modalReducer';
 
 interface IColData {
   title: string;
@@ -68,16 +68,15 @@ const Card = ({
     getAllTask();
   }, [getAllTask]);
 
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
 
-  async function callModal() {
-    dispatch(updateState(true));
-  }
+  // async function callModal() {
+  //   dispatch(updateState(true));
+  // }
 
   const deleteCurrentBoard = async () => {
     if (data.id) {
-      // await deleteColumn(String(id), data.id);
-      callModal();
+      await deleteColumn(String(id), data.id);
       const columns = await getColumns(String(id));
 
       await Promise.all(
@@ -93,11 +92,10 @@ const Card = ({
   };
 
   const handleDeleteBoard = async () => {
-    // const isConfirm = confirm(`Точно вы хотите удалить колонку: ${data.order}`);
-    // if (!isConfirm) return isConfirm;
+    const isConfirm = confirm(`Точно вы хотите удалить колонку: ${data.order}`);
+    if (!isConfirm) return isConfirm;
+    // callModal();
     await deleteCurrentBoard();
-    console.log('ok');
-
     getAllColumn();
   };
 

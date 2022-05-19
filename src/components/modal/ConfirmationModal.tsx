@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
-import { deleteBoard, deleteColumn } from '../../core/api/api';
+import { deleteBoard } from '../../core/api/api';
 import { useAppDispatch, useAppSelector } from '../../core/hooks/redux';
 import { updateState } from '../../core/store/reducers/modalReducer';
 
@@ -14,8 +13,6 @@ const ConfirmationModal = (props: { page: string; id: string }) => {
 
   const { t } = useTranslation();
 
-  const { id } = useParams();
-
   const handleClose = () => {
     dispatch(updateState(false));
 
@@ -25,8 +22,10 @@ const ConfirmationModal = (props: { page: string; id: string }) => {
   async function deleteHandler() {
     if (props.page == 'boards') {
       await deleteBoard(props.id);
+
+      window.location.reload();
     } else if (props.page == 'column') {
-      await deleteColumn(String(id), props.id);
+      //
     }
   }
 
