@@ -15,6 +15,9 @@ import Task from '../task/Task';
 import { IColData, ITaskData } from '../../core/interfaces/interfaces';
 import { AiFillDelete } from 'react-icons/ai';
 import './card.css';
+import ConfirmationModal from '../modal/ConfirmationModal';
+// import { useAppDispatch } from '../../core/hooks/redux';
+// import { updateState } from '../../core/store/reducers/modalReducer';
 
 const Card = ({
   data,
@@ -55,6 +58,12 @@ const Card = ({
     getAllTask();
   }, [getAllTask]);
 
+  // const dispatch = useAppDispatch();
+
+  // async function callModal() {
+  //   dispatch(updateState(true));
+  // }
+
   const deleteCurrentBoard = async () => {
     await deleteColumn(String(id), data.id);
 
@@ -77,6 +86,7 @@ const Card = ({
   const handleDeleteBoard = async () => {
     const isConfirm = confirm(`Точно вы хотите удалить колонку: ${data.order}`);
     if (!isConfirm) return;
+    // callModal();
     await deleteCurrentBoard();
     await getAllColumn();
   };
@@ -173,7 +183,7 @@ const Card = ({
       onDragOver={dragOverHandler}
       onDrop={dropHandler}
     >
-      <form onSubmit={handleEditForm} key={data.id} className="board">
+      <form onSubmit={handleEditForm} key={data.id} className="board scroll-task">
         <div className="board__title">
           {edit ? (
             <div className="board__title-button">
@@ -222,6 +232,7 @@ const Card = ({
           />
         ))}
       </form>
+      <ConfirmationModal page={'column'} id={data.id} />
     </div>
   );
 };

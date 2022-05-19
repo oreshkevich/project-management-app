@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 import { useParams } from 'react-router-dom';
-import { AiFillDelete } from 'react-icons/ai';
+import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
 import { editTask, getTasks, deleteTask, createTask } from '../../core/api/api';
 import { ITaskData } from '../../core/interfaces/interfaces';
 
@@ -121,6 +121,9 @@ const Task = ({
       {task.title}
       <span className="icon" onClick={handleDeleteTask}>
         <AiFillDelete />
+      </span>
+      <span className="icon">
+        <AiFillEdit />
       </span>
     </div>
   );
