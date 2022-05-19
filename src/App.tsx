@@ -21,7 +21,7 @@ const App = () => {
         <Routes>
           <Route
             path="/"
-            element={token ? <Navigate replace to="/home" /> : <Navigate replace to="/main" />}
+            element={token ? <Navigate replace to="/main" /> : <Navigate replace to="/home" />}
           />
           <Route path="/board/:id" element={token ? <Board /> : <Navigate replace to="/home" />} />
           <Route path="/profile" element={token ? <Profile /> : <Navigate replace to="/home" />} />

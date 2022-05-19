@@ -9,24 +9,20 @@ const Task = ({
   tasks,
   getAllTask,
   setCurrentTask,
-  setCurrentTasks,
   currentTask,
-  currentTasks,
 }: {
   task: ITaskData;
   tasks: ITaskData[];
   getAllTask: () => Promise<void>;
   setCurrentTask: Dispatch<SetStateAction<ITaskData | undefined>>;
-  setCurrentTasks: Dispatch<SetStateAction<ITaskData[] | undefined>>;
   currentTask: ITaskData | undefined;
-  currentTasks: ITaskData[] | undefined;
 }) => {
   const { id } = useParams();
 
-  const deleteCurrentTask = async () => {
-    await deleteTask(String(id), task.columnId, task.id);
+  const deleteCurrentTask = async (card = task) => {
+    await deleteTask(String(id), card.columnId, card.id);
 
-    const tasks = await getTasks(String(id), task.columnId);
+    const tasks = await getTasks(String(id), card.columnId);
     const sortTasks = tasks.data.sort((a: ITaskData, b: ITaskData) =>
       a.order > b.order ? 1 : a.order < b.order ? -1 : 0
     );
@@ -59,35 +55,27 @@ const Task = ({
 
   const dragOverHandler = (e: React.DragEvent) => {
     e.preventDefault();
-    (e.target as HTMLElement).style.boxShadow = '0 4px 3px gray';
+    if (currentTask && currentTask.columnId === task.columnId)
+      (e.target as HTMLElement).style.boxShadow = '0 4px 3px gray';
   };
 
   const dragLeaveHandler = (e: React.DragEvent) => {
     (e.target as HTMLElement).style.boxShadow = 'none';
   };
 
-  const dragEndHandler = (e: React.DragEvent) => {
+  const dragEndHandler = async (e: React.DragEvent) => {
     (e.target as HTMLElement).style.boxShadow = 'none';
+
+    if (!currentTask) {
+      await deleteCurrentTask();
+      await getAllTask();
+    }
   };
 
   const dropHandler = async (e: React.DragEvent, card = task) => {
     e.preventDefault();
     e.stopPropagation();
     (e.target as HTMLElement).style.boxShadow = 'none';
-
-    if (currentTask && currentTask.columnId !== card.columnId) {
-      console.log(currentTask);
-      //console.log(card);
-      console.log(currentTasks);
-
-      //await deleteCurrentTask();
-      // await createTask(String(id), task.columnId, {
-      //   title: task.title,
-      //   order: card.order,
-      //   description: task.description,
-      //   userId: task.userId,
-      // });
-    }
 
     if (currentTask && currentTask.columnId === card.columnId) {
       await Promise.all(

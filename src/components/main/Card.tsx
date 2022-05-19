@@ -129,6 +129,20 @@ const Card = ({
   const dropHandler = async (e: React.DragEvent, card: IColData = data) => {
     e.preventDefault();
 
+    if (currentTask && tasks) {
+      const copyTask = { ...currentTask };
+      setCurrentTask(undefined);
+
+      await createTask(String(id), data.id, {
+        title: copyTask.title,
+        order: tasks.length + 1,
+        description: copyTask.description,
+        userId: copyTask.userId,
+      });
+
+      await getAllTask();
+    }
+
     if (currentColumn && currentTasks) {
       await Promise.all(
         columns.map(async (column: IColData) => {
@@ -205,8 +219,6 @@ const Card = ({
             key={item.id}
             getAllTask={getAllTask}
             setCurrentTask={setCurrentTask}
-            currentTasks={currentTasks}
-            setCurrentTasks={setCurrentTasks}
           />
         ))}
       </form>
