@@ -5,7 +5,7 @@
 }
 
 .board {
-  min-width: 300px;
+  min-width: 347px;
   min-height: 400px;
   border: 5px solid lightgray;
   padding: 20px 10px;
@@ -26,7 +26,7 @@
   word-break: break-all;
   width: 100%;
   border: 2ps solid lightgray;
-  padding: 10px;
+  padding: 7px;
   border-radius: 6px;
   margin: 5px 0;
   cursor: grab;
@@ -45,7 +45,7 @@
 }
 
 .todo__single--input {
-  padding: 10px;
+  padding: 7px;
   border: none;
   font-size: 16px;
 }

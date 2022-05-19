@@ -11,6 +11,7 @@
     "create-board__modal": "Новая доска",
     "create-col__modal": "Новая колонка",
     "create-task__modal": "Новая задача",
+    "create-task__modal-editing": "Редактирование задачи",
     "create-board__modal-title": "Название доски",
     "create-col__modal-title": "Название колонки",
     "create-task__modal-title": "Название задачи",
@@ -20,6 +21,7 @@
     "create-board__modal-description": "Описание доски",
     "create-board__modal-close-button": "Отмена",
     "create-board__modal-submit-button": "Создать",
+    "create-board__modal-submit-button-editing": "Сохранить",
     "language": "Язык"
   },
   "authentification": {

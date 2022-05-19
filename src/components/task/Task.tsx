@@ -1,3 +1,5 @@
+import React, { useState } from 'react';
+import FormTaskEditing from '../formTaskEditing/FormTaskEditing';
 import { Dispatch, SetStateAction } from 'react';
 import { useParams } from 'react-router-dom';
 import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
@@ -108,6 +110,8 @@ const Task = ({
     }
   };
 
+  const [showTask, setShowTask] = useState(false);
+  const handleShow = () => setShowTask(true);
   return (
     <div
       className="item"
@@ -122,9 +126,21 @@ const Task = ({
       <span className="icon" onClick={handleDeleteTask}>
         <AiFillDelete />
       </span>
-      <span className="icon">
+      <span className="icon" onClick={handleShow}>
         <AiFillEdit />
       </span>
+      {showTask && (
+        <FormTaskEditing
+          getAllTask={getAllTask}
+          setShowTask={setShowTask}
+          columnId={task.columnId as string}
+          boardId={task.boardId as string}
+          id={task.id as string}
+          order={task.order}
+          valueTitle={task.title}
+          valueDescription={task.description}
+        />
+      )}
     </div>
   );
 };
