@@ -17,7 +17,7 @@ const FormColumn = ({
   order,
 }: {
   setShowCol: (value: SetStateAction<boolean>) => void;
-  getAllColumn: () => void;
+  getAllColumn: () => Promise<void>;
   order: number;
 }) => {
   const { t } = useTranslation();
@@ -38,7 +38,7 @@ const FormColumn = ({
     };
 
     await createColumn(String(id), dataOrder);
-    getAllColumn();
+    await getAllColumn();
     handleClose();
   };
 

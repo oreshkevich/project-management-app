@@ -2,7 +2,7 @@ import { SetStateAction } from 'react';
 import { Form, Button, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { TaskData } from '../../core/types/types';
-import { editingTask } from '../../core/api/api';
+import { editTask } from '../../core/api/api';
 import { useForm } from 'react-hook-form';
 import './formTaskEditing.css';
 import { cookies } from '../../core/cookies/cookies';
@@ -20,6 +20,7 @@ const FormTaskEditing = ({
   order,
   valueTitle,
   valueDescription,
+  getAllTask,
 }: {
   setShowTask: (value: SetStateAction<boolean>) => void;
   columnId: string;
@@ -28,6 +29,7 @@ const FormTaskEditing = ({
   valueTitle: string;
   valueDescription: string;
   order: number;
+  getAllTask: () => Promise<void>;
 }) => {
   const { t } = useTranslation();
 
@@ -50,9 +52,11 @@ const FormTaskEditing = ({
       boardId: boardId,
     };
 
-    await editingTask(id, columnId, boardId, dataOrder);
+    await editTask(boardId, columnId, id, dataOrder);
 
     handleClose();
+
+    await getAllTask();
   };
 
   return (
