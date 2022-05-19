@@ -12,25 +12,9 @@ import {
 import { useTranslation } from 'react-i18next';
 import FormTask from '../formTask/FormTask';
 import Task from '../task/Task';
-
+import { IColData, ITaskData } from '../../core/interfaces/interfaces';
 import { AiFillDelete } from 'react-icons/ai';
 import './card.css';
-
-interface IColData {
-  title: string;
-  id: string;
-  order: number;
-}
-
-interface ITaskData {
-  title: string;
-  id: string;
-  order: number;
-  done: boolean;
-  description: string;
-  userId: string;
-  files: { filename: string; fileSize: number }[];
-}
 
 const Card = ({
   data,
@@ -40,14 +24,18 @@ const Card = ({
   columns,
   currentTasks,
   setCurrentTasks,
+  setCurrentTask,
+  currentTask,
 }: {
   data: IColData;
   getAllColumn: () => Promise<void>;
   currentColumn: IColData | undefined;
   setCurrentColumn: Dispatch<SetStateAction<IColData | undefined>>;
   setCurrentTasks: Dispatch<SetStateAction<ITaskData[] | undefined>>;
+  setCurrentTask: Dispatch<SetStateAction<ITaskData | undefined>>;
   columns: IColData[];
   currentTasks: ITaskData[] | undefined;
+  currentTask: ITaskData | undefined;
 }) => {
   const { t } = useTranslation();
   const { id } = useParams();
@@ -59,9 +47,7 @@ const Card = ({
   const getAllTask = useCallback(async () => {
     const response = await getTasks(String(id), data.id);
     setTasks(
-      [...response.data].sort((a, b) => {
-        return a.order > b.order ? 1 : a.order < b.order ? -1 : 0;
-      })
+      [...response.data].sort((a, b) => (a.order > b.order ? 1 : a.order < b.order ? -1 : 0))
     );
   }, [id, data.id]);
 
@@ -73,14 +59,14 @@ const Card = ({
     await deleteColumn(String(id), data.id);
 
     const columns = await getColumns(String(id));
-    const sortColumns = columns.data.sort((a: IColData, b: IColData) => {
-      return a.order > b.order ? 1 : a.order < b.order ? -1 : 0;
-    });
+    const sortColumns = columns.data.sort((a: IColData, b: IColData) =>
+      a.order > b.order ? 1 : a.order < b.order ? -1 : 0
+    );
 
     await Promise.all(
       sortColumns.map(async (column: IColData, idx: number) => {
         if (column.order !== idx + 1)
-          await editColumn(String(id), String(column.id), {
+          await editColumn(String(id), column.id, {
             title: column.title,
             order: idx + 1,
           });
@@ -90,7 +76,7 @@ const Card = ({
 
   const handleDeleteBoard = async () => {
     const isConfirm = confirm(`Точно вы хотите удалить колонку: ${data.order}`);
-    if (!isConfirm) return isConfirm;
+    if (!isConfirm) return;
     await deleteCurrentBoard();
     await getAllColumn();
   };
@@ -103,67 +89,60 @@ const Card = ({
   const handleEditForm = async (e: React.FormEvent) => {
     e.preventDefault();
     setEdit(false);
-    await editColumn(String(id), String(data.id), { title, order: data.order });
+    await editColumn(String(id), data.id, { title, order: data.order });
     await getAllColumn();
   };
 
-  const dragStartHandler = (e: React.DragEvent) => {
-    e.target === e.currentTarget ? setCurrentColumn(data) : setCurrentColumn(undefined);
-    setCurrentTasks(tasks);
+  const dragStartHandler = (e: React.DragEvent, card: IColData = data) => {
+    if (e.target === e.currentTarget) {
+      setCurrentColumn(card);
+      setCurrentTasks(tasks);
+      setCurrentTask(undefined);
+    } else {
+      setCurrentTasks(undefined);
+    }
   };
 
   const dragOverHandler = (e: React.DragEvent) => e.preventDefault();
 
+  const insertTasks = async (allTasks: ITaskData[], columnId: string) => {
+    await Promise.all(
+      allTasks.map(async (task: ITaskData) => {
+        await createTask(String(id), columnId, {
+          title: task.title,
+          order: task.order,
+          description: task.description,
+          userId: task.userId,
+        });
+      })
+    );
+  };
+
+  const insertColumn = async (column: IColData, order: number) => {
+    await deleteColumn(String(id), column.id);
+    return await createColumn(String(id), {
+      title: column.title,
+      order: order,
+    });
+  };
+
   const dropHandler = async (e: React.DragEvent, card: IColData = data) => {
     e.preventDefault();
 
-    if (currentColumn) {
+    if (currentColumn && currentTasks) {
       await Promise.all(
         columns.map(async (column: IColData) => {
-          if (Number(currentColumn.order) === card.order) return;
+          if (currentColumn.order === card.order) return;
 
           if (column.id === card.id) {
             const copyTasks = tasks ? [...tasks] : null;
-
-            await deleteColumn(String(id), column.id);
-            const response = await createColumn(String(id), {
-              title: column.title,
-              order: Number(currentColumn.order),
-            });
-
-            if (copyTasks) {
-              await Promise.all(
-                copyTasks.map(async (task: ITaskData) => {
-                  await createTask(String(id), response.data.id, {
-                    title: task.title,
-                    order: task.order,
-                    description: task.description,
-                    userId: task.userId,
-                  });
-                })
-              );
-            }
+            const response = await insertColumn(column, currentColumn.order);
+            if (copyTasks) await insertTasks(copyTasks, response.data.id);
           }
 
           if (column.id === currentColumn.id) {
-            await deleteColumn(String(id), column.id);
-            const response = await createColumn(String(id), {
-              title: column.title,
-              order: card.order,
-            });
-
-            if (currentTasks) {
-              await Promise.all(
-                currentTasks.map(async (task: ITaskData) => {
-                  await createTask(String(id), response.data.id, {
-                    title: task.title,
-                    order: task.order,
-                    description: task.description,
-                    userId: task.userId,
-                  });
-                })
-              );
-            }
+            const response = await insertColumn(column, card.order);
+            if (currentTasks) await insertTasks(currentTasks, response.data.id);
           }
         })
       );
@@ -219,7 +198,16 @@ const Card = ({
           />
         )}
         {tasks?.map((item) => (
-          <Task task={item} key={item.id} getAllTask={getAllTask} columnId={data.id} />
+          <Task
+            task={item}
+            tasks={tasks}
+            currentTask={currentTask}
+            key={item.id}
+            getAllTask={getAllTask}
+            setCurrentTask={setCurrentTask}
+            currentTasks={currentTasks}
+            setCurrentTasks={setCurrentTasks}
+          />
         ))}
       </form>
     </div>
