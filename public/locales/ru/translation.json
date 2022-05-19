@@ -72,6 +72,12 @@
     "board-delete-button": "Удалить",
     "board-open-button": "Открыть"
   },
+  "conf-modal": {
+    "title": "Удалить доску?",
+    "body": "Вы безвозвратно удалите эту доску",
+    "delete": "удалить",
+    "cancel": "отмена"
+  },
   "footer": {
     "footer-text": "Авторское право | Команда разработки",
     "team-Henadzi": "Геннадий",

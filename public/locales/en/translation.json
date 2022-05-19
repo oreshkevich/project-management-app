@@ -71,6 +71,12 @@
     "board-delete-button": "Delete",
     "board-open-button": "Open"
   },
+  "conf-modal":{
+    "title": "Delete the board?",
+    "body" : "You will permanently delete this board",
+    "delete": "delete",
+    "cancel": "cancel"
+  },
   "footer": {
     "footer-text": "Copyright | Development Team",
     "team-Henadzi": "Henadzi",
