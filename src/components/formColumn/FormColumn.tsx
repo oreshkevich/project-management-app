@@ -1,4 +1,5 @@
-import { SetStateAction, useState } from 'react';
+import { SetStateAction } from 'react';
+import { useParams } from 'react-router-dom';
 import { Form, Button, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { ColData } from '../../core/types/types';
@@ -10,8 +11,17 @@ interface IData {
   title: string;
 }
 
-const FormColumn = ({ setShowCol }: { setShowCol: (value: SetStateAction<boolean>) => void }) => {
+const FormColumn = ({
+  setShowCol,
+  getAllColumn,
+  order,
+}: {
+  setShowCol: (value: SetStateAction<boolean>) => void;
+  getAllColumn: () => void;
+  order: number;
+}) => {
   const { t } = useTranslation();
+  const { id } = useParams();
 
   const {
     register,
@@ -20,24 +30,16 @@ const FormColumn = ({ setShowCol }: { setShowCol: (value: SetStateAction<boolean
   } = useForm<ColData>({ mode: 'onBlur' });
 
   const handleClose = () => setShowCol(false);
-  const [count, setCount] = useState(1);
 
   const onSubmit = async (data: IData) => {
-    const savedCount = localStorage.getItem('countId');
-    const value = savedCount ? JSON.parse(savedCount) : 1;
-    setCount(value + 1);
-
-    localStorage.setItem('countId', JSON.stringify(count));
-
     const dataOrder = {
       title: data.title,
-      order: count,
+      order: order + 1,
     };
 
-    await createColumn(dataOrder);
-
+    await createColumn(String(id), dataOrder);
+    getAllColumn();
     handleClose();
-    window.location.reload();
   };
 
   return (

@@ -1,4 +1,5 @@
-import { SetStateAction, useState } from 'react';
+import { SetStateAction } from 'react';
+import { useParams } from 'react-router-dom';
 import { Form, Button, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { TaskData } from '../../core/types/types';
@@ -12,8 +13,19 @@ interface IData {
   description: string;
 }
 
-const FormTask = ({ setShowTask }: { setShowTask: (value: SetStateAction<boolean>) => void }) => {
+const FormTask = ({
+  setShowTask,
+  getAllTask,
+  columnId,
+  order,
+}: {
+  setShowTask: (value: SetStateAction<boolean>) => void;
+  getAllTask: () => void;
+  columnId: string;
+  order: number;
+}) => {
   const { t } = useTranslation();
+  const { id } = useParams();
 
   const {
     register,
@@ -22,27 +34,19 @@ const FormTask = ({ setShowTask }: { setShowTask: (value: SetStateAction<boolean
   } = useForm<TaskData>({ mode: 'onBlur' });
 
   const handleClose = () => setShowTask(false);
-  const [count, setCount] = useState(1);
 
   const onSubmit = async (data: IData) => {
-    const savedCount = localStorage.getItem('countId');
-    const value = savedCount ? JSON.parse(savedCount) : 1;
-    setCount(value + 1);
-
-    localStorage.setItem('countId', JSON.stringify(count));
     const idUser = cookies.get('id');
     const dataOrder = {
       title: data.title,
-      order: count,
+      order: order + 1,
       description: data.description,
-      userId: idUser,
+      userId: String(idUser),
     };
 
-    console.log(dataOrder);
-    await createTask(dataOrder);
-
+    await createTask(String(id), columnId, dataOrder);
+    getAllTask();
     handleClose();
-    window.location.reload();
   };
 
   return (

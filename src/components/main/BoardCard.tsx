@@ -3,28 +3,24 @@ import { Button, Card } from 'react-bootstrap';
 import { BoardData } from '../../core/types/types';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { deleteBoard } from '../../core/api/api';
 import ConfirmationModal from '../modal/ConfirmationModal';
-import { useEffect, useState } from 'react';
+import { useAppDispatch } from '../../core/hooks/redux';
+import { updateState } from '../../core/store/reducers/modalReducer';
 
 const BoardCard = (props: { data: BoardData }) => {
   const { t } = useTranslation();
+
   const navigate = useNavigate();
-  const [show, setShow] = useState(false);
+
+  const dispatch = useAppDispatch();
 
   async function deleteCurrentBoard() {
-    setShow(true);
-    // if (props.data.id) {
-    //   await deleteBoard(props.data.id);
-    // }
-
-    // window.location.reload();
+    dispatch(updateState(true));
   }
 
   async function openBoard() {
     if (props.data.id) {
-      localStorage.setItem('boardId', props.data.id);
-      navigate('/board');
+      navigate(`/board/${props.data.id}`);
     }
   }
 
@@ -32,7 +28,7 @@ const BoardCard = (props: { data: BoardData }) => {
     <>
       <Card style={{ width: '18rem' }}>
         <Card.Body>
-          <Card.Title onClick={() => setShow(false)}>{props.data.title}</Card.Title>
+          <Card.Title>{props.data.title}</Card.Title>
           <Card.Text>Description</Card.Text>
           <div className="board-buttons">
             <Button variant="danger" size="sm" onClick={async () => deleteCurrentBoard()}>
@@ -44,7 +40,7 @@ const BoardCard = (props: { data: BoardData }) => {
           </div>
         </Card.Body>
       </Card>
-      <ConfirmationModal data={show} />
+      <ConfirmationModal page={'boards'} id={`${props.data.id}`} />
     </>
   );
 };

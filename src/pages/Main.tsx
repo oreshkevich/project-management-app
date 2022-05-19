@@ -7,9 +7,8 @@ export const Main = () => {
   const [boards, setBoards] = useState<Array<BoardData>>();
 
   async function getAllBoards() {
-    const response = await getBoards();
-
-    setBoards(response.data);
+    const { data } = await getBoards();
+    setBoards(data);
   }
 
   useEffect(() => {
