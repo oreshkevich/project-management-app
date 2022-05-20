@@ -16,6 +16,10 @@
   flex-direction: column;
 }
 
+.board-card {
+  margin: 15px;
+}
+
 .board__title {
   font-size: 1.5rem;
   font-weight: 700;

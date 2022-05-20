@@ -29,7 +29,7 @@ export const Main = () => {
           autoFocus
         />
       </form>
-      <section className="main pt-5 pl-5">
+      <section className="row" style={{ width: '100%' }}>
         {boards
           ?.filter((value: BoardData) => {
             if (!searchText) {
