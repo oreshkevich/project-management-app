@@ -31,7 +31,7 @@ const Board = () => {
   }, [getAllColumn]);
 
   return (
-    <div>
+    <>
       {loading ? (
         <LoadingIcon />
       ) : (
@@ -65,7 +65,7 @@ const Board = () => {
           </div>
         </>
       )}
-    </div>
+    </>
   );
 };
 

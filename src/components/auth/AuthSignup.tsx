@@ -9,11 +9,14 @@ import './auth.css';
 import { NewUser, CatchedError } from '../../core/types/types';
 import { submitSignup } from '../../core/store/creators/UserCreators';
 
+import LoadingButton from '../loading/LoadingButton';
+
 const AuthSignup = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [formData, setFormData] = useState({} as NewUser);
   const [requestStatus, setStatus] = useState(true);
+  const [loading, setLoading] = useState(false);
   const {
     register,
     formState: { errors },
@@ -22,10 +25,13 @@ const AuthSignup = () => {
 
   const onSubmit = async () => {
     try {
+      setLoading(true);
       await dispatch(submitSignup(formData)).unwrap();
       setStatus(true);
+      setLoading(false);
       alert('User was created');
     } catch (error) {
+      setLoading(false);
       alert((error as CatchedError).message);
       setStatus(false);
     }
@@ -93,9 +99,13 @@ const AuthSignup = () => {
         <div>{errors?.password && <p className="form-error">{errors?.password?.message}</p>}</div>
       </Form.Group>
 
-      <Button variant="outline-*" className="auth__submit mt-2 text-white" type="submit">
-        {t('authentification.submit-registration')}
-      </Button>
+      {loading ? (
+        <LoadingButton />
+      ) : (
+        <Button variant="outline-*" className="auth__submit mt-2 text-white" type="submit">
+          {t('authentification.submit-registration')}
+        </Button>
+      )}
     </Form>
   );
 };

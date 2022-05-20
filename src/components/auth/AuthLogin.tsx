@@ -9,12 +9,14 @@ import './auth.css';
 import { useAppDispatch } from '../../core/hooks/redux';
 import { User } from '../../core/types/types';
 import { submitLogin, getProfile } from '../../core/store/creators/UserCreators';
+import LoadingButton from '../loading/LoadingButton';
 
 const AuthLogin = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [requestStatus, setStatus] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -26,11 +28,13 @@ const AuthLogin = () => {
 
   const onSubmit = async () => {
     try {
+      setLoading(true);
       const { id } = await dispatch(submitLogin(formData)).unwrap();
       await dispatch(getProfile(id)).unwrap();
       navigate('/main');
       setStatus(true);
     } catch (error) {
+      setLoading(false);
       setStatus(false);
       alert((error as Error).message);
     }
@@ -84,9 +88,13 @@ const AuthLogin = () => {
         {!requestStatus && <p className="form-error">{t('authentification.error-auth')}</p>}
       </div>
 
-      <Button variant="outline-*" className="auth__submit mt-2 text-white" type="submit">
-        {t('authentification.submit-login')}
-      </Button>
+      {loading ? (
+        <LoadingButton />
+      ) : (
+        <Button variant="outline-*" className="auth__submit mt-2 text-white" type="submit">
+          {t('authentification.submit-login')}
+        </Button>
+      )}
     </Form>
   );
 };
