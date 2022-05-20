@@ -10,7 +10,7 @@ import {
   createTask,
 } from '../../core/api/api';
 import { useTranslation } from 'react-i18next';
-import FormTask from '../formTask/FormTask';
+import FormTask from '../forms/formTask/FormTask';
 import Task from '../task/Task';
 import { IColData, ITaskData } from '../../core/interfaces/interfaces';
 import { AiFillDelete } from 'react-icons/ai';
@@ -232,7 +232,7 @@ const Card = ({
           />
         ))}
       </form>
-      <ConfirmationModal page={'column'} id={data.id} />
+      <ConfirmationModal />
     </div>
   );
 };

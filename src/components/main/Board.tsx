@@ -4,7 +4,7 @@ import { Button } from 'react-bootstrap';
 import { getColumns } from '../../core/api/api';
 import { useTranslation } from 'react-i18next';
 import Card from './Card';
-import FormColumn from '../formColumn/FormColumn';
+import FormColumn from '../forms/formColumn/FormColumn';
 import { IColData, ITaskData } from '../../core/interfaces/interfaces';
 
 const Board = () => {

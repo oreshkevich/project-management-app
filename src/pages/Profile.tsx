@@ -1,4 +1,4 @@
-import FormProfile from '../components/formProfile/FormProfile';
+import FormProfile from '../components/forms/formProfile/FormProfile';
 
 export const Profile = () => {
   return (

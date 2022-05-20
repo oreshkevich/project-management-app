@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
-import { useAppDispatch } from '../../core/hooks/redux';
+import { useAppDispatch } from '../../../core/hooks/redux';
 
 import { Button, Form } from 'react-bootstrap';
 
-import { NewUser, CatchedError } from '../../core/types/types';
-import { editProfile, deleteProfile } from '../../core/store/creators/UserCreators';
+import { NewUser, CatchedError } from '../../../core/types/types';
+import { editProfile, deleteProfile } from '../../../core/store/creators/UserCreators';
 
-import { cookies } from '../../core/cookies/cookies';
+import { cookies } from '../../../core/cookies/cookies';
 
 const FormProfile = () => {
   const { t } = useTranslation();

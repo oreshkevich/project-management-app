@@ -1,24 +1,29 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useCallback } from 'react';
 import { getBoards } from '../core/api/api';
 import { BoardData } from '../core/types/types';
 import BoardCard from '../components/main/BoardCard';
 
-export const Main = () => {
-  const [boards, setBoards] = useState<Array<BoardData>>();
+import { useAppDispatch, useAppSelector } from '../core/hooks/redux';
+import { boardSlice } from '../core/store/reducers/BoardSlice';
 
-  async function getAllBoards() {
+export const Main = () => {
+  const dispatch = useAppDispatch();
+  const { setBoards } = boardSlice.actions;
+  const { boards } = useAppSelector((state) => state.boardReducer);
+
+  const getAllBoards = useCallback(async () => {
     const { data } = await getBoards();
-    setBoards(data);
-  }
+    dispatch(setBoards(data));
+  }, [dispatch, setBoards]);
 
   useEffect(() => {
     getAllBoards();
-  }, []);
+  }, [getAllBoards]);
 
   return (
-    <section className="main pt-5 pl-5">
+    <section className="main pt-5 pl-5 pb-5">
       {boards?.map((item: BoardData) => (
-        <BoardCard data={item} key={item.id} />
+        <BoardCard data={item} key={item.id} getAllBoards={getAllBoards} />
       ))}
     </section>
   );

@@ -4,11 +4,15 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 
 import './formBoard.css';
-import { BoardData } from '../../core/types/types';
-import { createBoard } from '../../core/api/api';
+import { BoardData } from '../../../core/types/types';
+import { createBoard } from '../../../core/api/api';
+import { boardSlice } from '../../../core/store/reducers/BoardSlice';
+import { useAppDispatch } from '../../../core/hooks/redux';
 
 const FormBoard = ({ setShow }: { setShow: (value: SetStateAction<boolean>) => void }) => {
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
+  const { addBoard } = boardSlice.actions;
 
   const {
     register,
@@ -19,10 +23,9 @@ const FormBoard = ({ setShow }: { setShow: (value: SetStateAction<boolean>) => v
   const handleClose = () => setShow(false);
 
   const onSubmit = async (data: BoardData) => {
-    await createBoard(data);
-
+    const response = await createBoard(data);
     handleClose();
-    window.location.reload();
+    dispatch(addBoard(response.data));
   };
 
   return (
