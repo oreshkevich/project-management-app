@@ -8,7 +8,7 @@ import { cookies } from '../../core/cookies/cookies';
 import { useAppDispatch, useAppSelector } from '../../core/hooks/redux';
 import { userSlice } from '../../core/store/reducers/UserSlice';
 
-import FormBoard from '../formBoard/FormBoard';
+import FormBoard from '../forms/formBoard/FormBoard';
 
 import './header.css';
 

@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 
 import './formBoard.css';
-import { BoardData } from '../../core/types/types';
-import { createBoard } from '../../core/api/api';
+import { BoardData } from '../../../core/types/types';
+import { createBoard } from '../../../core/api/api';
 
 const FormBoard = ({ setShow }: { setShow: (value: SetStateAction<boolean>) => void }) => {
   const { t } = useTranslation();

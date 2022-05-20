@@ -36,7 +36,7 @@
 .footer__logo {
   height: 34px;
   width: 83px;
-  background-image: url(../assets/icons/rss.svg);
+  background-image: url(../../assets/icons/rss.svg);
   filter: invert(100%);
   background-repeat: no-repeat;
 }
