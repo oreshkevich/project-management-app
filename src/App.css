@@ -75,3 +75,7 @@
   justify-content: center;
   flex-wrap: wrap;
 }
+
+.offer__photo {
+    width: 50%;
+}
