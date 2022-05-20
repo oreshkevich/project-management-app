@@ -1,13 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import '../App.css';
 import img from '../assets/images/sections/main.webp';
+import imgOne from '../assets/images/sections/1.jpg';
 
 export const Home = () => {
   const { t } = useTranslation();
 
   return (
     <>
-      <section className="home container pt-5">
+      <section className="home container pt-3">
         <div className="row">
           <div className="col-lg-5 offset-lg-1 order-2 hero-image">
             <img src={img} className="img-fluid" alt="main" />
@@ -27,13 +28,17 @@ export const Home = () => {
           </div>
         </div>
       </section>
-      <section className="team container pt-5">
+      <section className="team container pt-3">
         <h2 className="team__title">{t('homepage.team-block__title')}</h2>
         <div className="row">
           <div className="card mb-3 profile-card" style={{ width: '840px' }}>
             <div className="row g-0">
               <div className="col-md-4">
-                <img src="#" className="card-img-top rounded-start" alt="profile-img" />
+                <img
+                  src={imgOne}
+                  className="card-img-top rounded-start offer__photo"
+                  alt="profile-img"
+                />
               </div>
               <div className="col-md-8">
                 <div className="card-body">
