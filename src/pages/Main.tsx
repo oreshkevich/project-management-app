@@ -7,6 +7,7 @@ import LoadingIcon from '../components/loading/LoadingIcon';
 export const Main = () => {
   const [boards, setBoards] = useState<Array<BoardData>>();
   const [loading, setLoading] = useState(true);
+  const [searchText, setSearchText] = useState('');
 
   async function getAllBoards() {
     const { data } = await getBoards();
@@ -20,12 +21,36 @@ export const Main = () => {
   }, []);
 
   return (
-    <section className="main pt-5 pl-5">
+    <>
       {loading ? (
         <LoadingIcon />
       ) : (
-        boards?.map((item: BoardData) => <BoardCard data={item} key={item.id} />)
+        <>
+          <form className="form-inline my-2 my-lg-0">
+            <input
+              className="form-control mx-auto"
+              type="search"
+              placeholder="Search"
+              aria-label="Search"
+              onChange={(event) => setSearchText(event.target.value)}
+              autoFocus
+            />
+          </form>
+          <section className="row" style={{ width: '100%' }}>
+            {boards
+              ?.filter((value: BoardData) => {
+                if (!searchText) {
+                  return value;
+                } else if (value.title.toLowerCase().includes(searchText.toLowerCase())) {
+                  return value;
+                }
+              })
+              .map((item: BoardData) => (
+                <BoardCard data={item} key={item.id} />
+              ))}
+          </section>
+        </>
       )}
-    </section>
+    </>
   );
 };

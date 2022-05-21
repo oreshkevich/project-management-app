@@ -13,6 +13,7 @@ import FormBoard from '../forms/formBoard/FormBoard';
 import './header.css';
 
 const Header = () => {
+  const [isOpen, setIsOpen] = useState(true);
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -75,9 +76,9 @@ const Header = () => {
             aria-expanded="false"
             aria-label="Toggle navigation"
           >
-            <span className="navbar-toggler-icon"></span>
+            <span onClick={() => setIsOpen(!isOpen)} className="navbar-toggler-icon"></span>
           </button>
-          <div className="collapse navbar-collapse" id="navbarNav">
+          <div className={`${isOpen ? 'collapse' : ''} navbar-collapse`} id="navbarNav">
             {token && (
               <Button className="createBoard" variant="success" onClick={handleShow}>
                 {t('header.create-board__button')}
