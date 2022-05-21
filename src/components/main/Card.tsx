@@ -9,7 +9,7 @@ import { IColData } from '../../core/interfaces/interfaces';
 import { StateCol } from '../../core/types/types';
 import { AiFillDelete } from 'react-icons/ai';
 import './card.css';
-import ConfirmationModal from '../modal/ConfirmationModal';
+import ConfirmationModal from '../modalWindows/ConfirmationModal';
 //import { updateState } from '../../core/store/reducers/modalReducer';
 
 import { useAppDispatch, useAppSelector } from '../../core/hooks/redux';

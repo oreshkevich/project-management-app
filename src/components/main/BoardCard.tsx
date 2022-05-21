@@ -3,7 +3,7 @@ import { Button, Card } from 'react-bootstrap';
 import { BoardData } from '../../core/types/types';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import ConfirmationModal from '../modal/ConfirmationModal';
+import ConfirmationModal from '../modalWindows/ConfirmationModal';
 import { useAppDispatch } from '../../core/hooks/redux';
 //import { updateState } from '../../core/store/reducers/modalReducer';
 import { deleteBoardCreator } from '../../core/store/creators/BoardCreators';

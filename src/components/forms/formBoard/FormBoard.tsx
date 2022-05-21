@@ -48,6 +48,7 @@ const FormBoard = ({ setShow }: { setShow: (value: SetStateAction<boolean>) => v
                 },
               })}
               placeholder={t('header.create-board__modal-title')}
+              autoFocus
             />
             <div>{errors?.title && <p className="form-error">{errors?.title?.message}</p>}</div>
           </Form.Group>

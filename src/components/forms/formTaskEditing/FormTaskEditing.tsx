@@ -3,9 +3,9 @@ import { Form, Button, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { TaskData } from '../../../core/types/types';
 import { ITaskData } from '../../../core/interfaces/interfaces';
-import { editTask } from '../../../core/api/api';
-import { useForm } from 'react-hook-form';
 import './formTaskEditing.css';
+import { useForm } from 'react-hook-form';
+import { editTask } from '../../../core/api/api';
 
 interface IData {
   title: string;

@@ -9,6 +9,7 @@ import { StateCol } from '../../core/types/types';
 
 import { useAppDispatch, useAppSelector } from '../../core/hooks/redux';
 import { CatchedError } from '../../core/types/types';
+import LoadingIcon from '../loading/LoadingIcon';
 
 const Board = () => {
   const dispatch = useAppDispatch();
@@ -16,6 +17,7 @@ const Board = () => {
   const { id } = useParams();
   const { columns } = useAppSelector((state) => state.boardReducer);
   const [showCol, setShowCol] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const handleShow = () => setShowCol(true);
 
@@ -25,6 +27,8 @@ const Board = () => {
     } catch (error) {
       alert((error as CatchedError).message);
     }
+
+    setLoading(false);
   }, [id, dispatch]);
 
   useEffect(() => {
@@ -32,20 +36,26 @@ const Board = () => {
   }, [getAllColumn]);
 
   return (
-    <div>
-      <Button variant="success" onClick={handleShow}>
-        {t('header.create-col__button')}
-      </Button>
-      {showCol && <FormColumn setShowCol={setShowCol} />}
+    <>
+      {loading ? (
+        <LoadingIcon />
+      ) : (
+        <section>
+          <Button variant="success" onClick={handleShow} style={{ width: '100%' }}>
+            {t('header.create-col__button')}
+          </Button>
+          {showCol && <FormColumn setShowCol={setShowCol} />}
 
-      <div className="app-card-data">
-        {columns.length
-          ? columns.map((item: StateCol) => (
-              <Card column={item} key={item.id} getAllColumn={getAllColumn} />
-            ))
-          : null}
-      </div>
-    </div>
+          <div className="app-card-data pt-3">
+            {columns.length
+              ? columns.map((item: StateCol) => (
+                  <Card column={item} key={item.id} getAllColumn={getAllColumn} />
+                ))
+              : null}
+          </div>
+        </section>
+      )}
+    </>
   );
 };
 
