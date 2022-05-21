@@ -2,26 +2,22 @@ import { SetStateAction } from 'react';
 import { useParams } from 'react-router-dom';
 import { Form, Button, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { TaskData } from '../../core/types/types';
-import { createTask } from '../../core/api/api';
+import { ColData } from '../../../core/types/types';
+import { createColumn } from '../../../core/api/api';
 import { useForm } from 'react-hook-form';
-import './formTask.css';
-import { cookies } from '../../core/cookies/cookies';
+import './formColumn.css';
 
 interface IData {
   title: string;
-  description: string;
 }
 
-const FormTask = ({
-  setShowTask,
-  getAllTask,
-  columnId,
+const FormColumn = ({
+  setShowCol,
+  getAllColumn,
   order,
 }: {
-  setShowTask: (value: SetStateAction<boolean>) => void;
-  getAllTask: () => Promise<void>;
-  columnId: string;
+  setShowCol: (value: SetStateAction<boolean>) => void;
+  getAllColumn: () => Promise<void>;
   order: number;
 }) => {
   const { t } = useTranslation();
@@ -31,33 +27,30 @@ const FormTask = ({
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm<TaskData>({ mode: 'onBlur' });
+  } = useForm<ColData>({ mode: 'onBlur' });
 
-  const handleClose = () => setShowTask(false);
+  const handleClose = () => setShowCol(false);
 
   const onSubmit = async (data: IData) => {
-    const idUser = cookies.get('id');
     const dataOrder = {
       title: data.title,
       order: order + 1,
-      description: data.description,
-      userId: String(idUser),
     };
 
-    await createTask(String(id), columnId, dataOrder);
-    await getAllTask();
+    await createColumn(String(id), dataOrder);
+    await getAllColumn();
     handleClose();
   };
 
   return (
     <Modal show={true} onHide={handleClose} backdrop="static" keyboard={false}>
       <Modal.Header closeButton>
-        <Modal.Title>{t('header.create-task__modal')}</Modal.Title>
+        <Modal.Title>{t('header.create-col__modal')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <Form.Group className="mb-3">
-            <Form.Label>{t('header.create-task__modal-title')}</Form.Label>
+            <Form.Label>{t('header.create-col__modal-title')}</Form.Label>
             <Form.Control
               {...register('title', {
                 required: `${t('header.create-board__modal-error-title')}`,
@@ -66,21 +59,7 @@ const FormTask = ({
                   message: `${t('header.create-board__modal-error-title-length')}`,
                 },
               })}
-              placeholder={t('header.create-task__modal-title')}
-            />
-            <div>{errors?.title && <p className="form-error">{errors?.title?.message}</p>}</div>
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>{t('header.create-task__modal-description')}</Form.Label>
-            <Form.Control
-              {...register('description', {
-                required: `${t('header.create-board__modal-error-title')}`,
-                minLength: {
-                  value: 4,
-                  message: `${t('header.create-board__modal-error-title-length')}`,
-                },
-              })}
-              placeholder={t('header.create-task__modal-description')}
+              placeholder={t('header.create-col__modal-title')}
             />
             <div>{errors?.title && <p className="form-error">{errors?.title?.message}</p>}</div>
           </Form.Group>
@@ -99,4 +78,4 @@ const FormTask = ({
   );
 };
 
-export default FormTask;
+export default FormColumn;

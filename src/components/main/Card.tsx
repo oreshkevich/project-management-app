@@ -10,12 +10,12 @@ import {
   createTask,
 } from '../../core/api/api';
 import { useTranslation } from 'react-i18next';
-import FormTask from '../formTask/FormTask';
+import FormTask from '../forms/formTask/FormTask';
 import Task from '../task/Task';
 import { IColData, ITaskData } from '../../core/interfaces/interfaces';
 import { AiFillDelete } from 'react-icons/ai';
 import './card.css';
-import ConfirmationModal from '../modal/ConfirmationModal';
+import ConfirmationModal from '../modalWindows/ConfirmationModal';
 // import { useAppDispatch } from '../../core/hooks/redux';
 // import { updateState } from '../../core/store/reducers/modalReducer';
 

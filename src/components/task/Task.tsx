@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import FormTaskEditing from '../formTaskEditing/FormTaskEditing';
+import FormTaskEditing from '../forms/formTaskEditing/FormTaskEditing';
 import { Dispatch, SetStateAction } from 'react';
 import { useParams } from 'react-router-dom';
 import { AiFillDelete, AiFillEdit } from 'react-icons/ai';

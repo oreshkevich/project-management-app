@@ -1,37 +1,31 @@
 import { SetStateAction } from 'react';
+import { useParams } from 'react-router-dom';
 import { Form, Button, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { TaskData } from '../../core/types/types';
-import { editTask } from '../../core/api/api';
+import { TaskData } from '../../../core/types/types';
+import { createTask } from '../../../core/api/api';
 import { useForm } from 'react-hook-form';
-import './formTaskEditing.css';
-import { cookies } from '../../core/cookies/cookies';
+import './formTask.css';
+import { cookies } from '../../../core/cookies/cookies';
 
 interface IData {
   title: string;
   description: string;
 }
 
-const FormTaskEditing = ({
+const FormTask = ({
   setShowTask,
-  columnId,
-  boardId,
-  id,
-  order,
-  valueTitle,
-  valueDescription,
   getAllTask,
+  columnId,
+  order,
 }: {
   setShowTask: (value: SetStateAction<boolean>) => void;
-  columnId: string;
-  boardId: string;
-  id: string;
-  valueTitle: string;
-  valueDescription: string;
-  order: number;
   getAllTask: () => Promise<void>;
+  columnId: string;
+  order: number;
 }) => {
   const { t } = useTranslation();
+  const { id } = useParams();
 
   const {
     register,
@@ -45,24 +39,20 @@ const FormTaskEditing = ({
     const idUser = cookies.get('id');
     const dataOrder = {
       title: data.title,
-      order: order,
+      order: order + 1,
       description: data.description,
       userId: String(idUser),
-      columnId: columnId,
-      boardId: boardId,
     };
 
-    await editTask(boardId, columnId, id, dataOrder);
-
-    handleClose();
-
+    await createTask(String(id), columnId, dataOrder);
     await getAllTask();
+    handleClose();
   };
 
   return (
     <Modal show={true} onHide={handleClose} backdrop="static" keyboard={false}>
       <Modal.Header closeButton>
-        <Modal.Title>{t('header.create-task__modal-editing')}</Modal.Title>
+        <Modal.Title>{t('header.create-task__modal')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit)}>
@@ -70,7 +60,6 @@ const FormTaskEditing = ({
             <Form.Label>{t('header.create-task__modal-title')}</Form.Label>
             <Form.Control
               {...register('title', {
-                value: valueTitle,
                 required: `${t('header.create-board__modal-error-title')}`,
                 minLength: {
                   value: 4,
@@ -85,7 +74,6 @@ const FormTaskEditing = ({
             <Form.Label>{t('header.create-task__modal-description')}</Form.Label>
             <Form.Control
               {...register('description', {
-                value: valueDescription,
                 required: `${t('header.create-board__modal-error-title')}`,
                 minLength: {
                   value: 4,
@@ -102,7 +90,7 @@ const FormTaskEditing = ({
               {t('header.create-board__modal-close-button')}
             </Button>
             <Button variant="success" type="submit">
-              {t('header.create-board__modal-submit-button-editing')}
+              {t('header.create-board__modal-submit-button')}
             </Button>
           </Modal.Footer>
         </Form>
@@ -111,4 +99,4 @@ const FormTaskEditing = ({
   );
 };
 
-export default FormTaskEditing;
+export default FormTask;
