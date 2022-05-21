@@ -1,27 +1,31 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
-import { getColumns } from '../../core/api/api';
+import { getColumnsCreator } from '../../core/store/creators/BoardCreators';
 import { useTranslation } from 'react-i18next';
 import Card from './Card';
 import FormColumn from '../forms/formColumn/FormColumn';
-import { IColData, ITaskData } from '../../core/interfaces/interfaces';
+import { StateCol } from '../../core/types/types';
+
+import { useAppDispatch, useAppSelector } from '../../core/hooks/redux';
+import { CatchedError } from '../../core/types/types';
 
 const Board = () => {
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
-  const [showCol, setShowCol] = useState(false);
-  const [columns, setColumns] = useState<Array<IColData>>();
-  const [currentColumn, setCurrentColumn] = useState<IColData>();
-  const [currentTasks, setCurrentTasks] = useState<ITaskData[]>();
-  const [currentTask, setCurrentTask] = useState<ITaskData>();
   const { id } = useParams();
+  const { columns } = useAppSelector((state) => state.boardReducer);
+  const [showCol, setShowCol] = useState(false);
 
   const handleShow = () => setShowCol(true);
 
   const getAllColumn = useCallback(async () => {
-    const { data } = await getColumns(String(id));
-    setColumns([...data].sort((a, b) => (a.order > b.order ? 1 : a.order < b.order ? -1 : 0)));
-  }, [id]);
+    try {
+      await dispatch(getColumnsCreator(String(id))).unwrap();
+    } catch (error) {
+      alert((error as CatchedError).message);
+    }
+  }, [id, dispatch]);
 
   useEffect(() => {
     getAllColumn();
@@ -32,29 +36,14 @@ const Board = () => {
       <Button variant="success" onClick={handleShow}>
         {t('header.create-col__button')}
       </Button>
-      {showCol && (
-        <FormColumn
-          setShowCol={setShowCol}
-          getAllColumn={getAllColumn}
-          order={columns?.length || 0}
-        />
-      )}
+      {showCol && <FormColumn setShowCol={setShowCol} />}
 
       <div className="app-card-data">
-        {columns?.map((item: IColData) => (
-          <Card
-            data={item}
-            key={item.id}
-            getAllColumn={getAllColumn}
-            columns={columns}
-            setCurrentColumn={setCurrentColumn}
-            currentColumn={currentColumn}
-            setCurrentTasks={setCurrentTasks}
-            currentTasks={currentTasks}
-            setCurrentTask={setCurrentTask}
-            currentTask={currentTask}
-          />
-        ))}
+        {columns.length
+          ? columns.map((item: StateCol) => (
+              <Card column={item} key={item.id} getAllColumn={getAllColumn} />
+            ))
+          : null}
       </div>
     </div>
   );

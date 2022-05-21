@@ -3,10 +3,11 @@ import { useParams } from 'react-router-dom';
 import { Form, Button, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { TaskData } from '../../../core/types/types';
-import { createTask } from '../../../core/api/api';
 import { useForm } from 'react-hook-form';
 import './formTask.css';
 import { cookies } from '../../../core/cookies/cookies';
+import { createTaskCreator } from '../../../core/store/creators/BoardCreators';
+import { useAppDispatch } from '../../../core/hooks/redux';
 
 interface IData {
   title: string;
@@ -15,15 +16,14 @@ interface IData {
 
 const FormTask = ({
   setShowTask,
-  getAllTask,
   columnId,
   order,
 }: {
   setShowTask: (value: SetStateAction<boolean>) => void;
-  getAllTask: () => Promise<void>;
   columnId: string;
   order: number;
 }) => {
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const { id } = useParams();
 
@@ -44,8 +44,11 @@ const FormTask = ({
       userId: String(idUser),
     };
 
-    await createTask(String(id), columnId, dataOrder);
-    await getAllTask();
+    try {
+      await dispatch(
+        createTaskCreator({ boardId: String(id), columnId, taskData: dataOrder })
+      ).unwrap();
+    } catch (error) {}
     handleClose();
   };
 

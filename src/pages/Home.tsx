@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { NavLink } from 'react-router-dom';
 import '../App.css';
 import img from '../assets/images/sections/main.webp';
 
@@ -7,30 +8,31 @@ export const Home = () => {
 
   return (
     <>
-      <section className="home container pt-5">
+      <section className="home container pt-5 pb-3">
         <div className="row">
           <div className="col-lg-5 offset-lg-1 order-2 hero-image">
             <img src={img} className="img-fluid" alt="main" />
           </div>
-          <div className="col-lg-5">
+          <div className="col-lg-5 d-flex flex-column justify-content-between">
             <h1 className="home__title">{t('homepage.welcome-block__title')}</h1>
             <p className="home__text">{t('homepage.welcome-block__title-description')}</p>
 
-            <a
-              href="/signup"
+            <NavLink
+              to="/signup"
               type="submit"
               data-analytics-button="greenSignupHeroButton"
               className="btn btn-wrap btn-primary btn-block px-4"
+              style={{ maxWidth: '250px' }}
             >
               {t('homepage.welcome-block__button')}
-            </a>
+            </NavLink>
           </div>
         </div>
       </section>
-      <section className="team container pt-5">
+      <section className="team container pt-3 pb-3">
         <h2 className="team__title">{t('homepage.team-block__title')}</h2>
         <div className="row">
-          <div className="card mb-3 profile-card" style={{ width: '840px' }}>
+          <div className="card mb-3 profile-card">
             <div className="row g-0">
               <div className="col-md-4">
                 <img src="#" className="card-img-top rounded-start" alt="profile-img" />
@@ -46,7 +48,7 @@ export const Home = () => {
               </div>
             </div>
           </div>
-          <div className="card mb-3 profile-card" style={{ width: '840px' }}>
+          <div className="card mb-3 profile-card">
             <div className="row g-0">
               <div className="col-md-4">
                 <img src="#" className="card-img-top rounded-start" alt="profile-img" />
@@ -62,7 +64,7 @@ export const Home = () => {
               </div>
             </div>
           </div>
-          <div className="card mb-3 profile-card" style={{ width: '840px' }}>
+          <div className="card mb-3 profile-card">
             <div className="row g-0">
               <div className="col-md-4">
                 <img src="#" className="card-img-top rounded-start" alt="profile-img" />
@@ -89,7 +91,7 @@ export const Home = () => {
         <p>{t('homepage.course-block__about-three')}</p>
         <p>{t('homepage.course-block__about-four')}</p>
       </section>
-      <section className="container pt-3 pb-3">
+      <section className="container pt-3 pb-5">
         <h2 className="team__title">{t('homepage.course-block__title-project')}</h2>
         <p>{t('homepage.course-block__about-project')}</p>
       </section>

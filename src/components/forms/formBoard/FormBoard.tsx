@@ -5,14 +5,13 @@ import { useForm } from 'react-hook-form';
 
 import './formBoard.css';
 import { BoardData } from '../../../core/types/types';
-import { createBoard } from '../../../core/api/api';
-import { boardSlice } from '../../../core/store/reducers/BoardSlice';
+import { createBoardCreator } from '../../../core/store/creators/BoardCreators';
 import { useAppDispatch } from '../../../core/hooks/redux';
+import { CatchedError } from '../../../core/types/types';
 
 const FormBoard = ({ setShow }: { setShow: (value: SetStateAction<boolean>) => void }) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
-  const { addBoard } = boardSlice.actions;
 
   const {
     register,
@@ -23,9 +22,12 @@ const FormBoard = ({ setShow }: { setShow: (value: SetStateAction<boolean>) => v
   const handleClose = () => setShow(false);
 
   const onSubmit = async (data: BoardData) => {
-    const response = await createBoard(data);
-    handleClose();
-    dispatch(addBoard(response.data));
+    try {
+      await dispatch(createBoardCreator(data)).unwrap();
+      handleClose();
+    } catch (error) {
+      alert((error as CatchedError).message);
+    }
   };
 
   return (

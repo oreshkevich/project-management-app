@@ -1,25 +1,26 @@
 import React, { useState } from 'react';
 import FormTaskEditing from '../forms/formTaskEditing/FormTaskEditing';
-import { Dispatch, SetStateAction } from 'react';
 import { useParams } from 'react-router-dom';
 import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
 import { editTask, getTasks, deleteTask, createTask } from '../../core/api/api';
 import { ITaskData } from '../../core/interfaces/interfaces';
 
+import { useAppDispatch, useAppSelector } from '../../core/hooks/redux';
+import { boardSlice } from '../../core/store/reducers/BoardSlice';
+
 const Task = ({
   task,
   tasks,
-  getAllTask,
-  setCurrentTask,
-  currentTask,
+  getAllColumn,
 }: {
   task: ITaskData;
   tasks: ITaskData[];
-  getAllTask: () => Promise<void>;
-  setCurrentTask: Dispatch<SetStateAction<ITaskData | undefined>>;
-  currentTask: ITaskData | undefined;
+  getAllColumn: () => Promise<void>;
 }) => {
+  const dispatch = useAppDispatch();
   const { id } = useParams();
+  const { setCurrentTask } = boardSlice.actions;
+  const { currentTask } = useAppSelector((state) => state.boardReducer);
 
   const deleteCurrentTask = async (card = task) => {
     await deleteTask(String(id), card.columnId, card.id);
@@ -48,11 +49,11 @@ const Task = ({
     const isConfirm = confirm(`Точно вы хотите удалить задание: ${task.order}`);
     if (!isConfirm) return;
     await deleteCurrentTask();
-    await getAllTask();
+    await getAllColumn();
   };
 
   const dragStartHandler = () => {
-    setCurrentTask(task);
+    dispatch(setCurrentTask(task));
   };
 
   const dragOverHandler = (e: React.DragEvent) => {
@@ -70,7 +71,7 @@ const Task = ({
 
     if (!currentTask) {
       await deleteCurrentTask();
-      await getAllTask();
+      await getAllColumn();
     }
   };
 
@@ -106,7 +107,7 @@ const Task = ({
         })
       );
 
-      await getAllTask();
+      await getAllColumn();
     }
   };
 
@@ -130,16 +131,7 @@ const Task = ({
         <AiFillEdit />
       </span>
       {showTask && (
-        <FormTaskEditing
-          getAllTask={getAllTask}
-          setShowTask={setShowTask}
-          columnId={task.columnId as string}
-          boardId={task.boardId as string}
-          id={task.id as string}
-          order={task.order}
-          valueTitle={task.title}
-          valueDescription={task.description}
-        />
+        <FormTaskEditing getAllColumn={getAllColumn} setShowTask={setShowTask} task={task} />
       )}
     </div>
   );

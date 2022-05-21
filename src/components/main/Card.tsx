@@ -1,94 +1,59 @@
-import React, { useEffect, useState, useCallback, Dispatch, SetStateAction } from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
-import {
-  deleteColumn,
-  editColumn,
-  getColumns,
-  getTasks,
-  createColumn,
-  createTask,
-} from '../../core/api/api';
+import { createTask } from '../../core/api/api';
 import { useTranslation } from 'react-i18next';
 import FormTask from '../forms/formTask/FormTask';
 import Task from '../task/Task';
-import { IColData, ITaskData } from '../../core/interfaces/interfaces';
+import { IColData } from '../../core/interfaces/interfaces';
+import { StateCol } from '../../core/types/types';
 import { AiFillDelete } from 'react-icons/ai';
 import './card.css';
 import ConfirmationModal from '../modal/ConfirmationModal';
-// import { useAppDispatch } from '../../core/hooks/redux';
-// import { updateState } from '../../core/store/reducers/modalReducer';
+//import { updateState } from '../../core/store/reducers/modalReducer';
+
+import { useAppDispatch, useAppSelector } from '../../core/hooks/redux';
+import { boardSlice } from '../../core/store/reducers/BoardSlice';
+import {
+  deleteColumnCreator,
+  moveColumnCreator,
+  editColumnCreator,
+  // createTaskCreator,
+} from '../../core/store/creators/BoardCreators';
 
 const Card = ({
-  data,
+  column,
   getAllColumn,
-  currentColumn,
-  setCurrentColumn,
-  columns,
-  currentTasks,
-  setCurrentTasks,
-  setCurrentTask,
-  currentTask,
 }: {
-  data: IColData;
+  column: StateCol;
   getAllColumn: () => Promise<void>;
-  currentColumn: IColData | undefined;
-  setCurrentColumn: Dispatch<SetStateAction<IColData | undefined>>;
-  setCurrentTasks: Dispatch<SetStateAction<ITaskData[] | undefined>>;
-  setCurrentTask: Dispatch<SetStateAction<ITaskData | undefined>>;
-  columns: IColData[];
-  currentTasks: ITaskData[] | undefined;
-  currentTask: ITaskData | undefined;
 }) => {
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const { id } = useParams();
+  const { setCurrentColumn, setCurrentTasks, setCurrentTask } = boardSlice.actions;
+  const { columns } = useAppSelector((state) => state.boardReducer);
+  const { currentColumn } = useAppSelector((state) => state.boardReducer);
+  const { currentTasks } = useAppSelector((state) => state.boardReducer);
+  const { currentTask } = useAppSelector((state) => state.boardReducer);
+
   const [showTask, setShowTask] = useState(false);
-  const [tasks, setTasks] = useState<Array<ITaskData>>();
-  const [title, setTitle] = useState(data.title);
+  const [title, setTitle] = useState(column.title);
   const [edit, setEdit] = useState<boolean>(false);
 
-  const getAllTask = useCallback(async () => {
-    const response = await getTasks(String(id), data.id);
-    setTasks(
-      [...response.data].sort((a, b) => (a.order > b.order ? 1 : a.order < b.order ? -1 : 0))
-    );
-  }, [id, data.id]);
-
-  useEffect(() => {
-    getAllTask();
-  }, [getAllTask]);
-
-  // const dispatch = useAppDispatch();
-
-  // async function callModal() {
-  //   dispatch(updateState(true));
-  // }
-
-  const deleteCurrentBoard = async () => {
-    await deleteColumn(String(id), data.id);
-
-    const columns = await getColumns(String(id));
-    const sortColumns = columns.data.sort((a: IColData, b: IColData) =>
-      a.order > b.order ? 1 : a.order < b.order ? -1 : 0
-    );
-
-    await Promise.all(
-      sortColumns.map(async (column: IColData, idx: number) => {
-        if (column.order !== idx + 1)
-          await editColumn(String(id), column.id, {
-            title: column.title,
-            order: idx + 1,
-          });
-      })
-    );
+  const deleteCurrentColumn = async () => {
+    try {
+      await dispatch(deleteColumnCreator({ boardId: String(id), columnId: column.id }));
+    } catch (error) {
+      alert(error);
+    }
   };
 
   const handleDeleteBoard = async () => {
-    const isConfirm = confirm(`Точно вы хотите удалить колонку: ${data.order}`);
+    const isConfirm = confirm(`Точно вы хотите удалить колонку: ${column.order}`);
     if (!isConfirm) return;
-    // callModal();
-    await deleteCurrentBoard();
-    await getAllColumn();
+    //dispatch(updateState(true));
+    await deleteCurrentColumn();
   };
 
   const handleShow = () => setShowTask(true);
@@ -99,79 +64,102 @@ const Card = ({
   const handleEditForm = async (e: React.FormEvent) => {
     e.preventDefault();
     setEdit(false);
-    await editColumn(String(id), data.id, { title, order: data.order });
-    await getAllColumn();
+    try {
+      await dispatch(
+        editColumnCreator({
+          boardId: String(id),
+          columnId: column.id,
+          colData: { title, order: column.order },
+        })
+      );
+    } catch (error) {
+      alert(error);
+    }
   };
 
-  const dragStartHandler = (e: React.DragEvent, card: IColData = data) => {
+  const dragStartHandler = (e: React.DragEvent, card: IColData = column) => {
     if (e.target === e.currentTarget) {
-      setCurrentColumn(card);
-      setCurrentTasks(tasks);
-      setCurrentTask(undefined);
+      dispatch(setCurrentColumn(card));
+      dispatch(setCurrentTasks(column.tasks));
+      dispatch(setCurrentTask(undefined));
     } else {
-      setCurrentTasks(undefined);
+      dispatch(setCurrentTasks(undefined));
     }
   };
 
   const dragOverHandler = (e: React.DragEvent) => e.preventDefault();
 
-  const insertTasks = async (allTasks: ITaskData[], columnId: string) => {
-    await Promise.all(
-      allTasks.map(async (task: ITaskData) => {
-        await createTask(String(id), columnId, {
-          title: task.title,
-          order: task.order,
-          description: task.description,
-          userId: task.userId,
-        });
-      })
-    );
-  };
-
-  const insertColumn = async (column: IColData, order: number) => {
-    await deleteColumn(String(id), column.id);
-    return await createColumn(String(id), {
-      title: column.title,
-      order: order,
-    });
-  };
-
-  const dropHandler = async (e: React.DragEvent, card: IColData = data) => {
+  const dropHandler = async (e: React.DragEvent, card: IColData = column) => {
     e.preventDefault();
 
-    if (currentTask && tasks) {
+    if (currentTask && column.tasks) {
       const copyTask = { ...currentTask };
-      setCurrentTask(undefined);
+      dispatch(setCurrentTask(undefined));
 
-      await createTask(String(id), data.id, {
+      await createTask(String(id), column.id, {
         title: copyTask.title,
-        order: tasks.length + 1,
+        order: column.tasks.length + 1,
         description: copyTask.description,
         userId: copyTask.userId,
       });
 
-      await getAllTask();
+      await getAllColumn();
+
+      // try {
+      //   await dispatch(
+      //     createTaskCreator({
+      //       boardId: String(id),
+      //       columnId: column.id,
+      //       taskData: {
+      //         title: copyTask.title,
+      //         order: column.tasks.length + 1,
+      //         description: copyTask.description,
+      //         userId: copyTask.userId,
+      //       },
+      //     })
+      //   );
+      // } catch (error) {
+      //   alert(error);
+      // }
     }
 
     if (currentColumn && currentTasks) {
       await Promise.all(
-        columns.map(async (column: IColData) => {
+        columns.map(async (column: StateCol) => {
           if (currentColumn.order === card.order) return;
 
           if (column.id === card.id) {
-            const copyTasks = tasks ? [...tasks] : null;
-            const response = await insertColumn(column, currentColumn.order);
-            if (copyTasks) await insertTasks(copyTasks, response.data.id);
+            const copyTasks = column.tasks ? [...column.tasks] : null;
+            try {
+              await dispatch(
+                moveColumnCreator({
+                  boardId: String(id),
+                  column: column,
+                  order: currentColumn.order,
+                  tasks: copyTasks,
+                })
+              ).unwrap();
+            } catch (error) {
+              alert(error);
+            }
           }
 
           if (column.id === currentColumn.id) {
-            const response = await insertColumn(column, card.order);
-            if (currentTasks) await insertTasks(currentTasks, response.data.id);
+            try {
+              await dispatch(
+                moveColumnCreator({
+                  boardId: String(id),
+                  column: column,
+                  order: card.order,
+                  tasks: currentTasks.length ? currentTasks : null,
+                })
+              ).unwrap();
+            } catch (error) {
+              alert(error);
+            }
           }
         })
       );
-
-      await getAllColumn();
     }
   };
 
@@ -183,7 +171,7 @@ const Card = ({
       onDragOver={dragOverHandler}
       onDrop={dropHandler}
     >
-      <form onSubmit={handleEditForm} key={data.id} className="board scroll-task">
+      <form onSubmit={handleEditForm} key={column.id} className="board scroll-task">
         <div className="board__title">
           {edit ? (
             <div className="board__title-button">
@@ -216,21 +204,15 @@ const Card = ({
         {showTask && (
           <FormTask
             setShowTask={setShowTask}
-            columnId={data.id}
-            getAllTask={getAllTask}
-            order={tasks?.length || 0}
+            columnId={column.id}
+            order={column.tasks?.length || 0}
           />
         )}
-        {tasks?.map((item) => (
-          <Task
-            task={item}
-            tasks={tasks}
-            currentTask={currentTask}
-            key={item.id}
-            getAllTask={getAllTask}
-            setCurrentTask={setCurrentTask}
-          />
-        ))}
+        {column.tasks?.length
+          ? column.tasks.map((item) => (
+              <Task task={item} tasks={column.tasks} key={item.id} getAllColumn={getAllColumn} />
+            ))
+          : null}
       </form>
       <ConfirmationModal />
     </div>

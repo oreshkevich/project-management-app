@@ -2,10 +2,10 @@ import { SetStateAction } from 'react';
 import { Form, Button, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { TaskData } from '../../../core/types/types';
+import { ITaskData } from '../../../core/interfaces/interfaces';
 import { editTask } from '../../../core/api/api';
 import { useForm } from 'react-hook-form';
 import './formTaskEditing.css';
-import { cookies } from '../../../core/cookies/cookies';
 
 interface IData {
   title: string;
@@ -14,22 +14,12 @@ interface IData {
 
 const FormTaskEditing = ({
   setShowTask,
-  columnId,
-  boardId,
-  id,
-  order,
-  valueTitle,
-  valueDescription,
-  getAllTask,
+  task,
+  getAllColumn,
 }: {
   setShowTask: (value: SetStateAction<boolean>) => void;
-  columnId: string;
-  boardId: string;
-  id: string;
-  valueTitle: string;
-  valueDescription: string;
-  order: number;
-  getAllTask: () => Promise<void>;
+  task: ITaskData;
+  getAllColumn: () => Promise<void>;
 }) => {
   const { t } = useTranslation();
 
@@ -42,21 +32,18 @@ const FormTaskEditing = ({
   const handleClose = () => setShowTask(false);
 
   const onSubmit = async (data: IData) => {
-    const idUser = cookies.get('id');
     const dataOrder = {
       title: data.title,
-      order: order,
+      order: task.order,
       description: data.description,
-      userId: String(idUser),
-      columnId: columnId,
-      boardId: boardId,
+      userId: task.userId,
+      columnId: task.columnId,
+      boardId: task.boardId,
     };
 
-    await editTask(boardId, columnId, id, dataOrder);
-
+    await editTask(task.boardId, task.columnId, task.id, dataOrder);
     handleClose();
-
-    await getAllTask();
+    await getAllColumn();
   };
 
   return (
@@ -70,7 +57,7 @@ const FormTaskEditing = ({
             <Form.Label>{t('header.create-task__modal-title')}</Form.Label>
             <Form.Control
               {...register('title', {
-                value: valueTitle,
+                value: task.title,
                 required: `${t('header.create-board__modal-error-title')}`,
                 minLength: {
                   value: 4,
@@ -85,7 +72,7 @@ const FormTaskEditing = ({
             <Form.Label>{t('header.create-task__modal-description')}</Form.Label>
             <Form.Control
               {...register('description', {
-                value: valueDescription,
+                value: task.description,
                 required: `${t('header.create-board__modal-error-title')}`,
                 minLength: {
                   value: 4,
