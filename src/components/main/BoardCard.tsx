@@ -26,7 +26,7 @@ const BoardCard = (props: { data: BoardData }) => {
 
   return (
     <>
-      <Card style={{ width: '18rem' }}>
+      <Card style={{ width: '18rem' }} className="board-card">
         <Card.Body>
           <Card.Title>{props.data.title}</Card.Title>
           <Card.Text>Description</Card.Text>

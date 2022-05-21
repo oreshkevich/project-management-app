@@ -29,9 +29,6 @@ const Board = () => {
 
   return (
     <div>
-      <Button variant="success" onClick={handleShow}>
-        {t('header.create-col__button')}
-      </Button>
       {showCol && (
         <FormColumn
           setShowCol={setShowCol}
@@ -55,6 +52,9 @@ const Board = () => {
             currentTask={currentTask}
           />
         ))}
+        <Button variant="success" onClick={handleShow}>
+          {t('header.create-col__button')}
+        </Button>
       </div>
     </div>
   );
