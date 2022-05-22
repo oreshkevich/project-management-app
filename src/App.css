@@ -76,7 +76,7 @@
     width: 50%;
 }
 
-@media (max-width: 1070px) {
+@media (max-width: 1270px) {
 .home__title {
     font-size: 2rem;
 }
