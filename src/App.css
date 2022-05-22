@@ -75,3 +75,15 @@
 .offer__photo {
     width: 50%;
 }
+
+@media (max-width: 1270px) {
+.home__title {
+    font-size: 2rem;
+}
+}
+
+@media (max-width: 850px) {
+.img-fluid {
+    max-width: 83%;
+}
+}
