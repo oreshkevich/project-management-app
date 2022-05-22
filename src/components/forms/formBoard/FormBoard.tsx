@@ -5,9 +5,12 @@ import { useForm } from 'react-hook-form';
 
 import './formBoard.css';
 import { BoardData } from '../../../core/types/types';
-import { createBoard } from '../../../core/api/api';
+import { createBoardCreator } from '../../../core/store/creators/BoardCreators';
+import { useAppDispatch } from '../../../core/hooks/redux';
+import { CatchedError } from '../../../core/types/types';
 
 const FormBoard = ({ setShow }: { setShow: (value: SetStateAction<boolean>) => void }) => {
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
   const {
@@ -19,10 +22,12 @@ const FormBoard = ({ setShow }: { setShow: (value: SetStateAction<boolean>) => v
   const handleClose = () => setShow(false);
 
   const onSubmit = async (data: BoardData) => {
-    await createBoard(data);
-
-    handleClose();
-    window.location.reload();
+    try {
+      await dispatch(createBoardCreator(data)).unwrap();
+      handleClose();
+    } catch (error) {
+      alert((error as CatchedError).message);
+    }
   };
 
   return (

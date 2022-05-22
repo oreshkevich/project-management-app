@@ -3,25 +3,22 @@ import { useParams } from 'react-router-dom';
 import { Form, Button, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { ColData } from '../../../core/types/types';
-import { createColumn } from '../../../core/api/api';
+import { createColumnCreator } from '../../../core/store/creators/BoardCreators';
 import { useForm } from 'react-hook-form';
 import './formColumn.css';
+
+import { useAppSelector, useAppDispatch } from '../../../core/hooks/redux';
+import { CatchedError } from '../../../core/types/types';
 
 interface IData {
   title: string;
 }
 
-const FormColumn = ({
-  setShowCol,
-  getAllColumn,
-  order,
-}: {
-  setShowCol: (value: SetStateAction<boolean>) => void;
-  getAllColumn: () => Promise<void>;
-  order: number;
-}) => {
+const FormColumn = ({ setShowCol }: { setShowCol: (value: SetStateAction<boolean>) => void }) => {
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const { id } = useParams();
+  const { columns } = useAppSelector((state) => state.boardReducer);
 
   const {
     register,
@@ -34,12 +31,15 @@ const FormColumn = ({
   const onSubmit = async (data: IData) => {
     const dataOrder = {
       title: data.title,
-      order: order + 1,
+      order: columns.length + 1,
     };
 
-    await createColumn(String(id), dataOrder);
-    await getAllColumn();
-    handleClose();
+    try {
+      await dispatch(createColumnCreator({ id: String(id), column: dataOrder })).unwrap();
+      handleClose();
+    } catch (error) {
+      alert((error as CatchedError).message);
+    }
   };
 
   return (

@@ -59,10 +59,6 @@
   margin-bottom: 0 !important;
 }
 
-.main {
-  padding-left: 1%;
-}
-
 .main-route {
   display: flex;
   justify-content: space-evenly;

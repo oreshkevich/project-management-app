@@ -7,6 +7,24 @@
   --body-background: rgb(240 244 253);
 }
 
+.btn-primary {
+  background-color: var(--blue);
+}
+
+.btn-primary:hover {
+  background-color: var(--light-blue);
+  border-color: var(--light-blue);
+}
+
+.btn:focus,
+.btn:active {
+  box-shadow: none !important;
+}
+
+section > p:last-child {
+  margin-bottom: 0;
+}
+
 body {
   margin: 0;
   height: 100%;

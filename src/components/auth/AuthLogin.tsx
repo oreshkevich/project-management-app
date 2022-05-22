@@ -16,6 +16,7 @@ const AuthLogin = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [requestStatus, setStatus] = useState(true);
+  const [formData, setFormData] = useState({} as User);
   const [loading, setLoading] = useState(false);
 
   const {
@@ -23,8 +24,6 @@ const AuthLogin = () => {
     formState: { errors },
     handleSubmit,
   } = useForm({ mode: 'onBlur' });
-
-  const [formData, setFormData] = useState({} as User);
 
   const onSubmit = async () => {
     try {

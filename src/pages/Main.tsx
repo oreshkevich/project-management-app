@@ -1,24 +1,30 @@
 import { useEffect, useState } from 'react';
-import { getBoards } from '../core/api/api';
 import { BoardData } from '../core/types/types';
 import BoardCard from '../components/main/BoardCard';
 import LoadingIcon from '../components/loading/LoadingIcon';
 
+import { useAppDispatch, useAppSelector } from '../core/hooks/redux';
+import { getBoardsCreator } from '../core/store/creators/BoardCreators';
+import { CatchedError } from '../core/types/types';
+
 export const Main = () => {
-  const [boards, setBoards] = useState<Array<BoardData>>();
+  const dispatch = useAppDispatch();
+  const { boards } = useAppSelector((state) => state.boardReducer);
   const [loading, setLoading] = useState(true);
   const [searchText, setSearchText] = useState('');
 
-  async function getAllBoards() {
-    const { data } = await getBoards();
-
-    setBoards(data);
-    setLoading(false);
-  }
-
   useEffect(() => {
+    const getAllBoards = async () => {
+      try {
+        await dispatch(getBoardsCreator()).unwrap();
+      } catch (error) {
+        if ((error as CatchedError).statusCode !== 401) alert((error as CatchedError).message);
+      }
+    };
+
     getAllBoards();
-  }, []);
+    setLoading(false);
+  }, [dispatch]);
 
   return (
     <>
@@ -26,7 +32,10 @@ export const Main = () => {
         <LoadingIcon />
       ) : (
         <>
-          <form className="form-inline my-2 my-lg-0">
+          <form
+            className="form-inline my-2 my-lg-0 pt-5 m-auto"
+            onSubmit={(e) => e.preventDefault()}
+          >
             <input
               className="form-control mx-auto"
               type="search"
@@ -36,7 +45,7 @@ export const Main = () => {
               autoFocus
             />
           </form>
-          <section className="row" style={{ width: '100%' }}>
+          <section className="main pt-3 pb-5 d-flex justify-content-center flex-wrap">
             {boards
               ?.filter((value: BoardData) => {
                 if (!searchText) {
