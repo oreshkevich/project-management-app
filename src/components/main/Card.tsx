@@ -11,7 +11,8 @@ import { AiFillDelete } from 'react-icons/ai';
 import './card.css';
 import ConfirmationModal from '../modalWindows/ConfirmationModal';
 //import { updateState } from '../../core/store/reducers/modalReducer';
-
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 import { useAppDispatch, useAppSelector } from '../../core/hooks/redux';
 import { boardSlice } from '../../core/store/reducers/BoardSlice';
 import {
@@ -50,10 +51,28 @@ const Card = ({
   };
 
   const handleDeleteBoard = async () => {
-    const isConfirm = confirm(`Точно вы хотите удалить колонку: ${column.order}`);
-    if (!isConfirm) return;
+    confirmAlert({
+      title: `${t('conf-modal.titleColumn')}`,
+      message: `${t('conf-modal.bodyColumn')}: ${column.order}`,
+      buttons: [
+        {
+          label: `${t('conf-modal.delete')}`,
+          onClick: () => {
+            return deleteCurrentColumn();
+          },
+        },
+        {
+          label: `${t('conf-modal.cancel')}`,
+          onClick: () => {
+            return;
+          },
+        },
+      ],
+    });
+    // const isConfirm = confirm(`Точно вы хотите удалить колонку: ${column.order}`);
+    // if (!isConfirm) return;
     //dispatch(updateState(true));
-    await deleteCurrentColumn();
+    // await deleteCurrentColumn();
   };
 
   const handleShow = () => setShowTask(true);
