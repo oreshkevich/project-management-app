@@ -4,7 +4,9 @@ import { useParams } from 'react-router-dom';
 import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
 import { editTask, getTasks, deleteTask, createTask } from '../../core/api/api';
 import { ITaskData } from '../../core/interfaces/interfaces';
-
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../core/hooks/redux';
 import { boardSlice } from '../../core/store/reducers/BoardSlice';
 
@@ -19,6 +21,7 @@ const Task = ({
 }) => {
   const dispatch = useAppDispatch();
   const { id } = useParams();
+  const { t } = useTranslation();
   const { setCurrentTask } = boardSlice.actions;
   const { currentTask } = useAppSelector((state) => state.boardReducer);
 
@@ -46,10 +49,30 @@ const Task = ({
   };
 
   const handleDeleteTask = async () => {
-    const isConfirm = confirm(`Точно вы хотите удалить задание: ${task.order}`);
-    if (!isConfirm) return;
-    await deleteCurrentTask();
-    await getAllColumn();
+    confirmAlert({
+      title: `${t('conf-modal.titleTask')}`,
+      message: `${t('conf-modal.bodyTask')}: ${task.order}`,
+      buttons: [
+        {
+          label: `${t('conf-modal.delete')}`,
+          onClick: () => {
+            const allReturn = () => {
+              deleteCurrentTask();
+              getAllColumn();
+            };
+            return allReturn();
+          },
+        },
+        {
+          label: `${t('conf-modal.cancel')}`,
+          onClick: () => {
+            return;
+          },
+        },
+      ],
+    });
+    // await deleteCurrentTask();
+    // await getAllColumn();
   };
 
   const dragStartHandler = () => {

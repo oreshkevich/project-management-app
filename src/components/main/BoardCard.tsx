@@ -7,6 +7,8 @@ import ConfirmationModal from '../modalWindows/ConfirmationModal';
 import { useAppDispatch } from '../../core/hooks/redux';
 //import { updateState } from '../../core/store/reducers/modalReducer';
 import { deleteBoardCreator } from '../../core/store/creators/BoardCreators';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const BoardCard = ({ data }: { data: BoardData }) => {
   const { t } = useTranslation();
@@ -24,6 +26,27 @@ const BoardCard = ({ data }: { data: BoardData }) => {
 
   const openBoard = () => navigate(`/board/${data.id}`);
 
+  const handleDeleteBoard = async () => {
+    confirmAlert({
+      title: `${t('conf-modal.title')}`,
+      message: `${t('conf-modal.body')}: ${data.title}`,
+      buttons: [
+        {
+          label: `${t('conf-modal.delete')}`,
+          onClick: () => {
+            return deleteCurrentBoard();
+          },
+        },
+        {
+          label: `${t('conf-modal.cancel')}`,
+          onClick: () => {
+            return;
+          },
+        },
+      ],
+    });
+  };
+
   return (
     <>
       <Card className="m-2" style={{ width: '18rem' }}>
@@ -31,7 +54,7 @@ const BoardCard = ({ data }: { data: BoardData }) => {
           <Card.Title>{data.title}</Card.Title>
           <Card.Text>Description</Card.Text>
           <div className="board-buttons">
-            <Button variant="danger" size="sm" onClick={deleteCurrentBoard}>
+            <Button variant="danger" size="sm" onClick={handleDeleteBoard}>
               {t('main-rote.board-delete-button')}
             </Button>
             <Button variant="primary" size="lg" onClick={openBoard}>
