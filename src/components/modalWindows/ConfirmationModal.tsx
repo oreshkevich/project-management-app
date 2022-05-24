@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../core/hooks/redux';
-import { updateState } from '../../core/store/reducers/modalReducer';
+import { updateToastState } from '../../core/store/reducers/modalReducer';
 
 const ConfirmationModal = () => {
   const { t } = useTranslation();
@@ -12,7 +12,7 @@ const ConfirmationModal = () => {
   const [show, setShow] = useState(state.state);
 
   const handleClose = () => {
-    dispatch(updateState(false));
+    dispatch(updateToastState(false));
     setShow(false);
   };
 
