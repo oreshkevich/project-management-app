@@ -73,9 +73,13 @@
     "board-delete-button": "Delete",
     "board-open-button": "Open"
   },
-  "conf-modal":{
+  "conf-modal": {
     "title": "Delete the board?",
-    "body" : "You will permanently delete this board",
+    "body": "You will permanently delete this board",
+    "titleColumn": "Delete the column?",
+    "bodyColumn": "You will permanently delete this column",
+    "titleTask": "Delete the task?",
+    "bodyTask": "You will permanently delete this task",
     "delete": "delete",
     "cancel": "cancel"
   },
