@@ -10,7 +10,7 @@ const ToastNotification = (props: { message: string }) => {
   const [show, setShow] = useState(false);
   const [isError, setError] = useState(false);
 
-  const state = useAppSelector((state) => state.modalStateReducer);
+  const state = useAppSelector((state) => state.modalStateReducer.state);
   const dispatch = useAppDispatch();
 
   function changeState() {
@@ -18,10 +18,10 @@ const ToastNotification = (props: { message: string }) => {
   }
 
   useEffect(() => {
-    setShow(state.state);
+    setShow(state);
 
     setTimeout(changeState, SHOWTIME);
-  }, [state.state]);
+  }, [state]);
 
   useEffect(() => {
     if (
@@ -34,16 +34,20 @@ const ToastNotification = (props: { message: string }) => {
   }, [props.message]);
 
   return (
-    <ToastContainer className="p-3" position={'bottom-end'}>
-      <Toast onClose={() => setShow(false)} show={show} delay={SHOWTIME} autohide>
-        <Toast.Header closeButton={false}>
-          {isError ? <FcHighPriority /> : <FcApproval />}
-          <strong className="me-auto">{isError ? 'Error' : 'Message'}</strong>
-          <small>now</small>
-        </Toast.Header>
-        <Toast.Body>{props.message}</Toast.Body>
-      </Toast>
-    </ToastContainer>
+    <>
+      {props.message ? (
+        <ToastContainer className="p-3" position={'bottom-end'}>
+          <Toast onClose={() => setShow(false)} show={show} delay={SHOWTIME} autohide>
+            <Toast.Header closeButton={false}>
+              {isError ? <FcHighPriority /> : <FcApproval />}
+              <strong className="me-auto">{isError ? 'Error' : 'Message'}</strong>
+              <small>now</small>
+            </Toast.Header>
+            <Toast.Body>{props.message}</Toast.Body>
+          </Toast>
+        </ToastContainer>
+      ) : null}
+    </>
   );
 };
 

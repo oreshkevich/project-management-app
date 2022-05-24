@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
 import { editTask, getTasks, deleteTask, createTask } from '../../core/api/api';
 import { ITaskData } from '../../core/interfaces/interfaces';
-import { confirmAlert } from 'react-confirm-alert';
+import { confirmAlert, ReactConfirmAlertProps } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../core/hooks/redux';
@@ -70,9 +70,7 @@ const Task = ({
           },
         },
       ],
-    });
-    // await deleteCurrentTask();
-    // await getAllColumn();
+    } as unknown as ReactConfirmAlertProps);
   };
 
   const dragStartHandler = () => {

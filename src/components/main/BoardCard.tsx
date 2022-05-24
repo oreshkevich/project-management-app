@@ -8,7 +8,7 @@ import { deleteBoardCreator } from '../../core/store/creators/BoardCreators';
 import ToastNotification from '../modalWindows/ToastNotitfication';
 import { updateToastState } from '../../core/store/reducers/modalReducer';
 import { useState } from 'react';
-import { confirmAlert } from 'react-confirm-alert';
+import { confirmAlert, ReactConfirmAlertProps } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const BoardCard = ({ data }: { data: BoardData }) => {
@@ -46,7 +46,7 @@ const BoardCard = ({ data }: { data: BoardData }) => {
           },
         },
       ],
-    });
+    } as unknown as ReactConfirmAlertProps);
   };
 
   return (
