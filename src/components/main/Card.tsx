@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import FormTask from '../forms/formTask/FormTask';
 import Task from '../task/Task';
 import { IColData } from '../../core/interfaces/interfaces';
-import { StateCol } from '../../core/types/types';
+import { CatchedError, StateCol } from '../../core/types/types';
 import { AiFillDelete } from 'react-icons/ai';
 import './card.css';
 import ConfirmationModal from '../modalWindows/ConfirmationModal';
@@ -20,6 +20,8 @@ import {
   editColumnCreator,
   // createTaskCreator,
 } from '../../core/store/creators/BoardCreators';
+import { updateToastState } from '../../core/store/reducers/modalReducer';
+import ToastNotification from '../modalWindows/ToastNotitfication';
 
 const Card = ({
   column,
@@ -40,12 +42,14 @@ const Card = ({
   const [showTask, setShowTask] = useState(false);
   const [title, setTitle] = useState(column.title);
   const [edit, setEdit] = useState<boolean>(false);
+  const [message, setMessage] = useState('');
 
   const deleteCurrentColumn = async () => {
     try {
       await dispatch(deleteColumnCreator({ boardId: String(id), columnId: column.id }));
     } catch (error) {
-      alert(error);
+      setMessage((error as CatchedError).message);
+      dispatch(updateToastState(true));
     }
   };
 
@@ -73,7 +77,8 @@ const Card = ({
         })
       );
     } catch (error) {
-      alert(error);
+      setMessage((error as CatchedError).message);
+      dispatch(updateToastState(true));
     }
   };
 
@@ -140,7 +145,8 @@ const Card = ({
                 })
               ).unwrap();
             } catch (error) {
-              alert(error);
+              setMessage((error as CatchedError).message);
+              dispatch(updateToastState(true));
             }
           }
 
@@ -155,7 +161,8 @@ const Card = ({
                 })
               ).unwrap();
             } catch (error) {
-              alert(error);
+              setMessage((error as CatchedError).message);
+              dispatch(updateToastState(true));
             }
           }
         })
@@ -164,58 +171,61 @@ const Card = ({
   };
 
   return (
-    <div
-      className="app-card"
-      draggable
-      onDragStart={dragStartHandler}
-      onDragOver={dragOverHandler}
-      onDrop={dropHandler}
-    >
-      <form onSubmit={handleEditForm} key={column.id} className="board scroll-task">
-        <div className="board__title">
-          {edit ? (
-            <div className="board__title-button">
-              <Button variant="info" type="submit">
-                Sub
-              </Button>
-              <Button variant="info" type="button" onClick={handleEditCancel}>
-                Can.
-              </Button>
+    <>
+      <div
+        className="app-card"
+        draggable
+        onDragStart={dragStartHandler}
+        onDragOver={dragOverHandler}
+        onDrop={dropHandler}
+      >
+        <form onSubmit={handleEditForm} key={column.id} className="board scroll-task">
+          <div className="board__title">
+            {edit ? (
+              <div className="board__title-button">
+                <Button variant="info" type="submit">
+                  Sub
+                </Button>
+                <Button variant="info" type="button" onClick={handleEditCancel}>
+                  Can.
+                </Button>
 
-              <input
-                defaultValue={title}
-                onChange={(e) => handleEditTodo(e.target.value)}
-                className="todo__single--input"
-              />
-            </div>
-          ) : (
-            <div className="todo__single--text" onClick={handleEdit}>
-              {title}
-            </div>
+                <input
+                  defaultValue={title}
+                  onChange={(e) => handleEditTodo(e.target.value)}
+                  className="todo__single--input"
+                />
+              </div>
+            ) : (
+              <div className="todo__single--text" onClick={handleEdit}>
+                {title}
+              </div>
+            )}
+          </div>
+
+          <span className="icon" onClick={handleDeleteBoard}>
+            <AiFillDelete />
+          </span>
+          <Button variant="success" onClick={handleShow}>
+            {t('header.create-task__button')}
+          </Button>
+          {showTask && (
+            <FormTask
+              setShowTask={setShowTask}
+              columnId={column.id}
+              order={column.tasks?.length || 0}
+            />
           )}
-        </div>
-
-        <span className="icon" onClick={handleDeleteBoard}>
-          <AiFillDelete />
-        </span>
-        <Button variant="success" onClick={handleShow}>
-          {t('header.create-task__button')}
-        </Button>
-        {showTask && (
-          <FormTask
-            setShowTask={setShowTask}
-            columnId={column.id}
-            order={column.tasks?.length || 0}
-          />
-        )}
-        {column.tasks?.length
-          ? column.tasks.map((item) => (
-              <Task task={item} tasks={column.tasks} key={item.id} getAllColumn={getAllColumn} />
-            ))
-          : null}
-      </form>
-      <ConfirmationModal />
-    </div>
+          {column.tasks?.length
+            ? column.tasks.map((item) => (
+                <Task task={item} tasks={column.tasks} key={item.id} getAllColumn={getAllColumn} />
+              ))
+            : null}
+        </form>
+        <ConfirmationModal />
+      </div>
+      <ToastNotification message={message} />
+    </>
   );
 };
 

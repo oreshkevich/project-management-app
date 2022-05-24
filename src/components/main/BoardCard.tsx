@@ -1,24 +1,26 @@
 import './card.css';
 import { Button, Card } from 'react-bootstrap';
-import { BoardData } from '../../core/types/types';
+import { BoardData, CatchedError } from '../../core/types/types';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import ConfirmationModal from '../modalWindows/ConfirmationModal';
 import { useAppDispatch } from '../../core/hooks/redux';
-//import { updateState } from '../../core/store/reducers/modalReducer';
 import { deleteBoardCreator } from '../../core/store/creators/BoardCreators';
+import ToastNotification from '../modalWindows/ToastNotitfication';
+import { updateToastState } from '../../core/store/reducers/modalReducer';
+import { useState } from 'react';
 
 const BoardCard = ({ data }: { data: BoardData }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const [message, setMessage] = useState('');
 
   const deleteCurrentBoard = async () => {
-    //dispatch(updateState(true));
     try {
       await dispatch(deleteBoardCreator(data.id)).unwrap();
     } catch (error) {
-      alert(error);
+      setMessage((error as CatchedError).message);
+      dispatch(updateToastState(true));
     }
   };
 
@@ -40,7 +42,7 @@ const BoardCard = ({ data }: { data: BoardData }) => {
           </div>
         </Card.Body>
       </Card>
-      <ConfirmationModal />
+      <ToastNotification message={message} />
     </>
   );
 };
