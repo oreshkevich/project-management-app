@@ -18,7 +18,7 @@ const FormBoard = ({ setShow }: { setShow: (value: SetStateAction<boolean>) => v
 
   useEffect(() => {
     dispatch(updateToastState(false));
-  }, []);
+  }, [dispatch]);
 
   const {
     register,

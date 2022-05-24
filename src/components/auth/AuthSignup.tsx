@@ -28,7 +28,7 @@ const AuthSignup = () => {
 
   useEffect(() => {
     dispatch(updateToastState(false));
-  }, []);
+  }, [dispatch]);
 
   const onSubmit = async () => {
     try {

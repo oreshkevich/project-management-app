@@ -25,7 +25,7 @@ const AuthLogin = () => {
 
   useEffect(() => {
     dispatch(updateToastState(false));
-  }, []);
+  }, [dispatch]);
 
   const {
     register,

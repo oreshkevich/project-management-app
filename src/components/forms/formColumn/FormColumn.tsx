@@ -33,7 +33,7 @@ const FormColumn = ({ setShowCol }: { setShowCol: (value: SetStateAction<boolean
 
   useEffect(() => {
     dispatch(updateToastState(false));
-  }, []);
+  }, [dispatch]);
 
   const onSubmit = async (data: IData) => {
     const dataOrder = {

@@ -44,7 +44,7 @@ const Header = () => {
       dispatch(updateToastState(true));
       logout();
     }
-  }, [cookieToken, token, logout]);
+  }, [cookieToken, token, logout, dispatch]);
 
   const handleScroll = () => {
     window.scrollY > 0 ? setScroll(true) : setScroll(false);
