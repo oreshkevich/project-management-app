@@ -7,7 +7,7 @@ import ConfirmationModal from '../modalWindows/ConfirmationModal';
 import { useAppDispatch } from '../../core/hooks/redux';
 //import { updateState } from '../../core/store/reducers/modalReducer';
 import { deleteBoardCreator } from '../../core/store/creators/BoardCreators';
-import { confirmAlert } from 'react-confirm-alert';
+import { confirmAlert, ReactConfirmAlertProps } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const BoardCard = ({ data }: { data: BoardData }) => {
@@ -44,7 +44,7 @@ const BoardCard = ({ data }: { data: BoardData }) => {
           },
         },
       ],
-    });
+    } as unknown as ReactConfirmAlertProps);
   };
 
   return (

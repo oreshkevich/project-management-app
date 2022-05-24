@@ -11,7 +11,7 @@ import { AiFillDelete } from 'react-icons/ai';
 import './card.css';
 import ConfirmationModal from '../modalWindows/ConfirmationModal';
 //import { updateState } from '../../core/store/reducers/modalReducer';
-import { confirmAlert } from 'react-confirm-alert';
+import { confirmAlert, ReactConfirmAlertProps } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { useAppDispatch, useAppSelector } from '../../core/hooks/redux';
 import { boardSlice } from '../../core/store/reducers/BoardSlice';
@@ -68,7 +68,7 @@ const Card = ({
           },
         },
       ],
-    });
+    } as unknown as ReactConfirmAlertProps);
     // const isConfirm = confirm(`Точно вы хотите удалить колонку: ${column.order}`);
     // if (!isConfirm) return;
     //dispatch(updateState(true));
