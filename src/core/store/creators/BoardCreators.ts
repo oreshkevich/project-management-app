@@ -10,11 +10,11 @@ import {
   deleteColumn,
   editColumn,
   createTask,
-  // deleteTask,
-  // editTask,
+  deleteTask,
+  editTask,
 } from '../../api/api';
 import { BoardData, ColData, StateCol } from '../../types/types';
-import { IColData, ITaskData, ITaskCreated } from '../../interfaces/interfaces';
+import { IColData, ITaskData, ITaskCreated, ITaskEdited } from '../../interfaces/interfaces';
 
 export const getColumnsCreator = createAsyncThunk<StateCol[], string>(
   '/getColumns',
@@ -110,34 +110,34 @@ export const deleteColumnCreator = createAsyncThunk<string, { boardId: string; c
   }
 );
 
-// export const deleteTaskCreator = createAsyncThunk<
-//   string,
-//   { boardId: string; columnId: string; taskId: string }
-// >('/deleteTask', async ({ boardId, columnId, taskId }, thunkAPI) => {
-//   try {
-//     await deleteTask(boardId, columnId, taskId);
-//     const tasks = await getTasks(boardId, columnId);
-//     const sortTasks = tasks.data.sort((a: ITaskData, b: ITaskData) =>
-//       a.order > b.order ? 1 : a.order < b.order ? -1 : 0
-//     );
-//     await Promise.all(
-//       sortTasks.map(async (sortTask: ITaskData, idx: number) => {
-//         if (sortTask.order !== idx + 1)
-//           await editTask(boardId, sortTask.columnId, sortTask.id, {
-//             title: sortTask.title,
-//             order: idx + 1,
-//             description: sortTask.description,
-//             userId: sortTask.userId,
-//             boardId: boardId,
-//             columnId: sortTask.columnId,
-//           });
-//       })
-//     );
-//     return taskId;
-//   } catch (error) {
-//     return thunkAPI.rejectWithValue((error as AxiosError).response?.data);
-//   }
-// });
+export const deleteTaskCreator = createAsyncThunk<
+  { columnId: string; taskId: string },
+  { boardId: string; columnId: string; taskId: string }
+>('/deleteTask', async ({ boardId, columnId, taskId }, thunkAPI) => {
+  try {
+    await deleteTask(boardId, columnId, taskId);
+    const tasks = await getTasks(boardId, columnId);
+    const sortTasks = tasks.data.sort((a: ITaskData, b: ITaskData) =>
+      a.order > b.order ? 1 : a.order < b.order ? -1 : 0
+    );
+    await Promise.all(
+      sortTasks.map(async (sortTask: ITaskData, idx: number) => {
+        if (sortTask.order !== idx + 1)
+          await editTask(boardId, sortTask.columnId, sortTask.id, {
+            title: sortTask.title,
+            order: idx + 1,
+            description: sortTask.description,
+            userId: sortTask.userId,
+            boardId: boardId,
+            columnId: sortTask.columnId,
+          });
+      })
+    );
+    return { columnId, taskId };
+  } catch (error) {
+    return thunkAPI.rejectWithValue((error as AxiosError).response?.data);
+  }
+});
 
 export const moveColumnCreator = createAsyncThunk<
   StateCol,
@@ -165,7 +165,32 @@ export const moveColumnCreator = createAsyncThunk<
         })
       );
     }
-    return { ...columnData, order: order, tasks: copyTasks };
+    return {
+      ...columnData,
+      order: order,
+      tasks: copyTasks.sort((a: IColData, b: IColData) =>
+        a.order > b.order ? 1 : a.order < b.order ? -1 : 0
+      ),
+    };
+  } catch (error) {
+    return thunkAPI.rejectWithValue((error as AxiosError).response?.data);
+  }
+});
+
+export const moveTaskCreator = createAsyncThunk<
+  ITaskData,
+  { boardId: string; task: ITaskData; order: number }
+>('/moveTask', async ({ boardId, task, order }, thunkAPI) => {
+  try {
+    await deleteTask(boardId, task.columnId, task.id);
+    const { data: taskData } = await createTask(boardId, task.columnId, {
+      title: task.title,
+      order: order,
+      description: task.description,
+      userId: task.userId,
+    });
+
+    return taskData;
   } catch (error) {
     return thunkAPI.rejectWithValue((error as AxiosError).response?.data);
   }
@@ -190,6 +215,18 @@ export const createTaskCreator = createAsyncThunk<
   try {
     const { data } = await createTask(boardId, columnId, taskData);
     return { columnId, task: data };
+  } catch (error) {
+    return thunkAPI.rejectWithValue((error as AxiosError).response?.data);
+  }
+});
+
+export const editTaskCreator = createAsyncThunk<
+  ITaskData,
+  { task: ITaskData; newTask: ITaskEdited }
+>('/editTask', async ({ task, newTask }, thunkAPI) => {
+  try {
+    const { data } = await editTask(task.boardId, task.columnId, task.id, newTask);
+    return data;
   } catch (error) {
     return thunkAPI.rejectWithValue((error as AxiosError).response?.data);
   }

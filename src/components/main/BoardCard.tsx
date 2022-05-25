@@ -1,13 +1,13 @@
 import './card.css';
-import { Button, Card } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import { BoardData } from '../../core/types/types';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import ConfirmationModal from '../modalWindows/ConfirmationModal';
 import { useAppDispatch } from '../../core/hooks/redux';
-//import { updateState } from '../../core/store/reducers/modalReducer';
 import { deleteBoardCreator } from '../../core/store/creators/BoardCreators';
 import { confirmAlert } from 'react-confirm-alert';
+import { AiFillDelete } from 'react-icons/ai';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const BoardCard = ({ data }: { data: BoardData }) => {
@@ -16,7 +16,6 @@ const BoardCard = ({ data }: { data: BoardData }) => {
   const dispatch = useAppDispatch();
 
   const deleteCurrentBoard = async () => {
-    //dispatch(updateState(true));
     try {
       await dispatch(deleteBoardCreator(data.id)).unwrap();
     } catch (error) {
@@ -26,7 +25,8 @@ const BoardCard = ({ data }: { data: BoardData }) => {
 
   const openBoard = () => navigate(`/board/${data.id}`);
 
-  const handleDeleteBoard = async () => {
+  const handleDeleteBoard = async (e: React.SyntheticEvent) => {
+    e.stopPropagation();
     confirmAlert({
       title: `${t('conf-modal.title')}`,
       message: `${t('conf-modal.body')}: ${data.title}`,
@@ -49,18 +49,12 @@ const BoardCard = ({ data }: { data: BoardData }) => {
 
   return (
     <>
-      <Card className="m-2" style={{ width: '18rem' }}>
-        <Card.Body>
+      <Card className="card-board m-2" onClick={openBoard}>
+        <Card.Body className="d-flex justify-content-between">
           <Card.Title>{data.title}</Card.Title>
-          <Card.Text>Description</Card.Text>
-          <div className="board-buttons">
-            <Button variant="danger" size="sm" onClick={handleDeleteBoard}>
-              {t('main-rote.board-delete-button')}
-            </Button>
-            <Button variant="primary" size="lg" onClick={openBoard}>
-              {t('main-rote.board-open-button')}
-            </Button>
-          </div>
+          <span className="icon" onClick={handleDeleteBoard}>
+            <AiFillDelete />
+          </span>
         </Card.Body>
       </Card>
       <ConfirmationModal />

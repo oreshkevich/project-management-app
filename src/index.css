@@ -5,6 +5,7 @@
   --light-blue: #7189fb;
   --focus: #4c9aff;
   --body-background: rgb(240 244 253);
+  --light: #ebecf0;
 }
 
 .btn-primary {
@@ -14,6 +15,11 @@
 .btn-primary:hover {
   background-color: var(--light-blue);
   border-color: var(--light-blue);
+}
+
+.btn-light {
+  border: none;
+  background-color: var(--light);
 }
 
 .btn:focus,
@@ -39,6 +45,7 @@ html,
 body,
 #root {
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 code {
@@ -49,6 +56,7 @@ main {
   display: flex;
   flex-direction: column;
   flex: 1 1;
+  min-height: 0;
 }
 
 #root {

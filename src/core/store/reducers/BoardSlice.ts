@@ -9,6 +9,10 @@ import {
   deleteColumnCreator,
   moveColumnCreator,
   createTaskCreator,
+  deleteTaskCreator,
+  moveTaskCreator,
+  editTaskCreator,
+  editColumnCreator,
 } from '../creators/BoardCreators';
 import { IColData, ITaskData } from '../../interfaces/interfaces';
 import { StateCol } from '../../types/types';
@@ -55,6 +59,14 @@ export const boardSlice = createSlice({
     builder.addCase(createColumnCreator.fulfilled, (state, { payload }) => {
       state.columns = [...state.columns, payload];
     });
+    builder.addCase(editColumnCreator.fulfilled, (state, { payload }) => {
+      state.columns = state.columns.map((column) => {
+        if (column.id === payload.id) {
+          column.title = payload.title;
+        }
+        return column;
+      });
+    });
     builder.addCase(deleteBoardCreator.fulfilled, (state, { payload }) => {
       state.boards = state.boards.filter((board) => board.id !== payload);
     });
@@ -75,10 +87,35 @@ export const boardSlice = createSlice({
         ].sort((a: IColData, b: IColData) => (a.order > b.order ? 1 : a.order < b.order ? -1 : 0));
         state.temp = [];
       } else {
-        state.temp = [
-          ...state.columns.filter((column) => column.order !== payload.order),
-          payload,
-        ].sort((a: IColData, b: IColData) => (a.order > b.order ? 1 : a.order < b.order ? -1 : 0));
+        state.temp = [...state.columns.filter((column) => column.order !== payload.order), payload];
+      }
+    });
+    builder.addCase(moveTaskCreator.fulfilled, (state, { payload }) => {
+      if (state.temp.length) {
+        state.columns = state.temp.map((column) => {
+          if (column.id === payload.columnId) {
+            column.tasks = [
+              ...column.tasks.filter((task) => task.order !== payload.order),
+              payload,
+            ].sort((a: IColData, b: IColData) =>
+              a.order > b.order ? 1 : a.order < b.order ? -1 : 0
+            );
+          }
+          return column;
+        });
+        state.temp = [];
+      } else {
+        state.temp = state.columns.map((column) => {
+          if (column.id === payload.columnId) {
+            column.tasks = [
+              ...column.tasks.filter((task) => task.order !== payload.order),
+              payload,
+            ].sort((a: IColData, b: IColData) =>
+              a.order > b.order ? 1 : a.order < b.order ? -1 : 0
+            );
+          }
+          return column;
+        });
       }
     });
     builder.addCase(createTaskCreator.fulfilled, (state, { payload }) => {
@@ -86,7 +123,32 @@ export const boardSlice = createSlice({
         if (column.id === payload.columnId) {
           column.tasks.push(payload.task);
         }
-
+        return column;
+      });
+    });
+    builder.addCase(deleteTaskCreator.fulfilled, (state, { payload }) => {
+      state.columns = state.columns.map((column) => {
+        if (column.id === payload.columnId) {
+          column.tasks = column.tasks
+            .filter((task) => task.id !== payload.taskId)
+            .map((task, idx) => {
+              if (task.order !== idx + 1) {
+                return { ...task, order: idx + 1 };
+              } else return task;
+            });
+        }
+        return column;
+      });
+    });
+    builder.addCase(editTaskCreator.fulfilled, (state, { payload }) => {
+      state.columns = state.columns.map((column) => {
+        if (column.id === payload.columnId) {
+          column.tasks = column.tasks.map((task) => {
+            if (task.id === payload.id) {
+              return { ...task, title: payload.title, description: payload.description };
+            } else return task;
+          });
+        }
         return column;
       });
     });

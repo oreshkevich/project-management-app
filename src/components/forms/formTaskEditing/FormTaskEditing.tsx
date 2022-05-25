@@ -5,7 +5,8 @@ import { TaskData } from '../../../core/types/types';
 import { ITaskData } from '../../../core/interfaces/interfaces';
 import './formTaskEditing.css';
 import { useForm } from 'react-hook-form';
-import { editTask } from '../../../core/api/api';
+import { editTaskCreator } from '../../../core/store/creators/BoardCreators';
+import { useAppDispatch } from '../../../core/hooks/redux';
 
 interface IData {
   title: string;
@@ -15,13 +16,12 @@ interface IData {
 const FormTaskEditing = ({
   setShowTask,
   task,
-  getAllColumn,
 }: {
   setShowTask: (value: SetStateAction<boolean>) => void;
   task: ITaskData;
-  getAllColumn: () => Promise<void>;
 }) => {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -41,9 +41,13 @@ const FormTaskEditing = ({
       boardId: task.boardId,
     };
 
-    await editTask(task.boardId, task.columnId, task.id, dataOrder);
+    try {
+      await dispatch(editTaskCreator({ task, newTask: dataOrder })).unwrap();
+    } catch (error) {
+      alert(error);
+    }
+
     handleClose();
-    await getAllColumn();
   };
 
   return (

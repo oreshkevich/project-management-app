@@ -1,11 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { UserState } from '../../types/types';
 import { submitLogin, deleteProfile, getProfile, editProfile } from '../creators/UserCreators';
-import {
-  getColumnsCreator,
-  createBoardCreator,
-  createColumnCreator,
-} from '../creators/BoardCreators';
 import { cookies, removeCookies } from '../../cookies/cookies';
 
 const initialState: UserState = {
@@ -45,18 +40,6 @@ export const userSlice = createSlice({
       removeCookies();
     });
     builder.addCase(editProfile.rejected, (state) => {
-      state.token = null;
-      removeCookies();
-    });
-    builder.addCase(getColumnsCreator.rejected, (state) => {
-      state.token = null;
-      removeCookies();
-    });
-    builder.addCase(createBoardCreator.rejected, (state) => {
-      state.token = null;
-      removeCookies();
-    });
-    builder.addCase(createColumnCreator.rejected, (state) => {
       state.token = null;
       removeCookies();
     });

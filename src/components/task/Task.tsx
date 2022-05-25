@@ -2,23 +2,15 @@ import React, { useState } from 'react';
 import FormTaskEditing from '../forms/formTaskEditing/FormTaskEditing';
 import { useParams } from 'react-router-dom';
 import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
-import { editTask, getTasks, deleteTask, createTask } from '../../core/api/api';
 import { ITaskData } from '../../core/interfaces/interfaces';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../core/hooks/redux';
 import { boardSlice } from '../../core/store/reducers/BoardSlice';
+import { deleteTaskCreator, moveTaskCreator } from '../../core/store/creators/BoardCreators';
 
-const Task = ({
-  task,
-  tasks,
-  getAllColumn,
-}: {
-  task: ITaskData;
-  tasks: ITaskData[];
-  getAllColumn: () => Promise<void>;
-}) => {
+const Task = ({ task, tasks }: { task: ITaskData; tasks: ITaskData[] }) => {
   const dispatch = useAppDispatch();
   const { id } = useParams();
   const { t } = useTranslation();
@@ -26,26 +18,13 @@ const Task = ({
   const { currentTask } = useAppSelector((state) => state.boardReducer);
 
   const deleteCurrentTask = async (card = task) => {
-    await deleteTask(String(id), card.columnId, card.id);
-
-    const tasks = await getTasks(String(id), card.columnId);
-    const sortTasks = tasks.data.sort((a: ITaskData, b: ITaskData) =>
-      a.order > b.order ? 1 : a.order < b.order ? -1 : 0
-    );
-
-    await Promise.all(
-      sortTasks.map(async (sortTask: ITaskData, idx: number) => {
-        if (sortTask.order !== idx + 1)
-          await editTask(String(id), sortTask.columnId, sortTask.id, {
-            title: sortTask.title,
-            order: idx + 1,
-            description: sortTask.description,
-            userId: sortTask.userId,
-            boardId: String(id),
-            columnId: sortTask.columnId,
-          });
-      })
-    );
+    try {
+      await dispatch(
+        deleteTaskCreator({ boardId: String(id), columnId: card.columnId, taskId: card.id })
+      ).unwrap();
+    } catch (error) {
+      alert(error);
+    }
   };
 
   const handleDeleteTask = async () => {
@@ -56,11 +35,7 @@ const Task = ({
         {
           label: `${t('conf-modal.delete')}`,
           onClick: () => {
-            const allReturn = () => {
-              deleteCurrentTask();
-              getAllColumn();
-            };
-            return allReturn();
+            return deleteCurrentTask();
           },
         },
         {
@@ -71,37 +46,30 @@ const Task = ({
         },
       ],
     });
-    // await deleteCurrentTask();
-    // await getAllColumn();
   };
 
-  const dragStartHandler = () => {
+  const dragStartHandler = (e: React.DragEvent) => {
     dispatch(setCurrentTask(task));
+    e.dataTransfer.setData('task', JSON.stringify(task));
   };
 
   const dragOverHandler = (e: React.DragEvent) => {
     e.preventDefault();
     if (currentTask && currentTask.columnId === task.columnId)
-      (e.target as HTMLElement).style.boxShadow = '0 4px 3px gray';
+      (e.currentTarget as HTMLElement).style.border = '2px dashed #6C757D';
   };
 
   const dragLeaveHandler = (e: React.DragEvent) => {
-    (e.target as HTMLElement).style.boxShadow = 'none';
+    (e.currentTarget as HTMLElement).style.border = '2px solid white';
   };
 
   const dragEndHandler = async (e: React.DragEvent) => {
-    (e.target as HTMLElement).style.boxShadow = 'none';
-
-    if (!currentTask) {
-      await deleteCurrentTask();
-      await getAllColumn();
-    }
+    (e.currentTarget as HTMLElement).style.border = '2px solid white';
   };
 
   const dropHandler = async (e: React.DragEvent, card = task) => {
     e.preventDefault();
-    e.stopPropagation();
-    (e.target as HTMLElement).style.boxShadow = 'none';
+    (e.currentTarget as HTMLElement).style.border = '2px solid white';
 
     if (currentTask && currentTask.columnId === card.columnId) {
       await Promise.all(
@@ -109,28 +77,26 @@ const Task = ({
           if (Number(currentTask.order) === card.order) return;
 
           if (task.id === card.id) {
-            await deleteTask(String(id), task.columnId, task.id);
-            await createTask(String(id), task.columnId, {
-              title: task.title,
-              order: currentTask.order,
-              description: task.description,
-              userId: task.userId,
-            });
+            try {
+              await dispatch(
+                moveTaskCreator({ boardId: String(id), task: task, order: currentTask.order })
+              ).unwrap();
+            } catch (error) {
+              alert(error);
+            }
           }
 
           if (task.id === currentTask.id) {
-            await deleteTask(String(id), task.columnId, task.id);
-            await createTask(String(id), task.columnId, {
-              title: task.title,
-              order: card.order,
-              description: task.description,
-              userId: task.userId,
-            });
+            try {
+              await dispatch(
+                moveTaskCreator({ boardId: String(id), task: task, order: card.order })
+              ).unwrap();
+            } catch (error) {
+              alert(error);
+            }
           }
         })
       );
-
-      await getAllColumn();
     }
   };
 
@@ -147,15 +113,15 @@ const Task = ({
       onDrop={dropHandler}
     >
       {task.title}
-      <span className="icon" onClick={handleDeleteTask}>
-        <AiFillDelete />
-      </span>
-      <span className="icon" onClick={handleShow}>
-        <AiFillEdit />
-      </span>
-      {showTask && (
-        <FormTaskEditing getAllColumn={getAllColumn} setShowTask={setShowTask} task={task} />
-      )}
+      <div className="icons">
+        <span className="icon" onClick={handleShow}>
+          <AiFillEdit />
+        </span>
+        <span className="icon" onClick={handleDeleteTask}>
+          <AiFillDelete />
+        </span>
+      </div>
+      {showTask && <FormTaskEditing setShowTask={setShowTask} task={task} />}
     </div>
   );
 };

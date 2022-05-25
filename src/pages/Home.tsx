@@ -13,9 +13,11 @@ export const Home = () => {
           <div className="col-lg-5 offset-lg-1 order-2 hero-image">
             <img src={img} className="img-fluid" alt="main" />
           </div>
-          <div className="col-lg-5 d-flex flex-column justify-content-between pb-4">
+          <div className="col-lg-5 d-flex flex-column justify-content-around">
             <h1 className="home__title">{t('homepage.welcome-block__title')}</h1>
-            <p className="home__text">{t('homepage.welcome-block__title-description')}</p>
+            <p className="home__text" style={{ marginTop: '10px', marginBottom: '0' }}>
+              {t('homepage.welcome-block__title-description')}
+            </p>
           </div>
         </div>
       </section>

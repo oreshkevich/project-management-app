@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import { getColumnsCreator } from '../../core/store/creators/BoardCreators';
@@ -21,37 +21,40 @@ const Board = () => {
 
   const handleShow = () => setShowCol(true);
 
-  const getAllColumn = useCallback(async () => {
-    try {
-      await dispatch(getColumnsCreator(String(id))).unwrap();
-    } catch (error) {
-      alert((error as CatchedError).message);
-    }
-
-    setLoading(false);
-  }, [id, dispatch]);
-
   useEffect(() => {
+    const getAllColumn = async () => {
+      try {
+        await dispatch(getColumnsCreator(String(id))).unwrap();
+      } catch (error) {
+        alert((error as CatchedError).message);
+      }
+
+      setLoading(false);
+    };
+
     getAllColumn();
-  }, [getAllColumn]);
+    (document.getElementById('root') as HTMLElement).style.maxHeight = '100vh';
+
+    return () => {
+      (document.getElementById('root') as HTMLElement).style.maxHeight = 'inherit';
+    };
+  }, [dispatch, id]);
 
   return (
     <>
       {loading ? (
         <LoadingIcon />
       ) : (
-        <section>
-          <Button variant="success" onClick={handleShow} style={{ width: '100%' }}>
-            {t('header.create-col__button')}
-          </Button>
+        <section className="columns content">
           {showCol && <FormColumn setShowCol={setShowCol} />}
 
-          <div className="app-card-data pt-3">
+          <div className="app-card-data over justify-content-start flex-nowrap">
             {columns.length
-              ? columns.map((item: StateCol) => (
-                  <Card column={item} key={item.id} getAllColumn={getAllColumn} />
-                ))
+              ? columns.map((item: StateCol) => <Card column={item} key={item.id} />)
               : null}
+            <Button className="create-column" variant="secondary" onClick={handleShow}>
+              {t('header.create-col__button')}
+            </Button>
           </div>
         </section>
       )}

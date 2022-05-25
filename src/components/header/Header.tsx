@@ -64,7 +64,7 @@ const Header = () => {
         }
       >
         <div className="container-fluid">
-          <NavLink to={'/home'} className="navbar-brand">
+          <NavLink to="/home" className="navbar-brand">
             GoodBoard
           </NavLink>
           <button
@@ -80,7 +80,7 @@ const Header = () => {
           </button>
           <div className={`${isOpen ? 'collapse' : ''} navbar-collapse`} id="navbarNav">
             {token && (
-              <Button className="createBoard" variant="success" onClick={handleShow}>
+              <Button className="createBoard" variant="secondary" onClick={handleShow}>
                 {t('header.create-board__button')}
               </Button>
             )}
