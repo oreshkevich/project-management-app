@@ -55,7 +55,7 @@
     "team-block__Henadzi-description": "Graduated from the Belarusian State Technological University in Minsk with a degree in forestry engineering. I found out about the school by accident. In one of the articles on the Internet.",
     "team-block__Henadzi-role": "Teamlead",
     "team-block__Kirill-name": "Kirill",
-    "team-block__Kirill-description": "There will be something here",
+    "team-block__Kirill-description": "Student of the Belarusian State University Faculty of Radiophysics and Computer Technologies.",
     "team-block__Kirill-role": "Member",
     "team-block__Uladzislava-name": "Uladzislava",
     "team-block__Uladzislava-description": "There will be something here",
@@ -88,5 +88,8 @@
     "team-Henadzi": "Henadzi",
     "team-Kirill": "Kirill",
     "team-Uladzislava": "Uladzislava"
+  },
+  "messages": {
+    "cookie": "Сookie expired, please login again"
   }
 }

@@ -45,7 +45,6 @@ html,
 body,
 #root {
   min-height: 100vh;
-  overflow-x: hidden;
 }
 
 code {
@@ -69,4 +68,15 @@ main {
   flex: 1 0;
   padding: 1.5rem 0;
   box-sizing: border-box;
+}
+
+.toast-container {
+  z-index: 999;
+}
+
+.modal-dialog {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  max-width: 35rem;
 }

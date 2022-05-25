@@ -1,25 +1,29 @@
 import './card.css';
 import { Card } from 'react-bootstrap';
-import { BoardData } from '../../core/types/types';
+import { BoardData, CatchedError } from '../../core/types/types';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import ConfirmationModal from '../modalWindows/ConfirmationModal';
 import { useAppDispatch } from '../../core/hooks/redux';
 import { deleteBoardCreator } from '../../core/store/creators/BoardCreators';
-import { confirmAlert } from 'react-confirm-alert';
 import { AiFillDelete } from 'react-icons/ai';
+import ToastNotification from '../modalWindows/ToastNotitfication';
+import { updateToastState } from '../../core/store/reducers/modalReducer';
+import { useState } from 'react';
+import { confirmAlert, ReactConfirmAlertProps } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const BoardCard = ({ data }: { data: BoardData }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const [message, setMessage] = useState('');
 
   const deleteCurrentBoard = async () => {
     try {
       await dispatch(deleteBoardCreator(data.id)).unwrap();
     } catch (error) {
-      alert(error);
+      setMessage((error as CatchedError).message);
+      dispatch(updateToastState(true));
     }
   };
 
@@ -44,7 +48,7 @@ const BoardCard = ({ data }: { data: BoardData }) => {
           },
         },
       ],
-    });
+    } as unknown as ReactConfirmAlertProps);
   };
 
   return (
@@ -57,7 +61,7 @@ const BoardCard = ({ data }: { data: BoardData }) => {
           </span>
         </Card.Body>
       </Card>
-      <ConfirmationModal />
+      <ToastNotification message={message} />
     </>
   );
 };

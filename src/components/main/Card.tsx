@@ -5,11 +5,10 @@ import { useTranslation } from 'react-i18next';
 import FormTask from '../forms/formTask/FormTask';
 import Task from '../task/Task';
 import { IColData } from '../../core/interfaces/interfaces';
-import { StateCol } from '../../core/types/types';
+import { CatchedError, StateCol } from '../../core/types/types';
 import { AiFillDelete } from 'react-icons/ai';
 import './card.css';
-import ConfirmationModal from '../modalWindows/ConfirmationModal';
-import { confirmAlert } from 'react-confirm-alert';
+import { confirmAlert, ReactConfirmAlertProps } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { useAppDispatch, useAppSelector } from '../../core/hooks/redux';
 import { boardSlice } from '../../core/store/reducers/BoardSlice';
@@ -20,6 +19,8 @@ import {
   createTaskCreator,
   deleteTaskCreator,
 } from '../../core/store/creators/BoardCreators';
+import { updateToastState } from '../../core/store/reducers/modalReducer';
+import ToastNotification from '../modalWindows/ToastNotitfication';
 
 const Card = ({ column }: { column: StateCol }) => {
   const dispatch = useAppDispatch();
@@ -35,12 +36,14 @@ const Card = ({ column }: { column: StateCol }) => {
   const [title, setTitle] = useState(column.title);
   const [edit, setEdit] = useState<boolean>(false);
   const [isDrag, setIsDrag] = useState(false);
+  const [message, setMessage] = useState('');
 
   const deleteCurrentColumn = async () => {
     try {
       await dispatch(deleteColumnCreator({ boardId: String(id), columnId: column.id }));
     } catch (error) {
-      alert(error);
+      setMessage((error as CatchedError).message);
+      dispatch(updateToastState(true));
     }
   };
 
@@ -62,7 +65,7 @@ const Card = ({ column }: { column: StateCol }) => {
           },
         },
       ],
-    });
+    } as unknown as ReactConfirmAlertProps);
   };
 
   const handleShow = () => setShowTask(true);
@@ -84,7 +87,8 @@ const Card = ({ column }: { column: StateCol }) => {
         })
       );
     } catch (error) {
-      alert(error);
+      setMessage((error as CatchedError).message);
+      dispatch(updateToastState(true));
     }
   };
 
@@ -161,7 +165,8 @@ const Card = ({ column }: { column: StateCol }) => {
                 })
               ).unwrap();
             } catch (error) {
-              alert(error);
+              setMessage((error as CatchedError).message);
+              dispatch(updateToastState(true));
             }
           }
 
@@ -176,7 +181,8 @@ const Card = ({ column }: { column: StateCol }) => {
                 })
               ).unwrap();
             } catch (error) {
-              alert(error);
+              setMessage((error as CatchedError).message);
+              dispatch(updateToastState(true));
             }
           }
         })
@@ -241,7 +247,7 @@ const Card = ({ column }: { column: StateCol }) => {
           {t('header.create-task__button')}
         </Button>
       </form>
-      <ConfirmationModal />
+      <ToastNotification message={message} />
     </div>
   );
 };

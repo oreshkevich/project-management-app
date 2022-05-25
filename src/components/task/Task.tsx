@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import FormTaskEditing from '../forms/formTaskEditing/FormTaskEditing';
 import { useParams } from 'react-router-dom';
-import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
+import { AiFillDelete, AiFillEdit, AiFillInfoCircle } from 'react-icons/ai';
 import { ITaskData } from '../../core/interfaces/interfaces';
-import { confirmAlert } from 'react-confirm-alert';
+import { confirmAlert, ReactConfirmAlertProps } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../core/hooks/redux';
 import { boardSlice } from '../../core/store/reducers/BoardSlice';
 import { deleteTaskCreator, moveTaskCreator } from '../../core/store/creators/BoardCreators';
+import TaskInformationModal from '../modalWindows/TaskInformationModal';
 
 const Task = ({ task, tasks }: { task: ITaskData; tasks: ITaskData[] }) => {
   const dispatch = useAppDispatch();
@@ -45,7 +46,7 @@ const Task = ({ task, tasks }: { task: ITaskData; tasks: ITaskData[] }) => {
           },
         },
       ],
-    });
+    } as unknown as ReactConfirmAlertProps);
   };
 
   const dragStartHandler = (e: React.DragEvent) => {
@@ -102,27 +103,38 @@ const Task = ({ task, tasks }: { task: ITaskData; tasks: ITaskData[] }) => {
 
   const [showTask, setShowTask] = useState(false);
   const handleShow = () => setShowTask(true);
+  const [cardModalShow, setCardModalShow] = useState(false);
   return (
-    <div
-      className="item"
-      draggable
-      onDragStart={dragStartHandler}
-      onDragOver={dragOverHandler}
-      onDragLeave={dragLeaveHandler}
-      onDragEnd={dragEndHandler}
-      onDrop={dropHandler}
-    >
-      {task.title}
-      <div className="icons">
-        <span className="icon" onClick={handleShow}>
-          <AiFillEdit />
-        </span>
-        <span className="icon" onClick={handleDeleteTask}>
-          <AiFillDelete />
-        </span>
+    <>
+      <div
+        className="item"
+        draggable
+        onDragStart={dragStartHandler}
+        onDragOver={dragOverHandler}
+        onDragLeave={dragLeaveHandler}
+        onDragEnd={dragEndHandler}
+        onDrop={dropHandler}
+      >
+        {task.title}
+        <div className="icons">
+          <span className="icon" onClick={handleShow}>
+            <AiFillEdit />
+          </span>
+          <span className="icon" onClick={handleDeleteTask}>
+            <AiFillDelete />
+          </span>
+          <span className="icon" onClick={() => setCardModalShow(true)}>
+            <AiFillInfoCircle />
+          </span>
+        </div>
+        {showTask && <FormTaskEditing setShowTask={setShowTask} task={task} />}
       </div>
-      {showTask && <FormTaskEditing setShowTask={setShowTask} task={task} />}
-    </div>
+      <TaskInformationModal
+        task={task}
+        show={cardModalShow}
+        onHide={() => setCardModalShow(false)}
+      />
+    </>
   );
 };
 

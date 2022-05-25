@@ -6,19 +6,23 @@ import LoadingIcon from '../components/loading/LoadingIcon';
 import { useAppDispatch, useAppSelector } from '../core/hooks/redux';
 import { getBoardsCreator } from '../core/store/creators/BoardCreators';
 import { CatchedError } from '../core/types/types';
+import { updateToastState } from '../core/store/reducers/modalReducer';
+import ToastNotification from '../components/modalWindows/ToastNotitfication';
 
 export const Main = () => {
   const dispatch = useAppDispatch();
   const { boards } = useAppSelector((state) => state.boardReducer);
   const [loading, setLoading] = useState(true);
   const [searchText, setSearchText] = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const getAllBoards = async () => {
       try {
         await dispatch(getBoardsCreator()).unwrap();
       } catch (error) {
-        alert((error as CatchedError).message);
+        setError((error as CatchedError).message);
+        dispatch(updateToastState(true));
       }
     };
 
@@ -61,6 +65,7 @@ export const Main = () => {
                 ))}
             </div>
           </section>
+          <ToastNotification message={error} />
         </>
       )}
     </>

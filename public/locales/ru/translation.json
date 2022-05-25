@@ -55,7 +55,7 @@
     "team-block__Henadzi-description": "Окончил Белорусский государственный технологический университет в Минске по специальности инженер лесного хозяйства. О школе узнал случайно. В одной из статей в интернете.",
     "team-block__Henadzi-role": "Тимлид",
     "team-block__Kirill-name": "Кирилл",
-    "team-block__Kirill-description": "Здесь что-то будет",
+    "team-block__Kirill-description": "Студент Белорусского Государственного Университета факультета радиофизики и компьютерных технологий.",
     "team-block__Kirill-role": "Участник",
     "team-block__Uladzislava-name": "Владислава",
     "team-block__Uladzislava-description": "Здесь что-то будет",
@@ -89,5 +89,8 @@
     "team-Henadzi": "Геннадий",
     "team-Kirill": "Кирилл",
     "team-Uladzislava": "Владислава"
+  },
+  "messages": {
+    "cookie": "Куки истекли, пожалуйста войдите в аккаунт снова"
   }
 }

@@ -10,6 +10,8 @@ import { StateCol } from '../../core/types/types';
 import { useAppDispatch, useAppSelector } from '../../core/hooks/redux';
 import { CatchedError } from '../../core/types/types';
 import LoadingIcon from '../loading/LoadingIcon';
+import { updateToastState } from '../../core/store/reducers/modalReducer';
+import ToastNotification from '../modalWindows/ToastNotitfication';
 
 const Board = () => {
   const dispatch = useAppDispatch();
@@ -18,6 +20,7 @@ const Board = () => {
   const { columns } = useAppSelector((state) => state.boardReducer);
   const [showCol, setShowCol] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState('');
 
   const handleShow = () => setShowCol(true);
 
@@ -26,7 +29,8 @@ const Board = () => {
       try {
         await dispatch(getColumnsCreator(String(id))).unwrap();
       } catch (error) {
-        alert((error as CatchedError).message);
+        setMessage((error as CatchedError).message);
+        dispatch(updateToastState(true));
       }
 
       setLoading(false);
@@ -58,6 +62,7 @@ const Board = () => {
           </div>
         </section>
       )}
+      <ToastNotification message={message} />
     </>
   );
 };
