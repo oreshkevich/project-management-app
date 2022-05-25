@@ -9,8 +9,6 @@ import { IColData } from '../../core/interfaces/interfaces';
 import { CatchedError, StateCol } from '../../core/types/types';
 import { AiFillDelete } from 'react-icons/ai';
 import './card.css';
-import ConfirmationModal from '../modalWindows/ConfirmationModal';
-//import { updateState } from '../../core/store/reducers/modalReducer';
 import { confirmAlert, ReactConfirmAlertProps } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { useAppDispatch, useAppSelector } from '../../core/hooks/redux';
@@ -241,7 +239,6 @@ const Card = ({
               ))
             : null}
         </form>
-        <ConfirmationModal />
       </div>
       <ToastNotification message={message} />
     </>

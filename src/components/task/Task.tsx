@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import FormTaskEditing from '../forms/formTaskEditing/FormTaskEditing';
 import { useParams } from 'react-router-dom';
-import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
+import { AiFillDelete, AiFillEdit, AiFillInfoCircle } from 'react-icons/ai';
 import { editTask, getTasks, deleteTask, createTask } from '../../core/api/api';
 import { ITaskData } from '../../core/interfaces/interfaces';
 import { confirmAlert, ReactConfirmAlertProps } from 'react-confirm-alert';
@@ -9,6 +9,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../core/hooks/redux';
 import { boardSlice } from '../../core/store/reducers/BoardSlice';
+import TaskInformationModal from '../modalWindows/TaskInformationModal';
 
 const Task = ({
   task,
@@ -134,27 +135,38 @@ const Task = ({
 
   const [showTask, setShowTask] = useState(false);
   const handleShow = () => setShowTask(true);
+  const [cardModalShow, setCardModalShow] = useState(false);
   return (
-    <div
-      className="item"
-      draggable
-      onDragStart={dragStartHandler}
-      onDragOver={dragOverHandler}
-      onDragLeave={dragLeaveHandler}
-      onDragEnd={dragEndHandler}
-      onDrop={dropHandler}
-    >
-      {task.title}
-      <span className="icon" onClick={handleDeleteTask}>
-        <AiFillDelete />
-      </span>
-      <span className="icon" onClick={handleShow}>
-        <AiFillEdit />
-      </span>
-      {showTask && (
-        <FormTaskEditing getAllColumn={getAllColumn} setShowTask={setShowTask} task={task} />
-      )}
-    </div>
+    <>
+      <div
+        className="item"
+        draggable
+        onDragStart={dragStartHandler}
+        onDragOver={dragOverHandler}
+        onDragLeave={dragLeaveHandler}
+        onDragEnd={dragEndHandler}
+        onDrop={dropHandler}
+      >
+        {task.title}
+        <span className="icon" onClick={handleDeleteTask}>
+          <AiFillDelete />
+        </span>
+        <span className="icon" onClick={handleShow}>
+          <AiFillEdit />
+        </span>
+        <span className="icon" onClick={() => setCardModalShow(true)}>
+          <AiFillInfoCircle />
+        </span>
+        {showTask && (
+          <FormTaskEditing getAllColumn={getAllColumn} setShowTask={setShowTask} task={task} />
+        )}
+      </div>
+      <TaskInformationModal
+        task={task}
+        show={cardModalShow}
+        onHide={() => setCardModalShow(false)}
+      />
+    </>
   );
 };
 
