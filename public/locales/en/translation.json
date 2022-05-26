@@ -73,6 +73,10 @@
     "board-delete-button": "Delete",
     "board-open-button": "Open"
   },
+  "card": {
+    "cancel": "Cancel",
+    "submit": "Submit"
+  },
   "conf-modal": {
     "title": "Delete the board?",
     "body": "You will permanently delete this board",
@@ -80,8 +84,8 @@
     "bodyColumn": "You will permanently delete this column",
     "titleTask": "Delete the task?",
     "bodyTask": "You will permanently delete this task",
-    "delete": "delete",
-    "cancel": "cancel"
+    "delete": "Delete",
+    "cancel": "Cancel"
   },
   "footer": {
     "footer-text": "Copyright | Development Team",
