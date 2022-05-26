@@ -40,11 +40,11 @@ const Header = () => {
 
   useEffect(() => {
     if (!cookieToken && token) {
-      setMessage('Сookie expired, please login again');
+      setMessage(t('messages.cookie'));
       dispatch(updateToastState(true));
       logout();
     }
-  }, [cookieToken, token, logout, dispatch]);
+  }, [cookieToken, token, logout, dispatch, t]);
 
   const handleScroll = () => {
     window.scrollY > 0 ? setScroll(true) : setScroll(false);
@@ -85,7 +85,7 @@ const Header = () => {
             </button>
             <div className={`${isOpen ? 'collapse' : ''} navbar-collapse`} id="navbarNav">
               {token && (
-                <Button className="createBoard" variant="success" onClick={handleShow}>
+                <Button className="createBoard" variant="secondary" onClick={handleShow}>
                   {t('header.create-board__button')}
                 </Button>
               )}

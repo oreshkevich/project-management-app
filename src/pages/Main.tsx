@@ -21,10 +21,8 @@ export const Main = () => {
       try {
         await dispatch(getBoardsCreator()).unwrap();
       } catch (error) {
-        if ((error as CatchedError).statusCode !== 401) {
-          setError((error as CatchedError).message);
-          dispatch(updateToastState(true));
-        }
+        setError((error as CatchedError).message);
+        dispatch(updateToastState(true));
       }
     };
 
@@ -38,31 +36,34 @@ export const Main = () => {
         <LoadingIcon />
       ) : (
         <>
-          <form
-            className="form-inline my-2 my-lg-0 pt-5 m-auto"
-            onSubmit={(e) => e.preventDefault()}
-          >
-            <input
-              className="form-control mx-auto"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-              onChange={(event) => setSearchText(event.target.value)}
-              autoFocus
-            />
-          </form>
-          <section className="main pt-3 pb-5 d-flex justify-content-center flex-wrap">
-            {boards
-              ?.filter((value: BoardData) => {
-                if (!searchText) {
-                  return value;
-                } else if (value.title.toLowerCase().includes(searchText.toLowerCase())) {
-                  return value;
-                }
-              })
-              .map((item: BoardData) => (
-                <BoardCard data={item} key={item.id} />
-              ))}
+          <section className="main">
+            <form
+              className="form-inline my-2 my-lg-0 pt-5 m-auto"
+              onSubmit={(e) => e.preventDefault()}
+              style={{ maxWidth: '12rem' }}
+            >
+              <input
+                className="form-control mx-auto"
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+                onChange={(event) => setSearchText(event.target.value)}
+                autoFocus
+              />
+            </form>
+            <div className="boards pt-3 pb-5 d-flex justify-content-center flex-wrap">
+              {boards
+                ?.filter((value: BoardData) => {
+                  if (!searchText) {
+                    return value;
+                  } else if (value.title.toLowerCase().includes(searchText.toLowerCase())) {
+                    return value;
+                  }
+                })
+                .map((item: BoardData) => (
+                  <BoardCard data={item} key={item.id} />
+                ))}
+            </div>
           </section>
           <ToastNotification message={error} />
         </>

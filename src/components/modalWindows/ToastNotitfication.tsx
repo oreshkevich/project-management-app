@@ -13,15 +13,11 @@ const ToastNotification = (props: { message: string }) => {
   const state = useAppSelector((state) => state.modalStateReducer.state);
   const dispatch = useAppDispatch();
 
-  function changeState() {
-    dispatch(updateToastState(false));
-  }
-
   useEffect(() => {
+    const changeState = () => dispatch(updateToastState(false));
     setShow(state);
-
     setTimeout(changeState, SHOWTIME);
-  }, [state]);
+  }, [state, dispatch]);
 
   useEffect(() => {
     if (

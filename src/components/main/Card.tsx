@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
-import { createTask } from '../../core/api/api';
 import { useTranslation } from 'react-i18next';
 import FormTask from '../forms/formTask/FormTask';
 import Task from '../task/Task';
@@ -17,18 +16,13 @@ import {
   deleteColumnCreator,
   moveColumnCreator,
   editColumnCreator,
-  // createTaskCreator,
+  createTaskCreator,
+  deleteTaskCreator,
 } from '../../core/store/creators/BoardCreators';
 import { updateToastState } from '../../core/store/reducers/modalReducer';
 import ToastNotification from '../modalWindows/ToastNotitfication';
 
-const Card = ({
-  column,
-  getAllColumn,
-}: {
-  column: StateCol;
-  getAllColumn: () => Promise<void>;
-}) => {
+const Card = ({ column }: { column: StateCol }) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const { id } = useParams();
@@ -41,6 +35,7 @@ const Card = ({
   const [showTask, setShowTask] = useState(false);
   const [title, setTitle] = useState(column.title);
   const [edit, setEdit] = useState<boolean>(false);
+  const [isDrag, setIsDrag] = useState(false);
   const [message, setMessage] = useState('');
 
   const deleteCurrentColumn = async () => {
@@ -71,10 +66,6 @@ const Card = ({
         },
       ],
     } as unknown as ReactConfirmAlertProps);
-    // const isConfirm = confirm(`Точно вы хотите удалить колонку: ${column.order}`);
-    // if (!isConfirm) return;
-    //dispatch(updateState(true));
-    // await deleteCurrentColumn();
   };
 
   const handleShow = () => setShowTask(true);
@@ -84,6 +75,8 @@ const Card = ({
 
   const handleEditForm = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (title.length < 4) return;
+
     setEdit(false);
     try {
       await dispatch(
@@ -103,46 +96,56 @@ const Card = ({
     if (e.target === e.currentTarget) {
       dispatch(setCurrentColumn(card));
       dispatch(setCurrentTasks(column.tasks));
-      dispatch(setCurrentTask(undefined));
+      dispatch(setCurrentTask(null));
     } else {
-      dispatch(setCurrentTasks(undefined));
+      dispatch(setCurrentTasks(null));
     }
   };
 
-  const dragOverHandler = (e: React.DragEvent) => e.preventDefault();
+  const dragOverHandler = (e: React.DragEvent) => {
+    e.preventDefault();
+    if (!currentTask || (currentTask && currentTask.columnId !== column.id)) setIsDrag(true);
+  };
+
+  const dragLeaveHandler = (e: React.DragEvent) => {
+    e.preventDefault();
+    if (
+      (e.target as HTMLElement).className === 'board over' ||
+      (e.target as HTMLElement).className === 'app-card'
+    )
+      setIsDrag(false);
+  };
 
   const dropHandler = async (e: React.DragEvent, card: IColData = column) => {
     e.preventDefault();
+    setIsDrag(false);
 
-    if (currentTask && column.tasks) {
-      const copyTask = { ...currentTask };
-      dispatch(setCurrentTask(undefined));
+    if (currentTask && currentTask.columnId !== card.id) {
+      const droppedTask = JSON.parse(e.dataTransfer.getData('task'));
 
-      await createTask(String(id), column.id, {
-        title: copyTask.title,
-        order: column.tasks.length + 1,
-        description: copyTask.description,
-        userId: copyTask.userId,
-      });
-
-      await getAllColumn();
-
-      // try {
-      //   await dispatch(
-      //     createTaskCreator({
-      //       boardId: String(id),
-      //       columnId: column.id,
-      //       taskData: {
-      //         title: copyTask.title,
-      //         order: column.tasks.length + 1,
-      //         description: copyTask.description,
-      //         userId: copyTask.userId,
-      //       },
-      //     })
-      //   );
-      // } catch (error) {
-      //   alert(error);
-      // }
+      try {
+        await dispatch(
+          deleteTaskCreator({
+            boardId: String(id),
+            columnId: droppedTask.columnId,
+            taskId: droppedTask.id,
+          })
+        ).unwrap();
+        await dispatch(
+          createTaskCreator({
+            boardId: String(id),
+            columnId: column.id,
+            taskData: {
+              title: currentTask.title,
+              order: column.tasks.length + 1,
+              description: currentTask.description,
+              userId: currentTask.userId,
+            },
+          })
+        ).unwrap();
+      } catch (error) {
+        alert(error);
+      }
     }
 
     if (currentColumn && currentTasks) {
@@ -188,24 +191,27 @@ const Card = ({
   };
 
   return (
-    <>
-      <div
-        className="app-card"
-        draggable
-        onDragStart={dragStartHandler}
-        onDragOver={dragOverHandler}
-        onDrop={dropHandler}
-      >
-        <form onSubmit={handleEditForm} key={column.id} className="board scroll-task">
+    <div
+      className="app-card"
+      draggable
+      onDragStart={dragStartHandler}
+      onDragOver={dragOverHandler}
+      onDragLeave={dragLeaveHandler}
+      onDrop={dropHandler}
+    >
+      <form onSubmit={handleEditForm} key={column.id} className={isDrag ? 'board over' : 'board'}>
+        <div className="d-flex align-items-center justify-content-between">
           <div className="board__title">
             {edit ? (
               <div className="board__title-button">
-                <Button variant="info" type="submit">
-                  Sub
-                </Button>
-                <Button variant="info" type="button" onClick={handleEditCancel}>
-                  Can.
-                </Button>
+                <div className="d-inline-flex">
+                  <Button variant="light" type="submit">
+                    Submit
+                  </Button>
+                  <Button variant="light" type="button" onClick={handleEditCancel}>
+                    Cancel
+                  </Button>
+                </div>
 
                 <input
                   defaultValue={title}
@@ -223,25 +229,26 @@ const Card = ({
           <span className="icon" onClick={handleDeleteBoard}>
             <AiFillDelete />
           </span>
-          <Button variant="success" onClick={handleShow}>
-            {t('header.create-task__button')}
-          </Button>
-          {showTask && (
-            <FormTask
-              setShowTask={setShowTask}
-              columnId={column.id}
-              order={column.tasks?.length || 0}
-            />
-          )}
+        </div>
+        {showTask && (
+          <FormTask
+            setShowTask={setShowTask}
+            columnId={column.id}
+            order={column.tasks?.length || 0}
+          />
+        )}
+        <div className="tasks">
           {column.tasks?.length
-            ? column.tasks.map((item) => (
-                <Task task={item} tasks={column.tasks} key={item.id} getAllColumn={getAllColumn} />
-              ))
+            ? column.tasks.map((item) => <Task task={item} tasks={column.tasks} key={item.id} />)
             : null}
-        </form>
-      </div>
+        </div>
+
+        <Button className="create-task" variant="light" onClick={handleShow}>
+          {t('header.create-task__button')}
+        </Button>
+      </form>
       <ToastNotification message={message} />
-    </>
+    </div>
   );
 };
 

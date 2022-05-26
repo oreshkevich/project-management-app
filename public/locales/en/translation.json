@@ -6,7 +6,7 @@
     "reqistration": "Sign Up",
     "go-to-main": "Go to Main Page",
     "create-board__button": "Create new board",
-    "create-col__button": "Create new colum",
+    "create-col__button": "Create new column",
     "create-task__button": "Create new task",
     "create-board__modal": "New board",
     "create-col__modal": "New column",
@@ -47,8 +47,8 @@
     "delete": "Delete profile"
   },
   "homepage": {
-    "welcome-block__title": "GoodBoard helps teams to solve work tasks efficiently.",
-    "welcome-block__title-description": "Work in a team, manage projects, write notes and assignments, go to the store and not only. Our interactive whiteboard will help you with all this.",
+    "welcome-block__title": "GoodBoard helps teams to solve work tasks efficiently",
+    "welcome-block__title-description": "Work in a team, manage projects, write notes and assignments, go to the store and not only. Our interactive whiteboard will help you with all this",
     "welcome-block__button": "Register — it is free!",
     "team-block__title": "About the team",
     "team-block__Henadzi-name": "Henadzi",
@@ -65,8 +65,8 @@
     "course-block__about": "The online course 'React Development' is a free course from The Rolling Scopes community.",
     "course-block__about-two": "The course is intended for students of RS School set 2021Q3 who have passed RS School stage #2, as well as for new students who have knowledge and practical experience of using the following technologies and tools: JavaScript, TypeScript, Git, GitHub, NPM, Webpack, CSS3/ HTML5, Chrome DevTools, Figma.",
     "course-block__about-three": "The principle of 'Pay it forward' works in RS School. RS School shares its knowledge with students for free now, hoping that in the future they will return as mentors and in the same way pass on their knowledge to the next generation of students.",
-    "course-block__about-four": "We really liked the course, especially writing tests, the tasks are well chosen. There were a lot of materials for their implementation, all the materials did not even have time to revise. The course consists of six modules and a final team assignment",
-    "course-block__about-project": "Good Board is the final task of the online course 'Development on React'. As part of this task, we needed to implement an application that helps an individual in a team or a group of developers achieve their goals. This task seemed quite interesting to all of us, because it is a great opportunity to try to realize yourself in a team. We have implemented the possibility of registration, welcome page, user login, project management page, project management page. The application has the ability to change the language by clicking on select title in.  The layout is semantic. both React 18 and Typewritten text. The application has private routes, 404, error border. As well as the Welcome Page (route), Header and Footer, Login / Registration, Main Route, Board Route"
+    "course-block__about-four": "We really liked the course, especially writing tests, the tasks are well chosen. There were a lot of materials for their implementation, all the materials did not even have time to revise. The course consists of six modules and a final team assignment.",
+    "course-block__about-project": "Good Board is the final task of the online course 'Development on React'. As part of this task, we needed to implement an application that helps an individual in a team or a group of developers achieve their goals. This task seemed quite interesting to all of us, because it is a great opportunity to try to realize yourself in a team. We have implemented the possibility of registration, welcome page, user login, project management page, project management page. The application has the ability to change the language by clicking on select title in.  The layout is semantic. both React 18 and Typewritten text. The application has private routes, 404, error boundary. As well as the Welcome Page (route), Header and Footer, Login / Registration, Main Route, Board Route."
   },
   "main-rote": {
     "no-boards": "You hane no boards",
@@ -88,5 +88,8 @@
     "team-Henadzi": "Henadzi",
     "team-Kirill": "Kirill",
     "team-Uladzislava": "Uladzislava"
+  },
+  "messages": {
+    "cookie": "Сookie expired, please login again"
   }
 }
