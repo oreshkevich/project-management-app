@@ -1,0 +1,96 @@
+{
+  "header": {
+    "log-in": "Войти в аккаунт",
+    "log-out": "Выйти из аккаунта",
+    "edit": "Редактировать профиль",
+    "reqistration": "Зарегистрироваться",
+    "go-to-main": "На главную",
+    "create-board__button": "Создать новую доску",
+    "create-col__button": "Создать новую колонку",
+    "create-task__button": "Создать новую задачу",
+    "create-board__modal": "Новая доска",
+    "create-col__modal": "Новая колонка",
+    "create-task__modal": "Новая задача",
+    "create-task__modal-editing": "Редактирование задачи",
+    "create-board__modal-title": "Название доски",
+    "create-col__modal-title": "Название колонки",
+    "create-task__modal-title": "Название задачи",
+    "create-task__modal-description": "Описание задачи",
+    "create-board__modal-error-title": "Пожалуйста, введите название доски",
+    "create-board__modal-error-title-length": "Минимальная длина названия составляет 4 символа",
+    "create-board__modal-description": "Описание доски",
+    "create-board__modal-close-button": "Отмена",
+    "create-board__modal-submit-button": "Создать",
+    "create-board__modal-submit-button-editing": "Сохранить",
+    "language": "Язык"
+  },
+  "authentification": {
+    "login": "Логин",
+    "name": "Имя",
+    "password": "Пароль",
+    "enter-name": "Введите имя",
+    "error-name": "Пожалуйста, введите имя",
+    "error-name-length": "Минимальная длина имени составляет 4 символа",
+    "enter-login": "Введите логин",
+    "error-login": "Пожалуйста, введите логин",
+    "error-login-exist": "Такой пользователь уже существует",
+    "error-login-length": "Минимальная длина логина составляет 4 символа",
+    "enter-password": "Введите пароль",
+    "error-password": "Пожалуйста, введите пароль",
+    "error-password-length": "Минимальная длина пароля составляет 8 символов",
+    "error-auth": "Проверьте введённые данные",
+    "submit-login": "Войти",
+    "submit-registration": "Зарегистрироваться"
+  },
+  "profile": {
+    "save": "Сохранить",
+    "delete": "Удалить профиль"
+  },
+  "homepage": {
+    "welcome-block__title": "GoodBoard помогает командам эффективно решать рабочие задачи",
+    "welcome-block__title-description": "Работайте в команде, управляйте проектами, пишите заметки и задания, ходите в магазин и не только. Наша интерактивная доска поможет вам во всем этом",
+    "welcome-block__button": "Регистрируйтесь — это бесплатно!",
+    "team-block__title": "О команде",
+    "team-block__Henadzi-name": "Геннадий",
+    "team-block__Henadzi-description": "Окончил Белорусский государственный технологический университет в Минске по специальности инженер лесного хозяйства. О школе узнал случайно. В одной из статей в интернете.",
+    "team-block__Henadzi-role": "Тимлид",
+    "team-block__Kirill-name": "Кирилл",
+    "team-block__Kirill-description": "Студент Белорусского Государственного Университета факультета радиофизики и компьютерных технологий.",
+    "team-block__Kirill-role": "Участник",
+    "team-block__Uladzislava-name": "Владислава",
+    "team-block__Uladzislava-description": "Здесь что-то будет",
+    "team-block__Uladzislava-role": "Участник",
+    "course-block__title": "О курсе",
+    "course-block__title-project": "О проекте",
+    "course-block__about": "Онлайн курс «Разработка на React» -- Бесплатный курс от сообщества The Rolling Scopes.",
+    "course-block__about-two": "Курс предназначен для студентов RS School набора 2021Q3 , которые прошли RS School stage #2, а также для новых студентов, которые имеют знания и практический опыт использования следующих технологий и инструментов: JavaScript, TypeScript, Git, GitHub, NPM, Webpack, CSS3 / HTML5, Chrome DevTools, Figma.",
+    "course-block__about-three": "В RS School работает принцип 'Pay it forward'. RS School  бесплатно делится с учащимися своими знаниями сейчас, надеясь, что в будущем они вернутся в качестве менторов и точно так же передадут свои знания следующему поколению студентов.",
+    "course-block__about-four": "Курс нам очень понравился, особенно написания тестов, задания подобраны хорошо. Материалов для их выполнения было много, все материалы даже не успевали пересмотреть. Курс состоит из шести модулей и финального командного задания.",
+    "course-block__about-project": "GoodBoard  — финальное задание онлайн курса «Разработка на React». В рамках этого задания нам нужно было реализовать приложение помогающее достичь поставленных задач отдельному человеку в команде или группе разработчиков. Это задание показалось всем нам достаточно интересным, поскольку это отличная возможность попробовать реализовать себя в команде. В структуре приложения создана регистрация, приветственная страница, пользовательский логин, страница управления проектами и страница управления проектом. В приложении есть возможность смены языка по нажатию на select в header.  Вёрстка семантическая. Мы использовали React 18 и TypeScript. В приложении есть приватные роуты, 404, error boundary. А так же Welcome page(route), Header, Footer, Sign In / Sign Up, Main route, Board route."
+  },
+
+  "main-rote": {
+    "no-boards": "У вас нет созданных досок",
+    "board-delete-button": "Удалить",
+    "board-open-button": "Открыть"
+  },
+  "conf-modal": {
+    "title": "Удалить доску?",
+    "body": "Вы безвозвратно удалите эту доску",
+    "titleColumn": "Удалить колонку?",
+    "bodyColumn": "Вы безвозвратно удалите эту колонку",
+    "titleTask": "Удалить задачу?",
+    "bodyTask": "Вы безвозвратно удалите эту задачу",
+    "delete": "удалить",
+    "cancel": "отмена"
+  },
+  "footer": {
+    "footer-text": "Авторское право | Команда разработки",
+    "team-Henadzi": "Геннадий",
+    "team-Kirill": "Кирилл",
+    "team-Uladzislava": "Владислава"
+  },
+  "messages": {
+    "cookie": "Куки истекли, пожалуйста войдите в аккаунт снова"
+  }
+}
