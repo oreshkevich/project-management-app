@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import '../App.css';
 import img from '../assets/images/sections/main.webp';
 import imgOne from '../assets/images/sections/1.jpg';
+import imgTwo from '../assets/images/sections/2.jpg';
 import imgThree from '../assets/images/sections/3.jpg';
 
 export const Home = () => {
@@ -48,7 +49,11 @@ export const Home = () => {
           <div className="card mb-3 profile-card">
             <div className="row g-0">
               <div className="col-md-4">
-                <img src="#" className="card-img-top rounded-start" alt="profile-img" />
+                <img
+                  src={imgTwo}
+                  className="card-img-top rounded-start offer__photo"
+                  alt="profile-img"
+                />
               </div>
               <div className="col-md-8">
                 <div className="card-body">

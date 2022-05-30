@@ -70,7 +70,7 @@
   border: 2px dashed #6c757d;
 }
 
-.board.over > * {
+.board.over>* {
   pointer-events: none;
 }
 
@@ -116,7 +116,7 @@
   align-items: center;
 }
 
-.board__title-button > div > button {
+.board__title-button>div>button {
   padding: 0 7px;
 }
 

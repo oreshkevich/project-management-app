@@ -15,7 +15,7 @@ const App = () => {
   const { token } = useAppSelector((state) => state.userReducer);
 
   return (
-    <BrowserRouter basename="/">
+    <BrowserRouter basename="/project-management-app">
       <Header />
       <main>
         <Routes>

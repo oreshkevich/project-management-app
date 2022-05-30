@@ -74,6 +74,7 @@ const Card = ({ column }: { column: StateCol }) => {
     setEdit(false);
     setTitle(column.title);
   };
+
   const handleEditTodo = (title: string) => setTitle(title);
 
   const handleEditForm = async (e: React.FormEvent) => {

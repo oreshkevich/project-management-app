@@ -15,6 +15,7 @@ const TaskInformationModal = (props: { task: ITaskData; show: boolean; onHide: (
 
   useEffect(() => {
     getUserName();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
