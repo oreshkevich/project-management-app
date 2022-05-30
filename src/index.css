@@ -80,3 +80,7 @@ main {
   align-items: center;
   max-width: 35rem;
 }
+
+ul {
+  list-style: none;
+}
