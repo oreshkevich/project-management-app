@@ -54,30 +54,27 @@ export const boardSlice = createSlice({
       state.currentTask = {} as ITaskData;
     });
     builder.addCase(createBoardCreator.fulfilled, (state, { payload }) => {
-      state.boards = [...state.boards, payload];
+      state.boards.push(payload);
     });
     builder.addCase(createColumnCreator.fulfilled, (state, { payload }) => {
-      state.columns = [...state.columns, payload];
+      state.columns.push(payload);
     });
     builder.addCase(editColumnCreator.fulfilled, (state, { payload }) => {
-      state.columns = state.columns.map((column) => {
-        if (column.id === payload.id) {
-          column.title = payload.title;
-        }
-        return column;
-      });
+      const column = state.columns.find((column) => column.id === payload.id);
+      if (column) column.title = payload.title;
     });
     builder.addCase(deleteBoardCreator.fulfilled, (state, { payload }) => {
-      state.boards = state.boards.filter((board) => board.id !== payload);
+      const boardIdx = state.boards.findIndex((board) => board.id === payload);
+      state.boards.splice(boardIdx, 1);
     });
     builder.addCase(deleteColumnCreator.fulfilled, (state, { payload }) => {
-      state.columns = state.columns
-        .filter((column) => column.id !== payload)
-        .map((column, idx) => {
-          if (column.order !== idx + 1) {
-            return { ...column, order: idx + 1 };
-          } else return column;
-        });
+      const columnIdx = state.columns.findIndex((column) => column.id === payload);
+      state.columns.splice(columnIdx, 1);
+      state.columns = state.columns.map((column, idx) => {
+        if (column.order !== idx + 1) {
+          return { ...column, order: idx + 1 };
+        } else return column;
+      });
     });
     builder.addCase(moveColumnCreator.fulfilled, (state, { payload }) => {
       if (state.temp.length) {
@@ -119,38 +116,31 @@ export const boardSlice = createSlice({
       }
     });
     builder.addCase(createTaskCreator.fulfilled, (state, { payload }) => {
-      state.columns = state.columns.map((column) => {
-        if (column.id === payload.columnId) {
-          column.tasks.push(payload.task);
-        }
-        return column;
-      });
+      const column = state.columns.find((column) => column.id === payload.columnId);
+      column?.tasks.push(payload.task);
     });
     builder.addCase(deleteTaskCreator.fulfilled, (state, { payload }) => {
-      state.columns = state.columns.map((column) => {
-        if (column.id === payload.columnId) {
-          column.tasks = column.tasks
-            .filter((task) => task.id !== payload.taskId)
-            .map((task, idx) => {
-              if (task.order !== idx + 1) {
-                return { ...task, order: idx + 1 };
-              } else return task;
-            });
-        }
-        return column;
-      });
+      const column = state.columns.find((column) => column.id === payload.columnId);
+      const taskIdx = column?.tasks.findIndex((task) => task.id === payload.taskId);
+
+      if (column?.tasks && typeof taskIdx === 'number') {
+        column.tasks.splice(taskIdx, 1);
+        column.tasks = column?.tasks.map((task, idx) => {
+          if (task.order !== idx + 1) {
+            return { ...task, order: idx + 1 };
+          } else return task;
+        });
+      }
     });
     builder.addCase(editTaskCreator.fulfilled, (state, { payload }) => {
-      state.columns = state.columns.map((column) => {
-        if (column.id === payload.columnId) {
-          column.tasks = column.tasks.map((task) => {
-            if (task.id === payload.id) {
-              return { ...task, title: payload.title, description: payload.description };
-            } else return task;
-          });
-        }
-        return column;
-      });
+      const task = state.columns
+        .find((column) => column.id === payload.columnId)
+        ?.tasks.find((task) => task.id === payload.id);
+
+      if (task) {
+        task.title = payload.title;
+        task.description = payload.description;
+      }
     });
   },
 });

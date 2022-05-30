@@ -58,7 +58,7 @@
     "team-block__Kirill-description": "Студент Белорусского Государственного Университета факультета радиофизики и компьютерных технологий.",
     "team-block__Kirill-role": "Участник",
     "team-block__Uladzislava-name": "Владислава",
-    "team-block__Uladzislava-description": "Здесь что-то будет",
+    "team-block__Uladzislava-description": "Бывшая студентка философского факультета СПбГУ. Около года самостоятельно изучаю веб-разработку, в настоящее время являюсь студентом в EPAM JS Lab.",
     "team-block__Uladzislava-role": "Участник",
     "course-block__title": "О курсе",
     "course-block__title-project": "О проекте",
@@ -74,6 +74,10 @@
     "board-delete-button": "Удалить",
     "board-open-button": "Открыть"
   },
+  "card": {
+    "cancel": "Закрыть",
+    "submit": "Принять"
+  },
   "conf-modal": {
     "title": "Удалить доску?",
     "body": "Вы безвозвратно удалите эту доску",
@@ -81,8 +85,8 @@
     "bodyColumn": "Вы безвозвратно удалите эту колонку",
     "titleTask": "Удалить задачу?",
     "bodyTask": "Вы безвозвратно удалите эту задачу",
-    "delete": "удалить",
-    "cancel": "отмена"
+    "delete": "Удалить",
+    "cancel": "Отмена"
   },
   "footer": {
     "footer-text": "Авторское право | Команда разработки",

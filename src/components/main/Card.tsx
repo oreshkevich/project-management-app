@@ -210,10 +210,10 @@ const Card = ({ column }: { column: StateCol }) => {
               <div className="board__title-button">
                 <div className="d-inline-flex">
                   <Button variant="light" type="submit">
-                    Submit
+                    {t('card.submit')}
                   </Button>
                   <Button variant="light" type="button" onClick={handleEditCancel}>
-                    Cancel
+                    {t('card.cancel')}
                   </Button>
                 </div>
 
