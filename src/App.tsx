@@ -1,0 +1,40 @@
+import Header from './components/header/Header';
+import Footer from './components/footer/Footer';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Home } from './pages/Home';
+import { NotFound } from './pages/NotFound';
+import { Signup } from './pages/Signup';
+import { Login } from './pages/Login';
+import { Main } from './pages/Main';
+import { Profile } from './pages/Profile';
+import Board from './components/main/Board';
+
+import { useAppSelector } from './core/hooks/redux';
+
+const App = () => {
+  const { token } = useAppSelector((state) => state.userReducer);
+
+  return (
+    <BrowserRouter basename="/project-management-app">
+      <Header />
+      <main>
+        <Routes>
+          <Route
+            path="/"
+            element={token ? <Navigate replace to="/main" /> : <Navigate replace to="/home" />}
+          />
+          <Route path="/board/:id" element={token ? <Board /> : <Navigate replace to="/home" />} />
+          <Route path="/profile" element={token ? <Profile /> : <Navigate replace to="/home" />} />
+          <Route path="/login" element={token ? <Navigate replace to="/main" /> : <Login />} />
+          <Route path="/signup" element={token ? <Navigate replace to="/main" /> : <Signup />} />
+          <Route path="/main" element={token ? <Main /> : <Navigate replace to="/home" />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
+      <Footer />
+    </BrowserRouter>
+  );
+};
+
+export default App;

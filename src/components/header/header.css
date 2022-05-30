@@ -1,0 +1,102 @@
+.header {
+  position: sticky;
+  top: 0;
+  transition: all 0.25s ease-in;
+  background-color: #393939;
+  z-index: 10;
+}
+
+.header.scroll {
+  box-shadow: 0 0 10px rgb(0 0 0 / 30%);
+  background-color: var(--body-background);
+}
+
+.navbar-light .navbar-nav .nav-link {
+  color: var(--bs-body-color);
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+  color: var(--bs-gray-600);
+}
+
+.navbar-brand {
+  font-weight: 500;
+  transition: all 0.25s ease-in;
+}
+
+.nav {
+  width: 100%;
+}
+
+.logout:focus {
+  box-shadow: none;
+  outline: 0px;
+}
+
+.navbar-collapse {
+  flex-grow: 0;
+  width: 100%;
+  justify-content: flex-end;
+}
+
+.createBoard {
+  margin-left: 1%;
+  margin-right: auto;
+}
+
+.search-tasks {
+  position: relative;
+}
+
+.search-tasks__results-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.search-tasks__input {
+  transition: all 0.5s;
+}
+
+.search-tasks__input:hover {
+  opacity: 1;
+}
+
+.search-tasks__input.form-control:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: #fff;
+}
+
+.search-tasks__results {
+  list-style: none;
+  position: absolute;
+  top: 0;
+  background-color: #fff;
+  z-index: 998;
+  width: 100%;
+  padding: 0;
+}
+
+.search-tasks__results > li {
+  padding-left: 10px;
+  border: 1px solid gray;
+  cursor: pointer;
+}
+
+.search-tasks__results > li:hover {
+  padding-left: 10px;
+  border: 1px solid gray;
+  cursor: pointer;
+}
+
+.search-tasks__close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 30px;
+  padding-right: 15px;
+}
+
+.search-tasks__close:focus {
+  box-shadow: none;
+}

@@ -1,0 +1,26 @@
+.auth {
+  max-width: 30%;
+}
+
+.auth__submit {
+  background-color: var(--blue);
+}
+
+.auth__submit:hover {
+  background-color: var(--light-blue);
+}
+
+.auth__submit:focus {
+  box-shadow: none;
+}
+
+.form-control:focus {
+  outline: 1px var(--focus) solid;
+  box-shadow: none;
+}
+
+.form-error {
+  margin-top: 5px;
+  margin-bottom: 0px;
+  color: rgba(231, 37, 37, 0.705);
+}
