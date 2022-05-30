@@ -52,7 +52,7 @@ const BoardCard = ({ data }: { data: BoardData }) => {
   };
 
   return (
-    <>
+    <li>
       <Card className="card-board m-2" onClick={openBoard}>
         <Card.Body className="d-flex justify-content-between">
           <Card.Title>{data.title}</Card.Title>
@@ -62,7 +62,7 @@ const BoardCard = ({ data }: { data: BoardData }) => {
         </Card.Body>
       </Card>
       <ToastNotification message={message} />
-    </>
+    </li>
   );
 };
 

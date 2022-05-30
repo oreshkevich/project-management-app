@@ -51,7 +51,7 @@ export const Main = () => {
                 autoFocus
               />
             </form>
-            <div className="boards pt-3 pb-5 d-flex justify-content-center flex-wrap">
+            <ul className="boards pt-3 pb-5 d-flex justify-content-center flex-wrap">
               {boards
                 ?.filter((value: BoardData) => {
                   if (!searchText) {
@@ -63,7 +63,7 @@ export const Main = () => {
                 .map((item: BoardData) => (
                   <BoardCard data={item} key={item.id} />
                 ))}
-            </div>
+            </ul>
           </section>
           <ToastNotification message={error} />
         </>

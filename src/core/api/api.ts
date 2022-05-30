@@ -28,6 +28,7 @@ export const updateUser = (id: string, formData: NewUser) => API.put(`/users/${i
 export const deleteUser = (id: string) => API.delete(`/users/${id}`);
 
 export const getBoards = () => API.get('/boards');
+export const getBoard = (id: string) => API.get(`/boards/${id}`);
 export const createBoard = (boardData: BoardData) => API.post('/boards', boardData);
 export const deleteBoard = (id: string) => API.delete(`/boards/${id}`);
 

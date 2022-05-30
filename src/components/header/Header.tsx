@@ -1,12 +1,15 @@
-import { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, NavDropdown } from 'react-bootstrap';
+import { Button, NavDropdown, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 import { cookies } from '../../core/cookies/cookies';
+import { ITaskEdited } from '../../core/interfaces/interfaces';
 
 import { useAppDispatch, useAppSelector } from '../../core/hooks/redux';
 import { userSlice } from '../../core/store/reducers/UserSlice';
+
+import { getBoard, getBoards, getUsers } from '../../core/api/api';
 
 import FormBoard from '../forms/formBoard/FormBoard';
 
@@ -15,14 +18,17 @@ import { updateToastState } from '../../core/store/reducers/modalReducer';
 import ToastNotification from '../modalWindows/ToastNotitfication';
 
 const Header = () => {
-  const [isOpen, setIsOpen] = useState(true);
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
+  const [isClick, setIsClick] = useState(false);
   const [show, setShow] = useState(false);
   const [scroll, setScroll] = useState(false);
+  const [search, setSearch] = useState('');
+  const [allTasks, setAllTasks] = useState([] as ITaskEdited[]);
   const [message, setMessage] = useState('');
+  const [isOpen, setIsOpen] = useState(true);
   const { token } = useAppSelector((state) => state.userReducer);
   const { setToken } = userSlice.actions;
   const cookieToken = cookies.get('token');
@@ -45,6 +51,47 @@ const Header = () => {
       logout();
     }
   }, [cookieToken, token, logout, dispatch, t]);
+
+  const submitSearch = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+
+    try {
+      setAllTasks([]);
+      const res: ITaskEdited[] = [];
+      const { data } = await getBoards();
+      const idBoards = data.map((board: { id: string }) => board.id);
+
+      await Promise.all(
+        idBoards.map(async (id: string) => {
+          const { data } = await getBoard(id);
+          data.columns.forEach((column: { tasks: ITaskEdited[] }) => {
+            const tasks = column.tasks.map((task) => {
+              return {
+                ...task,
+                boardId: id,
+              };
+            });
+            res.push(...tasks);
+          });
+        })
+      );
+
+      const re = new RegExp(search, 'gi');
+      const { data: userData } = await getUsers();
+      const userIds = userData
+        .filter((user: { name: string }) => user.name.match(re))
+        .map((user: { id: string }) => user.id);
+
+      setAllTasks((prevTasks) =>
+        [...prevTasks, ...res].filter(
+          (task) =>
+            task.title.match(re) || task.description.match(re) || userIds.includes(task.userId)
+        )
+      );
+    } catch (error) {
+      alert(error);
+    }
+  };
 
   const handleScroll = () => {
     window.scrollY > 0 ? setScroll(true) : setScroll(false);
@@ -85,9 +132,41 @@ const Header = () => {
             </button>
             <div className={`${isOpen ? 'collapse' : ''} navbar-collapse`} id="navbarNav">
               {token && (
-                <Button className="createBoard" variant="secondary" onClick={handleShow}>
-                  {t('header.create-board__button')}
-                </Button>
+                <>
+                  <Button className="createBoard" variant="secondary" onClick={handleShow}>
+                    {t('header.create-board__button')}
+                  </Button>
+                  <div className="search-tasks">
+                    <Form onSubmit={submitSearch}>
+                      <Form.Control
+                        className="search-tasks__input"
+                        placeholder="Search Tasks"
+                        onChange={(e) => setSearch(e.target.value)}
+                        onClick={() => setIsClick(true)}
+                      />
+                      <button
+                        type="button"
+                        className="search-tasks__close btn-close"
+                        aria-label="Close"
+                        onClick={() => setIsClick(false)}
+                        style={!isClick ? { display: 'none' } : { display: 'inherit' }}
+                      ></button>
+                    </Form>
+
+                    <div className="search-tasks__results-wrapper">
+                      <ul
+                        style={!isClick ? { display: 'none' } : { display: 'inherit' }}
+                        className="search-tasks__results"
+                      >
+                        {allTasks.map((task, idx) => (
+                          <li onClick={() => navigate(`/board/${task.boardId}`)} key={idx}>
+                            {task.title}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </>
               )}
               <ul className="navbar-nav">
                 {token ? (
