@@ -73,17 +73,19 @@
 }
 
 .offer__photo {
-    width: 50%;
+  max-width: 50%;
+  text-align: center;
+  padding: 10px 0;
 }
 
 @media (max-width: 1270px) {
-.home__title {
+  .home__title {
     font-size: 2rem;
-}
+  }
 }
 
 @media (max-width: 850px) {
-.img-fluid {
+  .img-fluid {
     max-width: 83%;
-}
+  }
 }

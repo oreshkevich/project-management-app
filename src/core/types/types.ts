@@ -22,6 +22,7 @@ export type BoardState = {
   currentColumn: IColData;
   currentTask: ITaskData;
   currentTasks: ITaskData[];
+  temp: StateCol[];
 };
 
 export type User = {

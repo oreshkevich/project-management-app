@@ -70,7 +70,10 @@ const Card = ({ column }: { column: StateCol }) => {
 
   const handleShow = () => setShowTask(true);
   const handleEdit = () => setEdit(true);
-  const handleEditCancel = () => setEdit(false);
+  const handleEditCancel = () => {
+    setEdit(false);
+    setTitle(column.title);
+  };
   const handleEditTodo = (title: string) => setTitle(title);
 
   const handleEditForm = async (e: React.FormEvent) => {

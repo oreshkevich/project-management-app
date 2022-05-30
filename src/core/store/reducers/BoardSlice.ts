@@ -23,6 +23,7 @@ const initialState: BoardState = {
   currentColumn: {} as IColData,
   currentTask: {} as ITaskData,
   currentTasks: [],
+  temp: [] as StateCol[],
 };
 
 export const boardSlice = createSlice({
@@ -76,14 +77,43 @@ export const boardSlice = createSlice({
       });
     });
     builder.addCase(moveColumnCreator.fulfilled, (state, { payload }) => {
-      const columnIdx = state.columns.findIndex((column) => column.order === payload.order);
-      state.columns.splice(columnIdx, 1, payload);
+      if (state.temp.length) {
+        state.columns = [
+          ...state.temp.filter((column) => column.order !== payload.order),
+          payload,
+        ].sort((a: IColData, b: IColData) => (a.order > b.order ? 1 : a.order < b.order ? -1 : 0));
+        state.temp = [];
+      } else {
+        state.temp = [...state.columns.filter((column) => column.order !== payload.order), payload];
+      }
     });
     builder.addCase(moveTaskCreator.fulfilled, (state, { payload }) => {
-      const column = state.columns.find((column) => column.id === payload.columnId);
-      const taskIdx = column?.tasks.findIndex((task) => task.order === payload.order);
-
-      if (column?.tasks && typeof taskIdx === 'number') column.tasks.splice(taskIdx, 1, payload);
+      if (state.temp.length) {
+        state.columns = state.temp.map((column) => {
+          if (column.id === payload.columnId) {
+            column.tasks = [
+              ...column.tasks.filter((task) => task.order !== payload.order),
+              payload,
+            ].sort((a: IColData, b: IColData) =>
+              a.order > b.order ? 1 : a.order < b.order ? -1 : 0
+            );
+          }
+          return column;
+        });
+        state.temp = [];
+      } else {
+        state.temp = state.columns.map((column) => {
+          if (column.id === payload.columnId) {
+            column.tasks = [
+              ...column.tasks.filter((task) => task.order !== payload.order),
+              payload,
+            ].sort((a: IColData, b: IColData) =>
+              a.order > b.order ? 1 : a.order < b.order ? -1 : 0
+            );
+          }
+          return column;
+        });
+      }
     });
     builder.addCase(createTaskCreator.fulfilled, (state, { payload }) => {
       const column = state.columns.find((column) => column.id === payload.columnId);
