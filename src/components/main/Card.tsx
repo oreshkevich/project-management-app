@@ -35,6 +35,7 @@ const Card = ({ column }: { column: StateCol }) => {
   const [showTask, setShowTask] = useState(false);
   const [title, setTitle] = useState(column.title);
   const [edit, setEdit] = useState<boolean>(false);
+  const [logged, setLogged] = useState<boolean>(true);
   const [isDrag, setIsDrag] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -79,8 +80,12 @@ const Card = ({ column }: { column: StateCol }) => {
 
   const handleEditForm = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (title.length < 4) return;
+    if (title.length < 4) {
+      setLogged(false);
+      return;
+    }
 
+    setLogged(true);
     setEdit(false);
     try {
       await dispatch(
@@ -207,21 +212,26 @@ const Card = ({ column }: { column: StateCol }) => {
         <div className="d-flex align-items-center justify-content-between">
           <div className="board__title">
             {edit ? (
-              <div className="board__title-button">
-                <div className="d-inline-flex">
-                  <Button variant="light" type="submit">
-                    {t('card.submit')}
-                  </Button>
-                  <Button variant="light" type="button" onClick={handleEditCancel}>
-                    {t('card.cancel')}
-                  </Button>
-                </div>
+              <div className="board__title-button-two">
+                <div className="board__title-button">
+                  <div className="d-inline-flex">
+                    <Button variant="light" type="submit">
+                      {t('card.submit')}
+                    </Button>
+                    <Button variant="light" type="button" onClick={handleEditCancel}>
+                      {t('card.cancel')}
+                    </Button>
+                  </div>
 
-                <input
-                  defaultValue={title}
-                  onChange={(e) => handleEditTodo(e.target.value)}
-                  className="todo__single--input"
-                />
+                  <input
+                    defaultValue={title}
+                    onChange={(e) => handleEditTodo(e.target.value)}
+                    className="todo__single--input"
+                  />
+                </div>
+                <p className="form-error-two">
+                  {logged ? null : `${t('header.create-board__modal-error-title-length-two')}`}
+                </p>
               </div>
             ) : (
               <div className="todo__single--text" onClick={handleEdit}>

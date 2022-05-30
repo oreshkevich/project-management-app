@@ -59,7 +59,7 @@
     "team-block__Kirill-description": "Student of the Belarusian State University Faculty of Radiophysics and Computer Technologies.",
     "team-block__Kirill-role": "Member",
     "team-block__Uladzislava-name": "Uladzislava",
-    "team-block__Uladzislava-description": "Former student of the Faculty of Philosophy of St. Petersburg State University. I've been studying web development on my own for about a year, I am currently a student at the EPAM JS Lab.",
+    "team-block__Uladzislava-description": "There will be something here",
     "team-block__Uladzislava-role": "Member",
     "course-block__title": "About the course",
     "course-block__title-project": "About the project",
@@ -74,10 +74,6 @@
     "board-delete-button": "Delete",
     "board-open-button": "Open"
   },
-  "card": {
-    "cancel": "Cancel",
-    "submit": "Submit"
-  },
   "conf-modal": {
     "title": "Delete the board?",
     "body": "You will permanently delete this board",
@@ -85,8 +81,8 @@
     "bodyColumn": "You will permanently delete this column",
     "titleTask": "Delete the task?",
     "bodyTask": "You will permanently delete this task",
-    "delete": "Delete",
-    "cancel": "Cancel"
+    "delete": "delete",
+    "cancel": "cancel"
   },
   "footer": {
     "footer-text": "Copyright | Development Team",
