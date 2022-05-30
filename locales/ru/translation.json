@@ -18,6 +18,7 @@
     "create-task__modal-description": "Описание задачи",
     "create-board__modal-error-title": "Пожалуйста, введите название доски",
     "create-board__modal-error-title-length": "Минимальная длина названия составляет 4 символа",
+    "create-board__modal-error-title-length-two": "Длина > 4 символа",
     "create-board__modal-description": "Описание доски",
     "create-board__modal-close-button": "Отмена",
     "create-board__modal-submit-button": "Создать",

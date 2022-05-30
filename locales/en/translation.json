@@ -18,6 +18,7 @@
     "create-task__modal-description": "Description name",
     "create-board__modal-error-title": "Please enter name of the board",
     "create-board__modal-error-title-length": "The minimum length of the name is 4 characters",
+    "create-board__modal-error-title-length-two": "The length > 4 characters",
     "create-board__modal-description": "Board description",
     "create-board__modal-close-button": "Close",
     "create-board__modal-submit-button": "Submit",
