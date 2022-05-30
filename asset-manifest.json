@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/project-management-app/static/css/main.e5def45c.css",
-    "main.js": "/project-management-app/static/js/main.5c6ad4e4.js",
+    "main.css": "/project-management-app/static/css/main.4d2c598f.css",
+    "main.js": "/project-management-app/static/js/main.2c674571.js",
     "static/media/3.jpg": "/project-management-app/static/media/3.235f547f3712d70e98af.jpg",
     "static/media/auth.webp": "/project-management-app/static/media/auth.56c13eab7f3960afc607.webp",
     "static/media/1.jpg": "/project-management-app/static/media/1.31c80612672ec2341aaa.jpg",
@@ -11,11 +11,11 @@
     "static/media/rss.svg": "/project-management-app/static/media/rss.ad178c0df28bc133be34.svg",
     "index.html": "/project-management-app/index.html",
     "static/media/getFetch.cjs": "/project-management-app/static/media/getFetch.c780682470504fffbd04.cjs",
-    "main.e5def45c.css.map": "/project-management-app/static/css/main.e5def45c.css.map",
-    "main.5c6ad4e4.js.map": "/project-management-app/static/js/main.5c6ad4e4.js.map"
+    "main.4d2c598f.css.map": "/project-management-app/static/css/main.4d2c598f.css.map",
+    "main.2c674571.js.map": "/project-management-app/static/js/main.2c674571.js.map"
   },
   "entrypoints": [
-    "static/css/main.e5def45c.css",
-    "static/js/main.5c6ad4e4.js"
+    "static/css/main.4d2c598f.css",
+    "static/js/main.2c674571.js"
   ]
 }
